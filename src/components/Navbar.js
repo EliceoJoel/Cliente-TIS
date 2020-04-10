@@ -21,11 +21,11 @@ class Landing extends Component {
             Register
           </Link>
         </li>
-        <li className="nav-item">
-          <Link to="/list" className="nav-link">
-            list
-          </Link>
-        </li>
+        <li className = "nav-item">
+        <Link to ="/Post" className= "nav-link">
+                     Post
+               </Link>
+          </li>
       </ul>
     )
 
