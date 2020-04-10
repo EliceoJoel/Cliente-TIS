@@ -7,6 +7,9 @@ import Login from './components/Login'
 import Register from './components/Register'
 import Profile from './components/Profile'
 import List from './components/List'
+import Post from './components/Post'
+
+
 
 class App extends Component {
   render() {
@@ -20,6 +23,7 @@ class App extends Component {
             <Route exact path="/login" component={Login} />
             <Route exact path="/profile" component={Profile} />
             <Route exact path="/list" component={List} />
+            <Route exact path="/post" component={Post} />
           </div>
         </div>
       </Router>
