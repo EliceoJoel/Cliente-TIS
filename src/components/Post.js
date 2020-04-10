@@ -50,7 +50,7 @@ var op = [
     }
     handleFile(e){
 
-        let file = e.target.files[0]
+        //let file = e.target.files[0]
         // console.log(e.target.files, "$$$$");
         // console.log(e.target.files[0], "$$$$");
         this.setState({file: e})
@@ -59,7 +59,7 @@ var op = [
 
     }
     handleUpload(e ){
-        let file = this.state.file
+        //let file = this.state.file
         let namePdf = this.state.namePdf
         let year = this.state.year
         let subject = this.state.subject
