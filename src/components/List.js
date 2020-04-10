@@ -6,14 +6,39 @@ class List extends Component{
   constructor(props) {
       super(props);
       this.state = {
-        convocatorias: [],
+        convocatorias: [
+          {
+            pdf:"http://www.africau.edu/images/default/sample.pdf",
+            tipo:"teorica",
+            año:2020,
+            gestion:1,
+            materia:"matematicas",
+            created_at:"2020-11-12",
+        },
+        {
+          pdf:"http://www.africau.edu/images/default/sample.pdf",
+          tipo:"laboratorio",
+          año:2020,
+          gestion:2,
+          materia:"quimica",
+          created_at:"2020-11-12",
+      },
+      {
+        pdf:"http://www.africau.edu/images/default/sample.pdf",
+        tipo:"practica",
+        año:2019,
+        gestion:1,
+        materia:"quimica",
+        created_at:"2019-10-15",
+    }
+      ],
       };  
     }
-    componentDidMount() {
+    /*componentDidMount() {
       fetch('http://127.0.0.1:8000/api/convs')
         .then(response => response.json())
         .then(data => this.setState({ convocatorias: data }));
-  }
+    }*/
   
   render(){
     return(
