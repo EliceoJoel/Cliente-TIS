@@ -1,63 +1,79 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react'
+import { Link, withRouter } from 'react-router-dom'
 
+class Landing extends Component {
+  logOut(e) {
+    e.preventDefault()
+    localStorage.removeItem('usertoken')
+    this.props.history.push(`/`)
+  }
 
-class List extends Component{
+  render() {
+    const loginRegLink = (
+      <ul className="navbar-nav">
+        <li className="nav-item">
+          <Link to="/login" className="nav-link">
+            Admin
+          </Link>
+        </li>
+        <li className="nav-item">
+          <Link to="/register" className="nav-link">
+            Register
+          </Link>
+        </li>
+        <li className="nav-item">
+          <Link to="/list" className="nav-link">
+            list
+          </Link>
+        </li>
+      </ul>
+    )
 
-  constructor(props) {
-      super(props);
-      this.state = {
-        convocatorias: [
-          {
-            pdf:"http://www.africau.edu/images/default/sample.pdf",
-            tipo:"teorica",
-            año:2020,
-            gestion:1,
-            materia:"matematicas",
-            created_at:"2020-11-12",
-        },
-        {
-          pdf:"http://www.africau.edu/images/default/sample.pdf",
-          tipo:"laboratorio",
-          año:2020,
-          gestion:2,
-          materia:"quimica",
-          created_at:"2020-11-12",
-      },
-      {
-        pdf:"http://www.africau.edu/images/default/sample.pdf",
-        tipo:"practica",
-        año:2019,
-        gestion:1,
-        materia:"quimica",
-        created_at:"2019-10-15",
-    }
-      ],
-      };  
-    }
-    /*componentDidMount() {
-      fetch('http://127.0.0.1:8000/api/convs')
-        .then(response => response.json())
-        .then(data => this.setState({ convocatorias: data }));
-    }*/
-  
-  render(){
-    return(
-        <div className="container">
-                <div className="justify-content-center">
-                    <h1 className="h3 font-weight-normal text-center mt-3 p-3 bg-info text-white"> Lista de convocatorias </h1>
-                    {this.state.convocatorias.map( convocatoria => (
-                    <div class="convocatoria">
-                        <embed class="pdf" src= {convocatoria.pdf} height='400' width='100%'></embed>
-                        <div class = "etiqueta">
-                        <div class="gestion"> <a href = {convocatoria.pdf}> { "gestion "+ convocatoria.gestion +", " +  convocatoria.año + "  " + convocatoria.materia} </a></div>
-                        <div>{convocatoria.tipo} </div>
-                        <div>{"publicado en " + convocatoria.created_at} </div>
-                        </div>
-                    </div>
-                    ))}
-                </div>
-      </div>
-      )
+    const userLink = (
+      <ul className="navbar-nav">
+        <li className="nav-item">
+          <Link to="/profile" className="nav-link">
+            User
+          </Link>
+        </li>
+        <li className="nav-item">
+          <a href=" " onClick={this.logOut.bind(this)} className="nav-link">
+            Logout
+          </a>
+        </li>
+      </ul>
+    )
+
+    return (
+      <nav className="navbar navbar-expand-lg navbar-dark bg-dark rounded">
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarsExample10"
+          aria-controls="navbarsExample10"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon" />
+        </button>
+
+        <div
+          className="collapse navbar-collapse justify-content-md-center"
+          id="navbarsExample10"
+        >
+          <ul className="navbar-nav">
+            <li className="nav-item">
+              <Link to="/" className="nav-link">
+                Home
+              </Link>
+            </li>
+          </ul>
+          {localStorage.usertoken ? userLink : loginRegLink}
+        </div>
+      </nav>
+    )
   }
 }
-export default List;
+
+export default withRouter(Landing)
