@@ -13,6 +13,20 @@ export const register = newPostulant => {
         })
 }
 
+export const getAnnouncement = () => {
+    return axios
+        .get('api/announcement', {
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => {
+            console.log(response)
+            return response.data
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
 
 export const login = user => {
     return axios

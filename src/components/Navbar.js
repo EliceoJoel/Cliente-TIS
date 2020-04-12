@@ -17,8 +17,8 @@ class Landing extends Component {
           </Link>
         </li>
         <li className="nav-item">
-          <Link to="/register" className="nav-link">
-            Register
+          <Link to="/Generate_Rotulado" className="nav-link">
+            Generar Rotulado
           </Link>
         </li>
       </ul>

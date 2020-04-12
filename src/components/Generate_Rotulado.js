@@ -3,14 +3,16 @@ import * as jsPDF from 'jspdf'
 import Select from 'react-select'
 //import axios from 'axios'
 import {register} from './UserFunctions'
+import {getAnnouncement} from './UserFunctions'
 
 //format of valid email
 var validMail = /\w+@\w+\.+[a-z]/;
-var op = [
+var aux = [
     { value: 'aux1', label: 'aux1' },
     { value: 'aux2', label: 'aux2' },
     { value: 'aux3', label: 'aux3' }
   ]
+var conv = []
 
 class Register extends Component {
 
@@ -32,31 +34,67 @@ class Register extends Component {
             phone_error: '',
             ci: '',
             ci_error: '',
-            selectedOption: null,
-            selectedOption_error: '',
+            sis_code: '',
+            sis_code_error: '',
+            selectedConvOption: null,
+            selectedConvOption_error: '',
+            selectedAuxOption: null,
+            selectedAuxOption_error: '',
+            showAux: false,
         }
 
         this.onChange = this.onChange.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
     }
 
+    componentDidMount() {
+        getAnnouncement().then(res => {
+            for (var i=0; i < res.length; i++) {
+                var object = {}
+                object.value = res[i].id
+                object.label = res[i].name
+                conv[i] = object
+              }
+        })
+    }
+
     onChange (e) {
         this.setState({ [e.target.name]: e.target.value })
+        this.setState({
+            names_error: '', 
+            first_surname_error: '',
+            second_surname_error: '',
+            direction_error: '',
+            email_error: '',
+            phone_error:'',
+            selectedOption_error:'',
+            ci_error:'',
+            sis_code_error:'',
+        })
     }
     
-    selectChange = selectedOption =>{
+    selectAuxChange = selectedAuxOption =>{
+        this.setState({selectedAuxOption_error:''})
         this.setState(
-            {selectedOption},
-            () => console.log(this.state.selectedOption)
+            {selectedAuxOption},
+            () => console.log(this.state.selectedAuxOption)
         )
-        
+    }
+
+    selectConvChange = selectedConvOption =>{
+        this.setState({selectedConvOption_error:''})
+        this.setState(
+            {selectedConvOption},
+            () => console.log(this.state.selectedConvOption)
+        )
+        this.setState({showAux:true})    
     }
     //field validation function
     valid(){        
         if(this.state.names === ''){
             this.setState({names_error:'Campo vacio'})
         }
-        else if(this.state.names.length > 30){
+        else if(this.state.names.length > 60){
             this.setState({names_error:'Dato ingresado demasiado largo'})
         }
         else if(this.state.first_surname === ''){
@@ -98,8 +136,17 @@ class Register extends Component {
         else if(this.state.ci.length > 8 || this.state.ci.length < 7 || isNaN(this.state.ci)){
             this.setState({ci_error:'ci incorrecto'})
         }
-        else if(this.state.selectedOption === null){
-            this.setState({selectedOption_error:'Seleccione una auxiliatura'})
+        else if(this.state.sis_code === ''){
+            this.setState({sis_code_error:'Campo vacio'})
+        }
+        else if(this.state.sis_code.length > 9 || this.state.sis_code.length < 8 || isNaN(this.state.sis_code)){
+            this.setState({sis_code_error:'codigo sis incorrecto'})
+        }
+        else if(this.state.selectedConvOption === null){
+            this.setState({selectedConvOption_error:'Seleccione una convocatoria'})
+        }
+        else if(this.state.selectedAuxOption === null){
+            this.setState({selectedAuxOption_error:'Seleccione una auxiliatura'})
         }
         else{
             return true;
@@ -110,7 +157,6 @@ class Register extends Component {
     
     onSubmit (e) {
         e.preventDefault()
-
         //clear error state
         this.setState({
             names_error: '', 
@@ -120,7 +166,10 @@ class Register extends Component {
             email_error: '',
             phone_error:'',
             selectedOption_error:'',
-            ci_error:''
+            ci_error:'',
+            sis_code_error:'',
+            selectedAuxOption_error:'',
+            selectedConvOption_error:''
         })
 
         if(this.valid()){  
@@ -134,9 +183,10 @@ class Register extends Component {
                 email: this.state.email,
                 phone: this.state.phone,
                 ci: this.state.ci,
+                sis_code: this.state.sis_code,
+                announcement: 'F',
                 auxiliary:this.getAuxs()
             }
-            console.log(newPostulant);
 
             register(newPostulant).then(res => {
                this.props.history.push(`/`)
@@ -147,8 +197,8 @@ class Register extends Component {
 
     getAuxs(){
         var auxs
-        for (var i=0; i < this.state.selectedOption.length; i++) {
-            auxs= auxs + (JSON.stringify(this.state.selectedOption[i].value))+"\n"
+        for (var i=0; i < this.state.selectedAuxOption.length; i++) {
+            auxs= auxs + (JSON.stringify(this.state.selectedAuxOption[i].value))+"\n"
           }
         auxs = auxs.replace(/["']/g, "")
         auxs = auxs.replace("undefined", "")
@@ -160,35 +210,38 @@ class Register extends Component {
         var doc = new jsPDF()
         doc.setFontSize(25)
         doc.line(15, 10, 200, 10) //horizontal top line
-        doc.line(200, 10, 200, 95+(10*this.state.selectedOption.length)) //vertical left line
-        doc.line(15, 10, 15, 95+(10*this.state.selectedOption.length)) //vertical rigth line
-        doc.line(15, 95+(10*this.state.selectedOption.length), 200, 95+(10*this.state.selectedOption.length)) //horizontal button line
+        doc.line(200, 10, 200, 115+(10*this.state.selectedAuxOption.length)) //vertical left line
+        doc.line(15, 10, 15, 115+(10*this.state.selectedAuxOption.length)) //vertical rigth line
+        doc.line(15, 115+(10*this.state.selectedAuxOption.length), 200, 115+(10*this.state.selectedAuxOption.length)) //horizontal button line
         doc.text('Nombre(s) = ' + this.state.names,20,20)
         doc.text('Apellido paterno = ' + this.state.first_surname,20,30)
         doc.text('Apellido Materno = ' + this.state.second_surname,20,40)
         doc.text('Dirección = ' + this.state.direction,20,50)
         doc.text('Email = ' + this.state.email,20,60)
         doc.text('Celular = ' + this.state.phone,20,70)
-        doc.text('Auxiliatura(s) = ',20,80)
-        doc.text(this.getAuxs(),20,90)
-        doc.text('Ci = '+this.state.ci,20,90+(10*this.state.selectedOption.length))
+        doc.text('Ci = ' + this.state.ci,20,80)
+        doc.text('Codigo sis = ' + this.state.sis_code,20,90)
+        doc.text('Convocatoria = conv1',20,100)
+        doc.text('Auxiliatura(s) = ',20,110)
+        doc.text(this.getAuxs(),20,120)
         doc.save('Mi_rotulado.pdf')
     }
 
     render () {
-        const { selectedOption } = this.state
+        const { selectedOptionAux } = this.state
+        const { selectedOptionConv } = this.state
         return (
                 <form noValidate onSubmit={this.onSubmit}>
                     <div className="row">
                         <div className="col-md-12 my-3 p-3 bg-info text-white">
                             <h1 className="h3 font-weight-normal text-center">
-                                Registro de postulante
+                                Generado de rotulado
                             </h1>
                         </div>
                         <h3 className="h5 col-md-12 my-4 font-weight-normal text-center">
                                 Datos del postulante
                         </h3>
-                        <div className="form-group col-md-12">
+                        <div className="form-group col-md-4">
                             <label htmlFor="names">Nombres</label>
                             <input
                                 type="text"
@@ -200,7 +253,7 @@ class Register extends Component {
                             />
                             <p style={{color:"red"}}>{this.state.names_error}</p>
                         </div>
-                        <div className="form-group col-md-6">
+                        <div className="form-group col-md-4">
                             <label htmlFor="first_surname">Apellido paterno</label>
                             <input
                                 type="text"
@@ -212,7 +265,7 @@ class Register extends Component {
                             />
                             <p style={{color:"red"}}>{this.state.first_surname_error}</p>
                         </div>
-                        <div className="form-group col-md-6">
+                        <div className="form-group col-md-4">
                             <label htmlFor="second_surname">Apellido materno</label>
                             <input
                                 type="text"
@@ -224,7 +277,7 @@ class Register extends Component {
                             />
                             <p style={{color:"red"}}>{this.state.second_surname_error}</p>
                         </div>
-                        <div className="form-group col-md-6">
+                        <div className="form-group col-md-4">
                             <label htmlFor="direction">Dirección</label>
                             <input
                                 type="text"
@@ -236,8 +289,8 @@ class Register extends Component {
                             />
                             <p style={{color:"red"}}>{this.state.direction_error}</p>
                         </div>
-                        <div className="form-group col-md-6">
-                            <label htmlFor="email">Email address</label>
+                        <div className="form-group col-md-4">
+                            <label htmlFor="email">Email</label>
                             <input
                                 type="email"
                                 className="form-control"
@@ -248,7 +301,7 @@ class Register extends Component {
                             />
                             <p style={{color:"red"}}>{this.state.email_error}</p>
                         </div>
-                        <div className="form-group col-md-6">
+                        <div className="form-group col-md-4">
                             <label htmlFor="phone">Numero de celular</label>
                             <input
                                 type="text"
@@ -260,7 +313,7 @@ class Register extends Component {
                             />
                             <p style={{color:"red"}}>{this.state.phone_error}</p>
                         </div>
-                        <div className="form-group col-md-6">
+                        <div className="form-group col-md-4">
                             <label htmlFor="ci">Numero de ci</label>
                             <input
                                 type="text"
@@ -272,23 +325,52 @@ class Register extends Component {
                             />
                             <p style={{color:"red"}}>{this.state.ci_error}</p>
                         </div>
+                        <div className="form-group col-md-4">
+                            <label htmlFor="sis_code">Codigo sis</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                name="sis_code"
+                                placeholder="Ingrese su codigo sis"
+                                value={this.state.sis_code}
+                                onChange={this.onChange}
+                            />
+                            <p style={{color:"red"}}>{this.state.sis_code_error}</p>
+                        </div>
                         <h3 className="h5 col-md-12 my-4 font-weight-normal text-center">
                                 Datos de Auxiliatura
                         </h3>
-                        <div className="form-group col-md-12">
+                        <div className="form-group col-md-6">
+                            <label htmlFor="conv">Selecciona una convocatoria</label>
+                            <Select
+                                name="conv"
+                                options={conv}
+                                className="basic-multi-select"
+                                classNamePrefix="select"
+                                placeholder=""
+                                value={selectedOptionConv}
+                                onChange={this.selectConvChange}
+                            />
+                            <p style={{color:"red"}}>{this.state.selectedConvOption_error}</p>
+                        </div>
+                        {
+                        this.state.showAux?
+                        <div className="form-group col-md-6">
                             <label htmlFor="aux">Selecciona una auxiliatura</label>
                             <Select
                                 isMulti
                                 name="aux"
-                                options={op}
+                                options={aux}
                                 className="basic-multi-select"
                                 classNamePrefix="select"
                                 placeholder=""
-                                value={selectedOption}
-                                onChange={this.selectChange}
+                                value={selectedOptionAux}
+                                onChange={this.selectAuxChange}
                             />
-                            <p style={{color:"red"}}>{this.state.selectedOption_error}</p>
+                            <p style={{color:"red"}}>{this.state.selectedAuxOption_error}</p>
                         </div>
+                        :null
+                        }
                         <div style={{color:'red'}} className=" h5 col-md-12 mt-4 text-center">
                             <p>¡Antes de confirmar verifica tus datos!</p>
                         </div>
