@@ -192,7 +192,7 @@ class Register extends Component {
                 phone: this.state.phone,
                 ci: this.state.ci,
                 sis_code: this.state.sis_code,
-                announcement: 'F',
+                announcement: this.state.selectedConvOption.label,
                 auxiliary:this.getAuxs()
             }
 
@@ -206,7 +206,7 @@ class Register extends Component {
     getAuxs(){
         var auxs
         for (var i=0; i < this.state.selectedAuxOption.length; i++) {
-            auxs= auxs + (JSON.stringify(this.state.selectedAuxOption[i].value))+"\n"
+            auxs= auxs + (JSON.stringify(this.state.selectedAuxOption[i].label))+"\n"
           }
         auxs = auxs.replace(/["']/g, "")
         auxs = auxs.replace("undefined", "")
