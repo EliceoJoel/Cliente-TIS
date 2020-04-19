@@ -121,7 +121,8 @@ var op = [
              send.append('type', type)
              send.append('departament', departament)
              send.append('auxiliary', this.getAux())
-             send.append('file', this.state.file, this.state.file.name)
+             send.append('filepdf', this.state.file, this.state.file.name)
+             send.append('file' , this.state.file.name)
              //axios.post('api/announcement', send)
              axios({
                 method: 'post',
