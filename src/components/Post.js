@@ -90,12 +90,12 @@ var op = [
     //      let reader = new FileReader
     //      reader.readAsDataURL(file)
     //  }
-    handleFile(event){
-        this.setState({file: event})
+    handleFile = (event) =>{ this.setState({file: event.target.files[0]})}
+       // this.setState({file: event})
        // let reader = new FileReader
       //    reader.readAsDataURL(file[0])
         
-    }
+
 
      handleUpload(e ){
          e.preventDefault()
@@ -107,7 +107,7 @@ var op = [
          
         })
         if(this.valid()){  
-         let file = this.state.file
+         //let file = this.state.file
         
          let name = this.state.name
          let year = this.state.year
@@ -121,7 +121,7 @@ var op = [
              send.append('type', type)
              send.append('departament', departament)
              send.append('auxiliary', this.getAux())
-             send.append('file', year)
+             send.append('file', this.state.file, this.state.file.name)
              //axios.post('api/announcement', send)
              axios({
                 method: 'post',
@@ -264,7 +264,7 @@ var op = [
      
       <p></p>
                    
-                    {/* <div className="form-group col-md-10 "> */}
+                    <div className="form-group col-md-10 ">
                            <label htmlFor="Archivo">Archivo</label>
                        <p></p>
                        <p></p>
@@ -276,7 +276,7 @@ var op = [
                         accept = "application/pdf"
                        /> 
                         <p style={{color:"red"}}>{this.state.file_error}</p>
-                       {/* </div> */}
+                       </div>
                      </div>  
                   <div>
                      
