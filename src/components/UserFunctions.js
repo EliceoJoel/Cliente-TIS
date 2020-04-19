@@ -41,6 +41,19 @@ export const getAnnouncementID = (id) => {
         })
 }
 
+export const registerAnnouncement = newAnnouncement => {
+    return axios
+        .post('api/announcement', newAnnouncement, {
+            headers: { 'Content-Type' : 'multipart/form-data' }
+        })
+        .then(response => {
+            console.log(response)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
 
 export const login = user => {
     return axios
