@@ -31,11 +31,7 @@ class Landing extends Component {
                      Post
                </Link>
           </li>
-          <li className = "nav-item">
-        <Link to ="/File" className= "nav-link">
-                     File
-               </Link>
-          </li>
+        
       </ul>
     )
 
