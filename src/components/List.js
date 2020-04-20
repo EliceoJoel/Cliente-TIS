@@ -18,7 +18,7 @@ class List extends Component{
           console.log(e);
       })
     }
-      
+
     render(){
       var url = 'http://127.0.0.1:8000/storage/file/';
       return(
@@ -33,6 +33,11 @@ class List extends Component{
                           <div class="gestion"> <a href = {url + convocatoria.file}> { "gestion " + convocatoria.year +", "  + convocatoria.departament} </a></div>
                           <div>{convocatoria.type} </div>
                           <div>{"publicado en " + convocatoria.created_at} </div>
+                          
+                          <div> {JSON.parse(convocatoria.auxiliary).map( items => (
+                              <i>{items.item + "  "}</i>
+                          ))}</div>
+
                           <br/>
                           </div>
                       </div>
