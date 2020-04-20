@@ -23,14 +23,14 @@ class Landing extends Component {
         </li>
       <li className="nav-item">
           <Link to="/list" className="nav-link">
-            list
+            Convocatorias
           </Link>
         </li>
         <li className = "nav-item">
-        <Link to ="/Post" className= "nav-link">
-                     Post
-               </Link>
-          </li>
+          <Link to ="/Post" className= "nav-link">
+            Publicar Convocatoria
+          </Link>
+        </li>
         
         
         

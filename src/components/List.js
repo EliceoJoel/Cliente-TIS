@@ -35,7 +35,7 @@ class List extends Component{
                           <div>{"publicado en " + convocatoria.created_at} </div>
                           
                           <div> {JSON.parse(convocatoria.auxiliary).map( items => (
-                              <i>{items.item + "  "}</i>
+                              <i>{items.name + " - "}</i> 
                           ))}</div>
 
                           <br/>

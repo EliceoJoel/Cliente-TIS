@@ -7,9 +7,7 @@ var ArrayAuxi = []
      constructor() {
          super()
      
-         this.state = {
-           
-           
+         this.state = { 
             file: null,
             file_error: '',
             name :'' ,
@@ -20,76 +18,40 @@ var ArrayAuxi = []
             departament: 'Sistemas',
             selectedOption: null,
             selectedOption_error:'',
-            array_error:''
-      
-          //  gfg
-            
-       
-        //    ref: ''
-        
+            array_error:''      
          }
-         //this.onChange = this.onChange.bind(this)
-         //this.onSubmit = this.onSubmit.bind(this)
      }
-     
-    //  handleSelect = (evento) =>{
-    //     this.setState({[evento.target.name]: evento.target.value })
 
-    //  }
-   
-    
-    
-    
-    
-    
     onChange =  (e) =>{
         this.setState({[e.target.name]: e.target.value })
     }
     onChangeAux =  (e) =>{
         this.setState({[e.target.name]: e.target.value })
     }
-    // selectChange = selectedOption =>{
-    // this.setState(
-    //     {selectedOption},
-    //     () => console.log(this.state.selectedOption)
-    // )
-    
-    //}
+
     handleRemove(AuxEvent){
         AuxEvent.preventDefault()
         ArrayAuxi.pop()
         console.log(ArrayAuxi)
        
-
     }
     handleAux(AuxEvent){
        AuxEvent.preventDefault()
         var arreglo = {}
-     //   gfg = this.gfg
-     // var  arreglo = {}
-     // var hoal = []
-      // var posicion = 0
-     
-            //console.log(this.state.item,this.state.auxiliary)
-           arreglo.item = this.state.item
-           arreglo.name = this.state.auxiliary
+        arreglo.item = this.state.item
+        arreglo.name = this.state.auxiliary
+        capturar();
+        var Arreglo = JSON.stringify(ArrayAuxi); 
         
-              capturar();
-          
-             var Arreglo = JSON.stringify(ArrayAuxi); 
-           
-           function capturar(){
-               ArrayAuxi.push(arreglo);
-              // ArrayAuxi.
-               // hoal[posicion] = arreglo
-               // posicion++
-                console.log(ArrayAuxi)
-              
-            }
-            return Arreglo
-            
-
+        function capturar(){
+        ArrayAuxi.push(arreglo);
+        console.log(ArrayAuxi)
+        }
+        
+        return Arreglo
     }
+
+
     valid(){        
         if(this.state.name === ''){
             this.setState({name_error:'Campo vacio'})
@@ -113,22 +75,12 @@ var ArrayAuxi = []
         else{
             return true;
         }
-
     }
-    
-    // getAux(){
-    // var aux
-    // for (var i=0; i < this.state.selectedOption.length; i++) {
-    //     aux= aux + (JSON.stringify(this.state.selectedOption[i].value))+"\n"
-    //   }
-    // aux = aux.replace(/["']/g, "")
-    // aux = aux.replace("undefined", "")
-    // return aux;
-    // }
+
  
     handleFile = (event) =>{ this.setState({file: event.target.files[0]})}
       
-     handleUpload(e ){
+    handleUpload(e ){
          e.preventDefault()
                this.setState({
             name_error: '', 
@@ -137,32 +89,26 @@ var ArrayAuxi = []
             file_error:'',
             array_error:''
          
-        })
-        if(this.valid()){  
-         //let file = this.state.file
-        
+    })
+        if(this.valid()){       
          let name = this.state.name
          let year = this.state.year
          let type = this.state.type
-        let departament = this.state.departament
-        //et gfg = this.state.gfg
+         let departament = this.state.departament
          let send = new FormData()
              
              send.append('name', name)
              send.append('year', year )
              send.append('type', type)
              send.append('departament', departament)
-             //send.append('auxiliary', this.getAux())
              send.append('auxiliary',JSON.stringify(ArrayAuxi))
             
              send.append('filepdf', this.state.file, this.state.file.name)
              send.append('file' , this.state.file.name)
-             //axios.post('api/announcement', send)
              axios({
                 method: 'post',
                 url: 'api/announcement',
                 data: send,
-                //headers: { 'Content-Type': 'application/json' }
                 headers: {'Content-Type': 'multipart/form-data' }
                 }).then(response =>{
                  console.log(response)
@@ -174,41 +120,10 @@ var ArrayAuxi = []
 
      }
     
-     
-    // onSubmit (e) {
-    //     e.preventDefault()
-
-    //     //clear error state
-    //     this.setState({
-    //         name_error: '', 
-    //         year_error: '',
-    //         selectedOption_error:'',
-    //         file_error:''
-         
-    //     })
-
-    //     if(this.valid()){  
-            
-    //         const newAnnouncement = {
-    //             name: this.state.name,
-    //             year: this.state.year,
-    //             type: this.state.type,
-    //             departament: this.state.departament,
-    //             auxiliary:this.getAux(),
-    //             file: this.state.file
-    //         }
-    //         console.log(newAnnouncement);
-
-    //         registerAnnouncement (newAnnouncement).then(res => {
-    //            this.props.history.push(`/`)
-    //         })
-    //     }
-    // }
 
 
     render() {
          const {name ,year, type, departament,item,auxiliary } =this.state
-     //    const { selectedOption } = this.state
          
 
         
@@ -301,38 +216,34 @@ var ArrayAuxi = []
                             value = {auxiliary}  
                             onChange = {this.onChangeAux}                     
                       />
-
-
-                      
                       </div>
                       
                      
                       <div className="form-group col-md-12 ">    
-                      <button variant="warning" onClick ={(AuxEvent) => this.handleAux(AuxEvent)} >Agregar</button>
-                     <button  variant="warning"onClick ={(AuxEvent) => this.handleRemove(AuxEvent)} >Remover Ultimo Ingresado</button>
+                      <button className="btn btn-outline-info" variant="warning" onClick ={(AuxEvent) => this.handleAux(AuxEvent)} >Agregar</button>
+                     <button   className="btn btn-outline-info mx-3" variant="warning"onClick ={(AuxEvent) => this.handleRemove(AuxEvent)} >Remover Ultimo Ingresado</button>
                      <p style={{color:"red"}}>{this.state.array_error}</p>
                     </div>
-                  <p></p>
-                            <div>
-                                    {ArrayAuxi.map(arreglo =>
-                                        <div key = {arreglo.item}>
-                                             <label htmlFor="item">item : {arreglo.item},</label>
-                                             <label htmlFor="auxiliary">auxiliatura : {arreglo.name}</label>
-                                         </div>   )}
-                            </div>
-                            <p></p>
-                    <div className="form-group col-md-12 ">
-                    <h3 className="h5 col-md-12 my-4 font-weight-normal text-center">
+                    <p></p>
+                    <div className="ml-4">
+                            {ArrayAuxi.map(arreglo =>
+                                <div key = {arreglo.item}>
+                                     <label htmlFor="item">item : {arreglo.item},</label>
+                                     <label htmlFor="auxiliary">auxiliatura : {arreglo.name}</label>
+                                 </div>   )}
+                    </div>
+                        <p></p>
+                        <div className="form-group col-md-12 ">
+                        <h3 className="h5 col-md-12 my-4 font-weight-normal text-center">
                             Archivo Convocatoria</h3>
                        <p></p>
                        <p></p>
-                         <input 
-                        
-                        onChange={(event) => this.handleFile(event)}
-                        type = "file" 
-                        name = "file" 
-                        accept = "application/pdf"
-                       /> 
+                        <input 
+                            onChange={(event) => this.handleFile(event)}
+                            type = "file" 
+                            name = "file" 
+                            accept = "application/pdf"
+                        />
                         <p style={{color:"red"}}>{this.state.file_error}</p>
                        </div>
                      </div>  
