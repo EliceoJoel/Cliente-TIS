@@ -25,6 +25,9 @@ class App extends Component {
             <Route exact path="/list" component={List} />
             <Route exact path="/post" component={Post} />
             
+         
+
+            
           </div>
         </div>
       </Router>
