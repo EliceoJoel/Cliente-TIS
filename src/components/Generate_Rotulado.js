@@ -4,14 +4,11 @@ import Select from 'react-select'
 //import axios from 'axios'
 import {register} from './UserFunctions'
 import {getAnnouncement} from './UserFunctions'
+import {getAnnouncementID} from './UserFunctions'
 
 //format of valid email
 var validMail = /\w+@\w+\.+[a-z]/;
-var aux = [
-    { value: 'aux1', label: 'aux1' },
-    { value: 'aux2', label: 'aux2' },
-    { value: 'aux3', label: 'aux3' }
-  ]
+var aux = []
 var conv = []
 
 class Register extends Component {
@@ -58,6 +55,7 @@ class Register extends Component {
         })
     }
 
+
     onChange (e) {
         this.setState({ [e.target.name]: e.target.value })
         this.setState({
@@ -75,20 +73,29 @@ class Register extends Component {
     
     selectAuxChange = selectedAuxOption =>{
         this.setState({selectedAuxOption_error:''})
-        this.setState(
-            {selectedAuxOption},
-            () => console.log(this.state.selectedAuxOption)
-        )
+        this.setState({selectedAuxOption})
     }
 
     selectConvChange = selectedConvOption =>{
         this.setState({selectedConvOption_error:''})
-        this.setState(
-            {selectedConvOption},
-            () => console.log(this.state.selectedConvOption)
-        )
-        this.setState({showAux:true})    
+        this.setState({selectedConvOption},()=>this.fillAuxiliary())
+        this.setState({showAux:true})
+        //delete auxiliary array data
+        var array = []
+        aux = array
     }
+
+    fillAuxiliary(){
+        getAnnouncementID(this.state.selectedConvOption.value).then(res => {
+            for(var i=0 ; i<res.auxiliary.length ; i++){
+                var object = {}
+                object.value = res.auxiliary[i].item
+                object.label = res.auxiliary[i].name
+                aux[i] = object
+            }
+        })
+    }
+
     //field validation function
     valid(){        
         if(this.state.names === ''){
@@ -156,6 +163,7 @@ class Register extends Component {
 
     
     onSubmit (e) {
+        
         e.preventDefault()
         //clear error state
         this.setState({
@@ -184,7 +192,7 @@ class Register extends Component {
                 phone: this.state.phone,
                 ci: this.state.ci,
                 sis_code: this.state.sis_code,
-                announcement: 'F',
+                announcement: this.state.selectedConvOption.label,
                 auxiliary:this.getAuxs()
             }
 
@@ -198,7 +206,7 @@ class Register extends Component {
     getAuxs(){
         var auxs
         for (var i=0; i < this.state.selectedAuxOption.length; i++) {
-            auxs= auxs + (JSON.stringify(this.state.selectedAuxOption[i].value))+"\n"
+            auxs= auxs + (JSON.stringify(this.state.selectedAuxOption[i].label))+"\n"
           }
         auxs = auxs.replace(/["']/g, "")
         auxs = auxs.replace("undefined", "")
@@ -207,7 +215,7 @@ class Register extends Component {
     
     //method for generate pdf
     generatePDF(){
-        var doc = new jsPDF()
+        var doc = new jsPDF('p', 'mm', 'letter')
         doc.setFontSize(25)
         doc.line(15, 10, 200, 10) //horizontal top line
         doc.line(200, 10, 200, 115+(10*this.state.selectedAuxOption.length)) //vertical left line
@@ -221,9 +229,12 @@ class Register extends Component {
         doc.text('Celular = ' + this.state.phone,20,70)
         doc.text('Ci = ' + this.state.ci,20,80)
         doc.text('Codigo sis = ' + this.state.sis_code,20,90)
-        doc.text('Convocatoria = conv1',20,100)
+        doc.text('Convocatoria = ' + this.state.selectedConvOption.label,20,100)
         doc.text('Auxiliatura(s) = ',20,110)
-        doc.text(this.getAuxs(),20,120)
+        doc.setFontSize(15)
+        for(var i=0; i<this.state.selectedAuxOption.length; i++){
+        doc.text(this.state.selectedAuxOption[i].value + ' ' + this.state.selectedAuxOption[i].label, 20, 120+(i*10))
+        }
         doc.save('Mi_rotulado.pdf')
     }
 
