@@ -27,11 +27,13 @@ class List extends Component{
                       <h1 className="h3 font-weight-normal text-center mt-3 p-3 bg-info text-white"> Lista de convocatorias </h1>
                       {this.state.convocatorias.map( convocatoria => (
                       <div class="convocatoria">
+                          <div><h2>{convocatoria.name} </h2> </div>
                           <embed class="pdf"  src= {url + convocatoria.file} height='400' width='100%'></embed>
                           <div class = "etiqueta">
                           <div class="gestion"> <a href = {url + convocatoria.file}> { "gestion " + convocatoria.year +", "  + convocatoria.departament} </a></div>
                           <div>{convocatoria.type} </div>
                           <div>{"publicado en " + convocatoria.created_at} </div>
+                          <br/>
                           </div>
                       </div>
                       ))}
