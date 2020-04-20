@@ -45,7 +45,7 @@ class Register extends Component {
     }
 
     componentDidMount() {
-        getAnnouncement().then(res => {
+        getAnnouncementID().then(res => {
             for (var i=0; i < res.length; i++) {
                 var object = {}
                 object.value = res[i].id
