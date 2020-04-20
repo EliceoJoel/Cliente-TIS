@@ -1,18 +1,8 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-//import { Button } from 'reactstrap';
-//import Select from 'react-select'
-//import {registerAnnouncement} from './UserFunctions'
-// var op = [
-//     { value: {arreglo}, label: 'Introduccion a la Programación' },
-//     { value: 'Teoría de Grafos', label: 'Teoría de Grafos' },
-//     { value: 'Computación I', label: 'Computación I' } , 
-//     { value: 'Administracion de Laboratorio de Desarrollo', label: 'Administracion de Laboratorio de Desarrollo' }  
-//   ]
-//   var  arreglo = {}
-//    arreglo.item = "KFDSE";
-//    arreglo.auxiliary = "intro";
+
 var ArrayAuxi = []
+
  class Post extends Component {
      constructor() {
          super()
@@ -76,10 +66,10 @@ var ArrayAuxi = []
            
            function capturar(){
                ArrayAuxi.push(arreglo);
-               
+              // ArrayAuxi.
                // hoal[posicion] = arreglo
                // posicion++
-                console.log(ArrayAuxi)
+               // console.log(ArrayAuxi)
             }
             return Arreglo
 
@@ -163,7 +153,7 @@ var ArrayAuxi = []
             }
 
      }
-
+    
      
     // onSubmit (e) {
     //     e.preventDefault()
@@ -290,7 +280,7 @@ var ArrayAuxi = []
                     </div> */}
       <p></p>
            
-                      <div className="form-group col-md-4">
+                      <div className="form-group col-md-6">
                         <label htmlFor="Nombre">Item</label>
                
                        <input    
@@ -301,7 +291,7 @@ var ArrayAuxi = []
                            onChange = {this.onChangeAux}                     
                        />
                         </div>
-                        <div className="form-group col-md-4">
+                        <div className="form-group col-md-6">
                         <label htmlFor="Nombre">Auxiliatura</label>
                           <input    
                            className="form-control"                    
@@ -310,11 +300,24 @@ var ArrayAuxi = []
                             value = {auxiliary}  
                             onChange = {this.onChangeAux}                     
                       />
+
+
+                      
                       </div>
-                     <button className="col btn btn-lg btn-info mt-4 "onClick ={(AuxEvent) => this.handleAux(AuxEvent)} >Agregar</button>
-                 
+                      
+                     
+                      <div className="form-group col-md-10 ">    
+                      <button variant="warning" onClick ={(AuxEvent) => this.handleAux(AuxEvent)} >Agregar</button>
+                     <button  variant="warning"onClick ={(AuxEvent) => this.handleRemove(AuxEvent)} >Remover Ultimo Ingresado</button>
+                    </div>
                   <p></p>
-                   
+                 
+                        {/* <div>
+                            <ul>
+                                {auxlist}
+                            </ul>
+                        </div> */}
+
                     <div className="form-group col-md-10 ">
                            <label htmlFor="Archivo">Archivo</label>
                        <p></p>
@@ -332,6 +335,7 @@ var ArrayAuxi = []
                   <div>
                      
                 <button className="col btn btn-lg btn-info mt-10 "onClick ={(e) => this.handleUpload(e)} >UPLOAD</button>
+                
                
                 </div>
             </div>
