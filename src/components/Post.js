@@ -1,20 +1,15 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-//import { Button } from 'reactstrap';
-import Select from 'react-select'
-//import {registerAnnouncement} from './UserFunctions'
-var op = [
-    { value: 'Introducción a la Programacion', label: 'Introduccion a la Programación' },
-    { value: 'Teoría de Grafos', label: 'Teoría de Grafos' },
-    { value: 'Computación I', label: 'Computación I' } , 
-    { value: 'Administracion de Laboratorio de Desarrollo', label: 'Administracion de Laboratorio de Desarrollo' }  
-  ]
+
+var ArrayAuxi = []
 
  class Post extends Component {
      constructor() {
          super()
      
          this.state = {
+           
+           
             file: null,
             file_error: '',
             name :'' ,
@@ -25,8 +20,11 @@ var op = [
             departament: 'Sistemas',
             selectedOption: null,
             selectedOption_error:''
-        //    ref: ''
+          //  gfg
             
+       
+        //    ref: ''
+        
          }
          //this.onChange = this.onChange.bind(this)
          //this.onSubmit = this.onSubmit.bind(this)
@@ -40,14 +38,42 @@ var op = [
     onChange =  (e) =>{
         this.setState({[e.target.name]: e.target.value })
     }
-    selectChange = selectedOption =>{
-    this.setState(
-        {selectedOption},
-        () => console.log(this.state.selectedOption)
-    )
-    
+    onChangeAux =  (e) =>{
+        this.setState({[e.target.name]: e.target.value })
     }
+    // selectChange = selectedOption =>{
+    // this.setState(
+    //     {selectedOption},
+    //     () => console.log(this.state.selectedOption)
+    // )
     
+    //}
+    handleAux(AuxEvent){
+       AuxEvent.preventDefault()
+        var arreglo = {}
+     //   gfg = this.gfg
+     // var  arreglo = {}
+     // var hoal = []
+      // var posicion = 0
+     
+            //console.log(this.state.item,this.state.auxiliary)
+           arreglo.item = this.state.item
+           arreglo.name = this.state.auxiliary
+        
+              capturar();
+          
+             var Arreglo = JSON.stringify(ArrayAuxi); 
+           
+           function capturar(){
+               ArrayAuxi.push(arreglo);
+              // ArrayAuxi.
+               // hoal[posicion] = arreglo
+               // posicion++
+               // console.log(ArrayAuxi)
+            }
+            return Arreglo
+
+    }
     valid(){        
         if(this.state.name === ''){
             this.setState({name_error:'Campo vacio'})
@@ -61,9 +87,7 @@ var op = [
         else if(this.state.year.length > 30){
             this.setState({year_error:'Dato ingresado demasiado largo'})
         }
-        else if(this.state.selectedOption === null){
-            this.setState({selectedOption_error:'Seleccione una auxiliatura'})
-        }
+     
         else if(this.state.file === null){
             this.setState({file_error:'Seleccione un documento .pdf'})
         }
@@ -73,30 +97,18 @@ var op = [
 
     }
     
-    getAux(){
-    var aux
-    for (var i=0; i < this.state.selectedOption.length; i++) {
-        aux= aux + (JSON.stringify(this.state.selectedOption[i].value))+"\n"
-      }
-    aux = aux.replace(/["']/g, "")
-    aux = aux.replace("undefined", "")
-    return aux;
-    }
-    //  handleFile  (event) {
-
-    //      file: event.target.files[0]
-    //      //let file = event.target.file
-
-    //      let reader = new FileReader
-    //      reader.readAsDataURL(file)
-    //  }
+    // getAux(){
+    // var aux
+    // for (var i=0; i < this.state.selectedOption.length; i++) {
+    //     aux= aux + (JSON.stringify(this.state.selectedOption[i].value))+"\n"
+    //   }
+    // aux = aux.replace(/["']/g, "")
+    // aux = aux.replace("undefined", "")
+    // return aux;
+    // }
+ 
     handleFile = (event) =>{ this.setState({file: event.target.files[0]})}
-       // this.setState({file: event})
-       // let reader = new FileReader
-      //    reader.readAsDataURL(file[0])
-        
-
-
+      
      handleUpload(e ){
          e.preventDefault()
                this.setState({
@@ -113,14 +125,16 @@ var op = [
          let year = this.state.year
          let type = this.state.type
         let departament = this.state.departament
-
+        //et gfg = this.state.gfg
          let send = new FormData()
              
              send.append('name', name)
              send.append('year', year )
              send.append('type', type)
              send.append('departament', departament)
-             send.append('auxiliary', this.getAux())
+             //send.append('auxiliary', this.getAux())
+             send.append('auxiliary',JSON.stringify(ArrayAuxi))
+            
              send.append('filepdf', this.state.file, this.state.file.name)
              send.append('file' , this.state.file.name)
              //axios.post('api/announcement', send)
@@ -128,6 +142,7 @@ var op = [
                 method: 'post',
                 url: 'api/announcement',
                 data: send,
+                //headers: { 'Content-Type': 'application/json' }
                 headers: {'Content-Type': 'multipart/form-data' }
                 }).then(response =>{
                  console.log(response)
@@ -138,6 +153,8 @@ var op = [
             }
 
      }
+    
+     
     // onSubmit (e) {
     //     e.preventDefault()
 
@@ -170,8 +187,8 @@ var op = [
 
 
     render() {
-         const {name ,year, type, departament } =this.state
-         const { selectedOption } = this.state
+         const {name ,year, type, departament,item,auxiliary } =this.state
+     //    const { selectedOption } = this.state
          
 
         
@@ -246,7 +263,7 @@ var op = [
                        
                          
                 
-                   
+{/*                    
                    <div className="form-group col-md-12">
                        <label htmlFor="Auxiliatura">Auxiliatura</label>
                    <Select
@@ -260,11 +277,47 @@ var op = [
                              onChange={this.selectChange}
                             />
                              <p style={{color:"red"}}>{this.state.selectedOption_error}</p>
+                    </div> */}
+      <p></p>
+           
+                      <div className="form-group col-md-6">
+                        <label htmlFor="Nombre">Item</label>
+               
+                       <input    
+                           className="form-control"                    
+                             type = "text"
+                          name = "item"
+                          value = {item}  
+                           onChange = {this.onChangeAux}                     
+                       />
+                        </div>
+                        <div className="form-group col-md-6">
+                        <label htmlFor="Nombre">Auxiliatura</label>
+                          <input    
+                           className="form-control"                    
+                            type = "text"
+                            name = "auxiliary"
+                            value = {auxiliary}  
+                            onChange = {this.onChangeAux}                     
+                      />
+
+
+                      
+                      </div>
+                      
+                     
+                      <div className="form-group col-md-10 ">    
+                      <button variant="warning" onClick ={(AuxEvent) => this.handleAux(AuxEvent)} >Agregar</button>
+                     <button  variant="warning"onClick ={(AuxEvent) => this.handleRemove(AuxEvent)} >Remover Ultimo Ingresado</button>
                     </div>
-      <p></p>
-     
-      <p></p>
-                   
+                  <p></p>
+                 
+                        {/* <div>
+                            <ul>
+                                {auxlist}
+                            </ul>
+                        </div> */}
+
                     <div className="form-group col-md-10 ">
                            <label htmlFor="Archivo">Archivo</label>
                        <p></p>
@@ -282,6 +335,7 @@ var op = [
                   <div>
                      
                 <button className="col btn btn-lg btn-info mt-10 "onClick ={(e) => this.handleUpload(e)} >UPLOAD</button>
+                
                
                 </div>
             </div>
