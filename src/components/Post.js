@@ -19,7 +19,9 @@ var ArrayAuxi = []
             type: 'Docencia', 
             departament: 'Sistemas',
             selectedOption: null,
-            selectedOption_error:''
+            selectedOption_error:'',
+            array_error:''
+      
           //  gfg
             
        
@@ -34,6 +36,11 @@ var ArrayAuxi = []
     //     this.setState({[evento.target.name]: evento.target.value })
 
     //  }
+   
+    
+    
+    
+    
     
     onChange =  (e) =>{
         this.setState({[e.target.name]: e.target.value })
@@ -48,6 +55,13 @@ var ArrayAuxi = []
     // )
     
     //}
+    handleRemove(AuxEvent){
+        AuxEvent.preventDefault()
+        ArrayAuxi.pop()
+        console.log(ArrayAuxi)
+       
+
+    }
     handleAux(AuxEvent){
        AuxEvent.preventDefault()
         var arreglo = {}
@@ -69,9 +83,11 @@ var ArrayAuxi = []
               // ArrayAuxi.
                // hoal[posicion] = arreglo
                // posicion++
-               // console.log(ArrayAuxi)
+                console.log(ArrayAuxi)
+              
             }
             return Arreglo
+            
 
     }
     valid(){        
@@ -90,6 +106,9 @@ var ArrayAuxi = []
      
         else if(this.state.file === null){
             this.setState({file_error:'Seleccione un documento .pdf'})
+        }
+        else if(ArrayAuxi.length === 0){
+            this.setState({array_error:'Seleccione al menos una auxiliatura'})
         }
         else{
             return true;
@@ -115,7 +134,8 @@ var ArrayAuxi = []
             name_error: '', 
             year_error: '',
             selectedOption_error:'',
-            file_error:''
+            file_error:'',
+            array_error:''
          
         })
         if(this.valid()){  
@@ -259,27 +279,8 @@ var ArrayAuxi = []
 
                         </select>
                         </div>
-
-                       
-                         
-                
-{/*                    
-                   <div className="form-group col-md-12">
-                       <label htmlFor="Auxiliatura">Auxiliatura</label>
-                   <Select
-                                isMulti
-                                name="aux"
-                                options={op}
-                                className="basic-multi-select"
-                                classNamePrefix="select"
-                                placeholder=""
-                                value={selectedOption}
-                             onChange={this.selectChange}
-                            />
-                             <p style={{color:"red"}}>{this.state.selectedOption_error}</p>
-                    </div> */}
-      <p></p>
-           
+                        <h3 className="h5 col-md-12 my-4 font-weight-normal text-center">
+                            Datos de Auxiliatura</h3>
                       <div className="form-group col-md-6">
                         <label htmlFor="Nombre">Item</label>
                
@@ -306,24 +307,27 @@ var ArrayAuxi = []
                       </div>
                       
                      
-                      <div className="form-group col-md-10 ">    
+                      <div className="form-group col-md-12 ">    
                       <button variant="warning" onClick ={(AuxEvent) => this.handleAux(AuxEvent)} >Agregar</button>
                      <button  variant="warning"onClick ={(AuxEvent) => this.handleRemove(AuxEvent)} >Remover Ultimo Ingresado</button>
+                     <p style={{color:"red"}}>{this.state.array_error}</p>
                     </div>
                   <p></p>
-                 
-                        {/* <div>
-                            <ul>
-                                {auxlist}
-                            </ul>
-                        </div> */}
-
-                    <div className="form-group col-md-10 ">
-                           <label htmlFor="Archivo">Archivo</label>
+                            <div>
+                                    {ArrayAuxi.map(arreglo =>
+                                        <div key = {arreglo.item}>
+                                             <label htmlFor="item">item : {arreglo.item},</label>
+                                             <label htmlFor="auxiliary">auxiliatura : {arreglo.name}</label>
+                                         </div>   )}
+                            </div>
+                            <p></p>
+                    <div className="form-group col-md-12 ">
+                    <h3 className="h5 col-md-12 my-4 font-weight-normal text-center">
+                            Archivo Convocatoria</h3>
                        <p></p>
                        <p></p>
-                    <input 
-                      
+                         <input 
+                        
                         onChange={(event) => this.handleFile(event)}
                         type = "file" 
                         name = "file" 
