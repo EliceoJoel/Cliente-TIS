@@ -39,6 +39,7 @@ var ArrayAuxi = []
         AuxEvent.preventDefault()
         ArrayAuxi.pop()
         console.log(ArrayAuxi)
+        
        
     }
     handleAux(AuxEvent){
@@ -266,7 +267,7 @@ var ArrayAuxi = []
                      
                       <div className="form-group col-md-12 ">    
                       <button className="btn btn-outline-info" variant="warning" onClick ={(AuxEvent) => this.handleAux(AuxEvent)} >Agregar</button>
-                     <button   className="btn btn-outline-info mx-3" variant="warning"onClick ={(AuxEvent) => this.handleRemove(AuxEvent)} >Remover Ultimo Ingresado</button>
+                      <button   className="btn btn-outline-info mx-3" variant="warning"onClick ={(AuxEvent) => this.handleRemove(AuxEvent)} >Remover Ultimo Ingresado</button>
                      <p style={{color:"red"}}>{this.state.array_error}</p>
                     </div>
                     <p></p>
@@ -289,6 +290,7 @@ var ArrayAuxi = []
                             name = "file" 
                             accept = "application/pdf"
                         />
+                        
                         <p style={{color:"red"}}>{this.state.file_error}</p>
                        </div>
                      </div>  
