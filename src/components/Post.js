@@ -18,7 +18,13 @@ var ArrayAuxi = []
             departament: 'Sistemas',
             selectedOption: null,
             selectedOption_error:'',
-            array_error:''      
+            array_error:'' ,
+            item:'',
+            item_error:'',
+            auxiliary:'',
+            auxiliary_error:''
+
+
          }
      }
 
@@ -36,21 +42,55 @@ var ArrayAuxi = []
        
     }
     handleAux(AuxEvent){
+        
        AuxEvent.preventDefault()
+       this.setState({
+        item_error: '', 
+        auxiliary_error: '',
+       })
+       if(this.validAux()){  
+
         var arreglo = {}
+      
+       //  arreglo.item = item;
+        // arreglo.name = auxiliary;
         arreglo.item = this.state.item
         arreglo.name = this.state.auxiliary
+        //arreglo.item = item
+        //arreglo.name = auxiliary
+       
         capturar();
         var Arreglo = JSON.stringify(ArrayAuxi); 
         
         function capturar(){
-        ArrayAuxi.push(arreglo);
-        console.log(ArrayAuxi)
+         ArrayAuxi.push(arreglo);
+         console.log(ArrayAuxi)
         }
         
         return Arreglo
+        }
     }
+    
+    validAux(){        
+        if(this.state.item === ''){
+            this.setState({item_error:'Campo vacio'})
+        }
+        else if(this.state.item.length > 15){
+            this.setState({item_error:'Dato ingresado demasiado largo'})
+        }
+        else if(this.state.auxiliary === ''){
+            this.setState({auxiliary_error:'Campo vacio'})
+        }
+        else if(this.state.item.length > 40){
+            this.setState({auxiliary_error:'Dato ingresado demasiado largo'})
+        }
+        else{
 
+              return true;
+        }
+      
+    }
+     
 
     valid(){        
         if(this.state.name === ''){
@@ -145,7 +185,8 @@ var ArrayAuxi = []
                         <div className="form-group col-md-6">
                         <label htmlFor="Nombre">Nombre</label>
                         <input    
-                         className="form-control"                    
+                         className="form-control"   
+                         placeholder="Ingrese un nombre"                 
                         type = "text"
                         name = "name"
                         value = {name}  
@@ -187,9 +228,9 @@ var ArrayAuxi = []
                                 name="departament" 
                                  value={departament}
                                  onChange = {this.onChange}>
-                            <option>Sistemas</option>
-                            <option>Informatica</option>
-                            <option>Biologia</option>
+                            <option>Departamento de Ing Sistemas</option>
+                            <option>Departamento de Ing Informatica</option>
+                            <option>Departamento de Ing Biologia</option>
 
 
                         </select>
@@ -200,22 +241,26 @@ var ArrayAuxi = []
                         <label htmlFor="Nombre">Item</label>
                
                        <input    
-                           className="form-control"                    
+                           className="form-control"   
+                           placeholder="Ingrese un item"                   
                              type = "text"
                           name = "item"
                           value = {item}  
                            onChange = {this.onChangeAux}                     
                        />
+                           <p style={{color:"red"}}>{this.state.item_error}</p>
                         </div>
                         <div className="form-group col-md-6">
                         <label htmlFor="Nombre">Auxiliatura</label>
                           <input    
-                           className="form-control"                    
+                           className="form-control" 
+                           placeholder="Ingrese un nombre"                     
                             type = "text"
                             name = "auxiliary"
                             value = {auxiliary}  
                             onChange = {this.onChangeAux}                     
                       />
+                         <p style={{color:"red"}}>{this.state.auxiliary_error}</p>
                       </div>
                       
                      
