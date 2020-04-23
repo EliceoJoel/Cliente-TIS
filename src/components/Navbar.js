@@ -31,9 +31,12 @@ class Landing extends Component {
             Publicar Convocatoria
           </Link>
         </li>
-        
-        
-        
+        <li className = "nav-item">
+          <Link to ="/PostulantEnable" className= "nav-link">
+            Habilitar Postulante
+          </Link>
+        </li>
+
         
       </ul>
     )
