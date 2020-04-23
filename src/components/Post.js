@@ -229,9 +229,9 @@ var ArrayAuxi = []
                                 name="departament" 
                                  value={departament}
                                  onChange = {this.onChange}>
-                            <option>Departamento de Ing Sistemas</option>
-                            <option>Departamento de Ing Informatica</option>
-                            <option>Departamento de Ing Biologia</option>
+                            <option>Departamento de Sistemas-Informatica</option>
+                            <option>Departamento de Biologia</option>
+                            <option>Departamento de Matematicas</option>
 
 
                         </select>
@@ -296,7 +296,7 @@ var ArrayAuxi = []
                      </div>  
                   <div>
                      
-                <button className="col btn btn-lg btn-info mt-10 "onClick ={(e) => this.handleUpload(e)} >UPLOAD</button>
+                <button className="col btn btn-lg btn-info mt-10 "onClick ={(e) => this.handleUpload(e)} >Subir Convocatoria</button>
                 
                
                 </div>
