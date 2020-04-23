@@ -129,3 +129,5 @@ export class PostulantEnable extends Component {
 }
 
 export default PostulantEnable
+
+
