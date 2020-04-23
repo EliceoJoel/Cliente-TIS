@@ -38,6 +38,8 @@ class Register extends Component {
             selectedAuxOption: null,
             selectedAuxOption_error: '',
             showAux: false,
+            selectedOptionAux:null,
+            selectedOptionConv:null,
         }
 
         this.onChange = this.onChange.bind(this)
@@ -54,7 +56,6 @@ class Register extends Component {
               }
         })
     }
-
 
     onChange (e) {
         this.setState({ [e.target.name]: e.target.value })
@@ -74,18 +75,22 @@ class Register extends Component {
     selectAuxChange = selectedAuxOption =>{
         this.setState({selectedAuxOption_error:''})
         this.setState({selectedAuxOption})
+        this.setState({selectedOptionAux:selectedAuxOption})
     }
 
     selectConvChange = selectedConvOption =>{
         this.setState({selectedConvOption_error:''})
         this.setState({selectedConvOption},()=>this.fillAuxiliary())
+        this.setState({selectedOptionConv:selectedConvOption})
         this.setState({showAux:true})
+        this.setState({selectedOptionAux:null})
         //delete auxiliary array data
         var array = []
         aux = array
     }
 
     fillAuxiliary(){
+        
         getAnnouncementID(this.state.selectedConvOption.value).then(res => {
             var auxiliary = JSON.parse(res.auxiliary)
             for(var i=0 ; i<auxiliary.length ; i++){
@@ -181,6 +186,7 @@ class Register extends Component {
             selectedConvOption_error:''
         })
 
+
         if(this.valid()){  
             this.generatePDF()
             
@@ -198,9 +204,17 @@ class Register extends Component {
             }
 
             register(newPostulant).then(res => {
-               this.props.history.push(`/`)
+               this.props.history.push(`/Generate_Rotulado`)
             })
+
+            //clear selected
+            this.setState({
+                selectedOptionAux:null,
+                selectedOptionConv:null
+            })
+
         }
+
     }
 
 
@@ -238,6 +252,7 @@ class Register extends Component {
         }
         doc.save('Mi_rotulado.pdf')
     }
+
 
     render () {
         const { selectedOptionAux } = this.state
