@@ -35,6 +35,8 @@ class Enabled_list extends Component {
     }
 
     fillPostulant(){
+        var array = []
+        postulants = array
         console.log(this.state.selectConv)
         getPostulantsEnabled().then(res => {
             for (var i=0; i < res.length; i++) {
