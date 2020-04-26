@@ -43,7 +43,16 @@ class Enabled_list extends Component {
     }
 
     fillPostulant(selectedConv){
-        console.log(selectedConv.label)
+        getPostulantsEnabled().then(res => {
+            for (var i=0; i < res.length; i++) {
+                var object = {}
+                object.sis_code = res[i].sis_code
+                object.auxiliary = res[i].auxiliary
+                object.enabled = res[i].enabled
+                object.reason = res[i].reason
+                this.state.postulans[i] = object
+              }
+        })
     }
 
     render() {
