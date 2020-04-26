@@ -1,15 +1,16 @@
 import React, { Component } from 'react'
 import Select from 'react-select'
 import {getAnnouncement} from './UserFunctions'
+import {getPostulantsEnabled} from './UserFunctions'
 
 var conv = []
+var postulants = []
 
 class Enabled_list extends Component {
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.state = {
             selectConv:null,
-            postulants:[],
         }
 
         this.selectConvChange = this.selectConvChange.bind(this)
@@ -27,31 +28,25 @@ class Enabled_list extends Component {
         })
     }
 
-    //fill postulant
-    /*componentDidMount() {
-        axios.get('/api/enabled_list')
-        .then(response => {
-            this.setState({postulants : response.data});
-        })
-        .catch(e => {
-            console.log(e);
-        })
-      }*/
 
-    selectConvChange = selectedConv =>{
-        this.setState({selectConv:selectedConv}, this.fillPostulant(selectedConv))
+    selectConvChange = selectConv =>{
+        this.setState({selectConv}, ()=>this.fillPostulant())
+        this.setState({selectConv})
     }
 
-    fillPostulant(selectedConv){
+    fillPostulant(){
+        console.log(this.state.selectConv)
         getPostulantsEnabled().then(res => {
             for (var i=0; i < res.length; i++) {
-                var object = {}
-                object.sis_code = res[i].sis_code
-                object.auxiliary = res[i].auxiliary
-                object.enabled = res[i].enabled
-                object.reason = res[i].reason
-                this.state.postulans[i] = object
-              }
+                if(res[i].announcement === this.state.selectConv.label){
+                    var object = {}
+                    object.sis_code = res[i].sis_code
+                    object.auxiliary = res[i].auxiliary
+                    object.enable = res[i].enable
+                    object.reason = res[i].reason
+                    postulants.push(object)
+                }
+            }
         })
     }
 
@@ -82,7 +77,7 @@ class Enabled_list extends Component {
                     <label className="col-md-3 text-info font-weight-bold" htmlFor="Nombre">Habilitado</label>
                     <label className="col-md-3 text-info font-weight-bold" htmlFor="Nombre">Motivo de inhabilitación</label>
                     <div className="my-1" style={{border:"0.5px solid silver", width: "100%"}}></div>
-                    {this.state.postulants.map( postulant =>(
+                    {postulants.map( postulant =>(
                         <div className="container">
                           <div className="row row-cols-4">
                             <div className="col">
@@ -92,12 +87,13 @@ class Enabled_list extends Component {
                                 {postulant.auxiliary}                    
                             </div>
                             <div className="col">
-                                {postulant.enabled}
+                                {postulant.enable}
                             </div>
                             <div className="col">
                                 {postulant.reason}
                             </div>
                           </div>
+                          <div className="my-1" style={{border:"0.3px solid silver", width: "100%"}}></div>
                         </div>
                     ))}
                 </div>

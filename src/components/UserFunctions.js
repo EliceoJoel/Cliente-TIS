@@ -27,6 +27,19 @@ export const getAnnouncement = () => {
         })
 }
 
+export const getPostulantsEnabled = () =>{
+    return axios
+       .get('api/postulantEnable', {
+           headers: {'Content-Type': 'application/json'}
+       })
+       .then(response => {
+        return response.data
+       })
+       .catch(err => {
+           console.log(err)
+       })
+}
+
 export const getAnnouncementID = (id) => {
     return axios
         .get('api/announcement/'+id, {
