@@ -7,10 +7,11 @@ var conv = []
 var postulants = []
 
 class Enabled_list extends Component {
-    constructor(props) {
-        super(props)
+    constructor() {
+        super()
         this.state = {
             selectConv:null,
+            showList:false,
         }
 
         this.selectConvChange = this.selectConvChange.bind(this)
@@ -31,25 +32,32 @@ class Enabled_list extends Component {
 
     selectConvChange = selectConv =>{
         this.setState({selectConv}, ()=>this.fillPostulant())
-        this.setState({selectConv})
     }
+
 
     fillPostulant(){
         var array = []
         postulants = array
-        console.log(this.state.selectConv)
         getPostulantsEnabled().then(res => {
             for (var i=0; i < res.length; i++) {
                 if(res[i].announcement === this.state.selectConv.label){
                     var object = {}
                     object.sis_code = res[i].sis_code
                     object.auxiliary = res[i].auxiliary
-                    object.enable = res[i].enable
+                    if(res[i].enable === true){
+                        object.enable = "Si"
+                    }else{
+                        object.enable = "No"
+                    }
                     object.reason = res[i].reason
                     postulants.push(object)
                 }
             }
         })
+    }
+
+    nose(){
+
     }
 
     render() {
@@ -76,7 +84,7 @@ class Enabled_list extends Component {
                     </div>
                     <label className="col-md-3 text-info font-weight-bold" htmlFor="Nombre">Código Sis del postulante</label>
                     <label className="col-md-3 text-info font-weight-bold" htmlFor="Nombre">Nombre de auxiliatura</label>
-                    <label className="col-md-3 text-info font-weight-bold" htmlFor="Nombre">Habilitado</label>
+                    <label className="col-md-3 text-info font-weight-bold text-center" htmlFor="Nombre">Habilitado</label>
                     <label className="col-md-3 text-info font-weight-bold" htmlFor="Nombre">Motivo de inhabilitación</label>
                     <div className="my-1" style={{border:"0.5px solid silver", width: "100%"}}></div>
                     {postulants.map( postulant =>(
@@ -88,7 +96,7 @@ class Enabled_list extends Component {
                             <div className="col">
                                 {postulant.auxiliary}                    
                             </div>
-                            <div className="col">
+                            <div className="col text-center">
                                 {postulant.enable}
                             </div>
                             <div className="col">
