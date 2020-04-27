@@ -8,6 +8,7 @@ import Generate_Rotulado from './components/Generate_Rotulado'
 import List from './components/List'
 import Post from './components/Post'
 import Enabled_list from './components/Enabled_list'
+import Postulant_Register from './components/Postulant_Register'
 
 
 
@@ -24,9 +25,7 @@ class App extends Component {
             <Route exact path="/list" component={List} />
             <Route exact path="/post" component={Post} />
             <Route exact path="/enabled_list" component={Enabled_list} />
-         
-
-            
+            <Route exact path="/postulant_register" component={Postulant_Register} />
           </div>
         </div>
       </Router>

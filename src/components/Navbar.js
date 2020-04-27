@@ -36,6 +36,11 @@ class Landing extends Component {
             Lista de Habilitados/Inhabilitados
           </Link>
         </li>
+        <li className = "nav-item">
+          <Link to ="/postulant_register" className= "nav-link">
+            Registrar postulante
+          </Link>
+        </li>
         
         
         
