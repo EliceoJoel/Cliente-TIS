@@ -1,4 +1,9 @@
 import React, { Component } from 'react'
+import {getPostulant} from './UserFunctions'
+
+var allPostulants = []
+var postulantions=[]
+var postulation
 
 class PostulantRegister extends Component {
     constructor() {
@@ -13,11 +18,20 @@ class PostulantRegister extends Component {
             date_error:"",
             showList:false,
             showDocuments:false,
-            showSubmit:false
+            showSubmit:false,
+            notFoundPostulant:""
 
         }
         this.onChange = this.onChange.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
+    }
+
+    //fill postulants
+    componentDidMount() {
+        getPostulant().then(res => {
+            allPostulants = res
+            console.log(allPostulants)
+        })
     }
 
     validSis(){
@@ -31,6 +45,21 @@ class PostulantRegister extends Component {
             return true
         }
     }
+
+    isPotulant(){
+       var res = false
+       allPostulants.map(postulant =>{
+           if(postulant.sis_code === this.state.sis_code){
+               postulantions.push(postulant)
+               res = true
+           }else{
+               this.setState({notFoundPostulant:"No se encontró ninguna postulación"})
+           }
+        })
+        console.log(postulantions)
+        return res
+    }
+
 
     validDoc(){
         if(this.state.documents === ''){
@@ -67,14 +96,19 @@ class PostulantRegister extends Component {
     }
 
     search(){
+        postulantions=[]
         if(this.validSis()){
-           this.setState({showList:true})
+            if(this.isPotulant()){
+               this.setState({showList:true, notFoundPostulant:""})
+            }
         }
     }
 
-    generar(){
+    generar(pos){
        this.setState({showData:true})
        this.setState({showSubmit:true})
+       postulation = pos
+
     }
 
     render() {
@@ -102,17 +136,14 @@ class PostulantRegister extends Component {
                         <div className="col-md-4">
                            <button type="button" className="col btn btn-info mb-2" onClick={()=>this.search()}>Buscar</button>
                         </div>
-                        {this.state.showList?    
+                        <p class="col-md-12 text-center" style={{color:"red"}}>{this.state.notFoundPostulant}</p>
+                        {this.state.showList?  
                             <div className="form-row col-md-12">
+                                {postulantions.map( postulation =>( 
                                 <div className="col-md-4">
-                                   <button type="button" className="col btn btn-outline-info mb-2" onClick={()=>this.generar()}>pos1</button>
+                                   <button type="button" className="col btn btn-outline-info mb-2" onClick={()=>this.generar(postulation)}>{postulation.announcement}</button>
                                 </div>
-                                <div className="col-md-4">
-                                   <button type="button" className="col btn btn-outline-info mb-2" onClick={()=>this.generar()}>pos2</button>
-                                </div>
-                                <div className="col-md-4">
-                                   <button type="button" className="col btn btn-outline-info mb-2" onClick={()=>this.generar()}>pos3</button>
-                                </div>
+                                ))}
                             </div>
                         :null
                         }
@@ -125,43 +156,43 @@ class PostulantRegister extends Component {
                                     </h3>
                                     <div className="form-group col-md-3">
                                         <b>Nombres:</b> 
-                                        <p>Eliceo</p>
+                                        <p>{postulation.names}</p>
                                     </div>
                                     <div className="form-group col-md-3">
                                         <b>Apellido Paterno:</b> 
-                                        <p>Eliceo</p>
+                                        <p>{postulation.first_surname}</p>
                                     </div>
                                     <div className="form-group col-md-3">
                                         <b>Apellido Materno:</b> 
-                                        <p>Eliceo</p>
+                                        <p>{postulation.second_surname}</p>
                                     </div>
                                     <div className="form-group col-md-3">
                                         <b>Email:</b> 
-                                        <p>Eliceo</p>
+                                        <p>{postulation.email}</p>
                                     </div>
                                     <div className="form-group col-md-3">
                                         <b>Dirección:</b> 
-                                        <p>Eliceo</p>
+                                        <p>{postulation.direction}</p>
                                     </div>
                                     <div className="form-group col-md-3">
                                         <b>Celular:</b> 
-                                        <p>Eliceo</p>
+                                        <p>{postulation.phone}</p>
                                     </div>
                                     <div className="form-group col-md-3">
                                         <b>Cedula de identidad:</b> 
-                                        <p>Eliceo</p>
+                                        <p>{postulation.ci}</p>
                                     </div>
                                     <div className="form-group col-md-3">
                                         <b>Código sis:</b> 
-                                        <p>Eliceo</p>
+                                        <p>{postulation.sis_code}</p>
                                     </div>
                                     <div className="form-group col-md-6">
                                         <b>Convocatoria:</b> 
-                                        <p>Eliceo</p>
+                                        <p>{postulation.announcement}</p>
                                     </div>
                                     <div className="form-group col-md-6">
                                         <b>Auxiliatura(s):</b> 
-                                        <p>Eliceo</p>
+                                        <p>{postulation.auxiliary}</p>
                                     </div>
                                 </div>
                                 <h3 className="h5 col-md-12 my-4 font-weight-normal text-center">

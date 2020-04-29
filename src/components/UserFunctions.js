@@ -13,6 +13,19 @@ export const register = newPostulant => {
         })
 }
 
+export const getPostulant = () => {
+    return axios
+        .get('api/postulant', {
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => {
+            return response.data
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
 export const getAnnouncement = () => {
     return axios
         .get('api/announcement', {

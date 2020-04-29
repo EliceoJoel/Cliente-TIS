@@ -44,7 +44,7 @@ class Enabled_list extends Component {
             for (var i=0; i < res.length; i++) {
                 if(res[i].announcement === this.state.selectConv.label){
                     var object = {}
-                    object.sis_code = res[i].sis_code
+                    object.name = res[i].name
                     object.auxiliary = res[i].auxiliary
                     if(res[i].enable === true){
                         object.enable = "Si"
@@ -54,6 +54,16 @@ class Enabled_list extends Component {
                     object.reason = res[i].reason
                     postulants.push(object)
                 }
+                //ordenamos alfaveticamente
+                postulants.sort(function (a, b) {
+                    if (a.name > b.name) {
+                      return 1;
+                    }
+                    if (a.name < b.name) {
+                      return -1;
+                    }
+                    return 0;
+                  });
             }
         })
     }
@@ -102,7 +112,7 @@ class Enabled_list extends Component {
                             <div className="container">
                               <div className="row row-cols-4">
                                 <div className="col">
-                                    {postulant.sis_code} 
+                                    {postulant.name} 
                                 </div>
                                 <div className="col">
                                     {postulant.auxiliary}                    
