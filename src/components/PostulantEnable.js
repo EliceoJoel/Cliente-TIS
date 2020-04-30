@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import {getAnnouncement} from './UserFunctions'
 import Select from 'react-select'
 import axios from 'axios'
-import {getAnnouncementID} from './UserFunctions'
+//import {getAnnouncementID} from './UserFunctions'
 var conv  = [] 
 //var postulantenable = []
 export class PostulantEnable extends Component {
