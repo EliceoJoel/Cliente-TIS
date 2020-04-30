@@ -22,7 +22,8 @@ var ArrayAuxi = []
             item:'',
             item_error:'',
             auxiliary:'',
-            auxiliary_error:''
+            auxiliary_error:'',
+            requirement:''
 
 
          }
@@ -117,7 +118,25 @@ var ArrayAuxi = []
             return true;
         }
     }
-
+    handleReq(reqevent ){
+        reqevent.preventDefault()
+        let name = this.state.name
+        let requirement = this.state.requirement
+        let reqconv = new FormData()
+        reqconv.append ('name_announcement', name)
+        reqconv.append ('requirement', requirement)
+        axios({
+            method: 'post',
+            url: 'api/requirement',
+            data: reqconv,
+            headers: {'Content-Type': 'multipart/form-data' }
+            }).then(response =>{
+             console.log(response)
+         }) 
+         .catch(error => {
+             console.log(error)
+         })
+    }
  
     handleFile = (event) =>{ this.setState({file: event.target.files[0]})}
       
@@ -164,7 +183,7 @@ var ArrayAuxi = []
 
 
     render() {
-         const {name ,year, type, departament,item,auxiliary } =this.state
+         const {name ,year, type, departament,item,auxiliary, requirement} =this.state
          
 
         
@@ -236,6 +255,25 @@ var ArrayAuxi = []
 
                         </select>
                         </div>
+
+                        <h3 className="h5 col-md-12 my-4 font-weight-normal text-center">
+                            Requisitos de Convocatoria</h3>
+                      <div className="form-group col-md-12">
+                        <label htmlFor="Nombre">Requisito</label>
+               
+                       <input    
+                           className="form-control"   
+                           placeholder="Ingrese un requisito"                   
+                             type = "text"
+                          name = "requirement"
+                          value = {requirement}  
+                           onChange = {this.onChangeAux}                     
+                       />
+                        
+                         </div>
+                         <div className="form-group col-md-12 ">  
+                         <button className="btn btn-outline-info" variant="warning" onClick ={(reqevent) => this.handleReq(reqevent)} >Agregar</button>
+                         </div>
                         <h3 className="h5 col-md-12 my-4 font-weight-normal text-center">
                             Datos de Auxiliatura</h3>
                       <div className="form-group col-md-6">
