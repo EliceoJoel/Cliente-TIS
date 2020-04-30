@@ -189,7 +189,7 @@ class Register extends Component {
 
 
         if(this.valid()){  
-            this.generatePDF()
+            //this.generatePDF()
             
             const newPostulant = {
                 names: this.state.names,
