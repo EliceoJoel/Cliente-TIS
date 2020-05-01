@@ -38,7 +38,7 @@ class PostulantRegister extends Component {
         if(this.state.sis_code === ''){
             this.setState({sis_code_error:'Campo vacio'})
         }
-        else if(this.state.sis_code.length > 9  || isNaN(this.state.sis_code)){
+        else if(this.state.sis_code.length > 9 || this.state.sis_code.length < 8 || isNaN(this.state.sis_code)){
             this.setState({sis_code_error:'Código sis incorrecto'})
         } 
         else{
@@ -48,14 +48,14 @@ class PostulantRegister extends Component {
 
     isPotulant(){
        var res = false
-       allPostulants.map(postulant =>{
-           if(postulant.sis_code === this.state.sis_code){
-               postulantions.push(postulant)
+        for(var i=0; i<allPostulants.length; i++){
+           if(allPostulants[i].sis_code === this.state.sis_code){
+               postulantions.push(allPostulants[i])
                res = true
            }else{
                this.setState({notFoundPostulant:"No se encontró ninguna postulación"})
            }
-        })
+        }
         console.log(postulantions)
         return res
     }
@@ -65,9 +65,9 @@ class PostulantRegister extends Component {
         if(this.state.documents === ''){
             this.setState({documents_error:'Campo vacio'})
         }
-        else if(this.state.documents > 2 || isNaN(this.state.documents)){
+        else if(this.state.documents.length > 2 || this.state.documents < 0 || isNaN(this.state.documents)){
             this.setState({documents_error:'Numero de documentos incorrecto o demasiado grande'})
-    }
+        }
         else if(this.state.date === ''){
                 this.setState({date_error:'Campo vacio'})
         }
@@ -79,7 +79,7 @@ class PostulantRegister extends Component {
     onSubmit(e){
         e.preventDefault()
         if(this.validDoc()){
-
+            console.log("enviado")
         }
     }
 
@@ -91,7 +91,8 @@ class PostulantRegister extends Component {
         this.setState({
             sis_code_error: '', 
             documents_error: '',
-            date_error: ''
+            date_error: '',
+            notFoundPostulant:''
         })
     }
 
@@ -136,7 +137,7 @@ class PostulantRegister extends Component {
                         <div className="col-md-4">
                            <button type="button" className="col btn btn-info mb-2" onClick={()=>this.search()}>Buscar</button>
                         </div>
-                        <p class="col-md-12 text-center" style={{color:"red"}}>{this.state.notFoundPostulant}</p>
+                        <p className="col-md-12 text-center" style={{color:"red"}}>{this.state.notFoundPostulant}</p>
                         {this.state.showList?  
                             <div className="form-row col-md-12">
                                 {postulantions.map( postulation =>( 
