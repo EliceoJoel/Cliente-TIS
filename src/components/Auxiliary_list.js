@@ -1,11 +1,9 @@
 import React, { Component } from 'react'
 import Select from 'react-select'
 import {getAnnouncement} from './UserFunctions'
-//import {getPostulantsEnabled} from './UserFunctions'
+import {getPostulantsEnabled} from './UserFunctions' 
 
 var conv = []
-var aux =[]
-//var postulants = []
 class Auxiliary_list extends Component{
   constructor() {
     super()
@@ -13,9 +11,10 @@ class Auxiliary_list extends Component{
         selectedConv:null,
         selectedAux:null,
         show:"true",
+        auxiliaturas:[],
+        postulantes:[],
     }
 }
-//fill announcement
 componentDidMount() {
     getAnnouncement().then(res => {
         for (var i=0; i < res.length; i++) {
@@ -26,14 +25,24 @@ componentDidMount() {
           }
     })
 }
+getStudents(){
+    var postulants = []
+    getPostulantsEnabled().then(postulant => {
+        for(var i=0; i<postulant.length;i++){
+            if(postulant[i].auxiliary === this.state.selectedAux && postulant[i].getAnnouncement === this.state.selectedConv.lavel){
+                postulants.push(postulant[i])
+            }
+        }
+        this.setState({postulantes:postulants})
+    })
+}
 
 fillAuxi(){
-    this.auxClear()
+    var aux =[]
     getAnnouncement().then(conv =>{
         for(var i=0;i<conv.length;i++){
-            if(conv[i].id === this.state.selectedConv){
+            if(conv[i].id === this.state.selectedConv.id){
                 var auxi = JSON.parse(conv[i].auxiliary)
-                console.log(auxi)
                 for(var j=0;j<auxi.length;j++){
                     var object = {}
                     object.label = auxi[j].name
@@ -42,7 +51,7 @@ fillAuxi(){
             }
         }
     })
-    this.setState({show:"true"})
+    this.setState({auxiliaturas:aux})
 }
 
 
@@ -59,7 +68,7 @@ render() {
                     <Select
                       name="conv"
                       options={conv}
-                      onChange={(e) => this.setState({selectedConv:e.id})}
+                      onChange={(e) => this.setState({selectedConv:e})}
                       placeholder=""
                       className="basic-select"
                       classNamePrefix="select"
@@ -76,7 +85,7 @@ render() {
                     <label htmlFor="Nombre">Selecciona una auxiliatura</label>
                     <Select
                       name="conv"
-                      options={aux}
+                      options={this.state.auxiliaturas}
                       onChange={(e) => this.setState({selectedAux:e.label})}
                       placeholder=""
                       className="basic-select"
@@ -86,23 +95,38 @@ render() {
                 </div>
 
                 <div className="form-group col-3 mt-5">
-                    <button type="button" class="col btn btn-info mt-2" onClick={() => console.log(this.state.selectedAux)} >Generar lista</button>
+                    <button type="button" class="col btn btn-info mt-2" onClick={() => this.getStudents()} >Generar lista</button>
                 </div>            
             </div>
             <div className="row">
                     <div class="col">sis</div>
-                    <div class="col">nombre</div>
+                    <div class="col">habilitado</div>
                     <div class="col">auxiliatura</div>
-                </div>
+            </div>
+                {this.renderTableData()}
         </div>        
     )
 }
 
-auxClear(){
-    for(var i=0;i<aux.length;i++){
-        aux[i] = null;
+
+
+
+renderTableData() {
+    return this.state.postulantes.map(postulant =>(
+        <div className="row">
+                <div class="col">{postulant.sis_code}</div>
+                <div class="col">{this.checkEnable(this.enable)}</div>
+                <div class="col">{postulant.auxiliary}</div>
+        </div>
+    ))
+ }
+
+ checkEnable(enable){
+    if(!enable){
+        return "documentos en regla"
     }
-}
+    else return "negativo a concaina"
+ }
 
 }
 
