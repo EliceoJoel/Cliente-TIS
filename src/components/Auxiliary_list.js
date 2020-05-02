@@ -1,101 +1,52 @@
 import React, { Component } from 'react'
 import Select from 'react-select'
 import {getAnnouncement} from './UserFunctions'
-import {getPostulantsEnabled} from './UserFunctions'
+//import {getPostulantsEnabled} from './UserFunctions'
 
-var aux = []
 var conv = []
-var postulants = []
+var aux =[]
+//var postulants = []
 class Auxiliary_list extends Component{
   constructor() {
     super()
     this.state = {
-        selectConv:null,
-        selectConvError:"",
-        selectAuxError:"",
-        showList:false,
-        selectAux:null,
+        selectedConv:null,
+        selectedAux:null,
+        show:"true",
     }
-
-    this.selectConvChange = this.selectConvChange.bind(this)
 }
-
 //fill announcement
 componentDidMount() {
     getAnnouncement().then(res => {
         for (var i=0; i < res.length; i++) {
             var object = {}
+            object.id = res[i].id
             object.label = res[i].name
             conv[i] = object
           }
     })
 }
 
-
-selectConvChange = selectConv =>{
-    this.setState({selectConvError:"", showList:false})
-    this.setState({selectConv})
-}
-
-selectAuxChange =selectAux => {
-  this.setState({selectAuxError:"", showList:false})
-  this.setState({selectAux}, ()=>this.fillPostulant())
-}
-
-fillAux(){
-    console.log(this.selectConv)
-    getAnnouncement().then(res => {
-        if(res != null){
-            for (var i=0; i < res.length; i++) {
-                if(res[i].announcement === this.state.selectConv.label){
-                    var auxi = JSON.parse(res[i].auxiliary);
-                    console.log(auxi)    
-                    for (var j=0; j < auxi.length; j++) {
-                        var object = {}
-                        object.label = auxi[j].name
-                        aux.push(object)
-                    }
-                    console.log(aux)
+fillAuxi(){
+    this.auxClear()
+    getAnnouncement().then(conv =>{
+        for(var i=0;i<conv.length;i++){
+            if(conv[i].id === this.state.selectedConv){
+                var auxi = JSON.parse(conv[i].auxiliary)
+                console.log(auxi)
+                for(var j=0;j<auxi.length;j++){
+                    var object = {}
+                    object.label = auxi[j].name
+                    aux[j]=object
                 }
             }
         }
     })
+    this.setState({show:"true"})
 }
 
-fillPostulant(){
-    var array = []
-    postulants = array
-    getPostulantsEnabled().then(res => {
-      if(res != null){
-        for (var i=0; i < res.length; i++) {
-            if(res[i].announcement === this.state.selectConv.label && res[i].auxiliary === this.state.selectAux.label && res[i].enable){
-                var object = {}
-                object.sis_code = res[i].sis_code
-                object.reason = res[i].reason
-                postulants.push(object)
-            }
-        }
-    }
-  })
-}
 
-showConv(){
-    if(this.state.selectConv){
-       this.setState({showList:true})
-    }else{
-        this.setState({selectConvError:"No se ha seleccionado una convocatoria"})
-    }
-}
-
-showAux(){
-  if(this.state.selectConv){
-     this.setState({showList:true})
-  }else{
-      this.setState({selectAuxError:"No se ha seleccionado una auxiliatura"})
-  }
-}
 render() {
-    const { selectConv, selectAux } = this.state
 
     return (
         <div className="justify-content-center">
@@ -107,9 +58,8 @@ render() {
                     <label htmlFor="Nombre">Selecciona una convocatoria</label>
                     <Select
                       name="conv"
-                      value={selectConv}
                       options={conv}
-                      onChange={this.selectConvChange}
+                      onChange={(e) => this.setState({selectedConv:e.id})}
                       placeholder=""
                       className="basic-select"
                       classNamePrefix="select"
@@ -119,16 +69,15 @@ render() {
                 </div>
 
                 <div className="form-group col-3 mt-5">
-                    <button type="button" class="col btn btn-info mt-2" onClick={() => this.fillAux()} >seleccionar convocatoria</button>
+                    <button type="button" class="col btn btn-info mt-2" onClick={() => this.fillAuxi()} >seleccionar convocatoria</button>
                 </div>
 
                 <div className="form-group col-8 my-4">
                     <label htmlFor="Nombre">Selecciona una auxiliatura</label>
                     <Select
                       name="conv"
-                      value={selectAux}
                       options={aux}
-                      onChange={this.selectAuxChange}
+                      onChange={(e) => this.setState({selectedAux:e.label})}
                       placeholder=""
                       className="basic-select"
                       classNamePrefix="select"
@@ -137,17 +86,24 @@ render() {
                 </div>
 
                 <div className="form-group col-3 mt-5">
-                    <button type="button" class="col btn btn-info mt-2" onClick={() => this.showAux()} >Generar lista</button>
-                </div>
-
-
-
-                
-
+                    <button type="button" class="col btn btn-info mt-2" onClick={() => console.log(this.state.selectedAux)} >Generar lista</button>
+                </div>            
             </div>
+            <div className="row">
+                    <div class="col">sis</div>
+                    <div class="col">nombre</div>
+                    <div class="col">auxiliatura</div>
+                </div>
         </div>        
     )
 }
+
+auxClear(){
+    for(var i=0;i<aux.length;i++){
+        aux[i] = null;
+    }
+}
+
 }
 
 export default Auxiliary_list
