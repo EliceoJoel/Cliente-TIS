@@ -29,7 +29,7 @@ getStudents(){
     var postulants = []
     getPostulantsEnabled().then(postulant => {
         for(var i=0; i<postulant.length;i++){
-            if(postulant[i].auxiliary === this.state.selectedAux && postulant[i].announcement === this.state.selectedConv.lavel){
+            if(postulant[i].auxiliary === this.state.selectedAux && postulant[i].announcement === this.state.selectedConv.label){
                 postulants.push(postulant[i])
             }
         }
@@ -42,7 +42,7 @@ fillAuxi(){
     getAnnouncement().then(conv =>{
         for(var i=0;i<conv.length;i++){
             if(conv[i].id === this.state.selectedConv.id){
-                var auxi = conv[i].auxiliary
+                var auxi = JSON.parse(conv[i].auxiliary)
                 for(var j=0;j<auxi.length;j++){
                     var object = {}
                     object.label = auxi[j].name
