@@ -261,7 +261,7 @@ var ArrayAuxi = []
                       <div className="form-group col-md-12">
                         <label htmlFor="Nombre">Requisito</label>
                
-                       <input    
+                       <textarea    
                            className="form-control"   
                            placeholder="Ingrese un requisito"                   
                              type = "text"

@@ -12,7 +12,7 @@ import Enabled_list from './components/Enabled_list'
 import Postulant_Register from './components/Postulant_Register'
 
 import PostulantEnable from './components/PostulantEnable'
-
+import RegisterDate from './components/RegisterDate'
 
 class App extends Component {
   render() {
@@ -30,12 +30,11 @@ class App extends Component {
             <Route exact path="/enabled_list" component={Enabled_list} />
             <Route exact path="/postulant_register" component={Postulant_Register} />
             <Route exact path="/PostulantEnable" component={PostulantEnable} />
-            
-         
-
-            
+            <Route exact path="/RegisterDate" component={RegisterDate} />
           </div>
+        
         </div>
+
       </Router>
     )
   }
