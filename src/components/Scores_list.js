@@ -126,7 +126,7 @@ renderTableData() {
         <div className="row">
                 <div class="col">{postulant.name}</div>
                 <div class="col">{postulant.auxiliary}</div>
-                <div class="col">{postulant.score}</div>
+                <div class="col">{this.fillScore(postulant.score)}</div>
                 <input 
                     className="col"  
                     placeholder= "ingrese datos"
@@ -143,15 +143,21 @@ renderTableData() {
 update(postulant){
     var postu = this.state.postulantes
     for(var i=0;i<this.state.postulantes.length;i++){
-        if(this.state.postulantes[i].id === postulant.id){
+        if(this.state.postulantes[i].id === postulant.id && this.state.score <101 && this.state.score != null){
             postu[i].score = this.state.score
         }
     }
-    this.setState({postulantes:postu})
+    this.setState({postulantes:postu, score:null})
 }
  onChange =  (event) =>{
     this.setState({score:event.target.value})
     console.log(this.state.score)
+}
+
+fillScore(score){
+    if(score === 0){
+        return "abandono"
+    } else return score
 }
 }
 export default Scores_list
