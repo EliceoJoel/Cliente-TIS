@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Select from 'react-select'
 import {getAnnouncement} from './UserFunctions'
 import {getPostulantsEnabled} from './UserFunctions' 
+//import {getScores} from './UserFunctions'
 
 var conv = []
 class Scores_list extends Component{
@@ -13,6 +14,7 @@ class Scores_list extends Component{
         show:"true",
         auxiliaturas:[],
         postulantes:[],
+        score:null,
     }
 }
 componentDidMount() {
@@ -29,11 +31,17 @@ getStudents(){
     var postulants = []
     getPostulantsEnabled().then(postulant => {
         for(var i=0; i<postulant.length;i++){
-            if(postulant[i].auxiliary === this.state.selectedAux && postulant[i].getAnnouncement === this.state.selectedConv.lavel){
-                postulants.push(postulant[i])
+            if(postulant[i].auxiliary === this.state.selectedAux && postulant[i].announcement === this.state.selectedConv.label){
+                var object = {}
+                object.id = postulant[i].id
+                object.name = postulant[i].name
+                object.auxiliary = postulant[i].auxiliary
+                object.score = 0
+                postulants.push(object)
             }
         }
         this.setState({postulantes:postulants})
+        console.log(this.state.postulantes)
     })
 }
 
@@ -100,8 +108,10 @@ render() {
             </div>
             <div className="row">
                     <div class="col">nombre</div>
-                    <div class="col">habilitado</div>
                     <div class="col">auxiliatura</div>
+                    <div class="col">nota</div>
+                    <div class="col"></div>
+                    <div class="col"></div>
             </div>
                 {this.renderTableData()}
         </div>        
@@ -115,19 +125,33 @@ renderTableData() {
     return this.state.postulantes.map(postulant =>(
         <div className="row">
                 <div class="col">{postulant.name}</div>
-                <div class="col">{this.checkEnable(this.enable)}</div>
                 <div class="col">{postulant.auxiliary}</div>
-        </div>
+                <div class="col">{postulant.score}</div>
+                <input 
+                    className="col"  
+                    placeholder= "ingrese datos"
+                    type = "text"
+                    name = "year" 
+                    onChange = {this.onChange}                     
+                />
+                <div className="form-group col-3 mt-1">
+                    <button type="button" class="col" onClick={() =>this.update(postulant)} >postulante</button>
+                </div>       
+            </div>
     ))
  }
-
- checkEnable(enable){
-    if(!enable){
-        return "documentos en regla"
+update(postulant){
+    var postu = this.state.postulantes
+    for(var i=0;i<this.state.postulantes.length;i++){
+        if(this.state.postulantes[i].id === postulant.id){
+            postu[i].score = this.state.score
+        }
     }
-    else return "falta de documentacion"
- }
-
+    this.setState({postulantes:postu})
 }
-
+ onChange =  (event) =>{
+    this.setState({score:event.target.value})
+    console.log(this.state.score)
+}
+}
 export default Scores_list

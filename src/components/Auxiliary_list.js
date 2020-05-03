@@ -100,7 +100,6 @@ render() {
             </div>
             <div className="row">
                     <div class="col">nombre</div>
-                    <div class="col">habilitado</div>
                     <div class="col">auxiliatura</div>
             </div>
                 {this.renderTableData()}
@@ -115,8 +114,12 @@ renderTableData() {
     return this.state.postulantes.map(postulant =>(
         <div className="row">
                 <div class="col">{postulant.name}</div>
-                <div class="col">{this.checkEnable(this.enable)}</div>
-                <div class="col">{postulant.auxiliary}</div>
+                <input 
+                        className="col"  
+                        type = "text"
+                        name = "year"
+                        value = {postulant.auxiliary}                    
+                        />
         </div>
     ))
  }
