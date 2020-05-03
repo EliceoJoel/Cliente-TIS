@@ -125,7 +125,7 @@ renderTableData() {
     if(!enable){
         return "documentos en regla"
     }
-    else return "negativo a concaina"
+    else return "falta de documentacion"
  }
 
 }
