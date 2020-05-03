@@ -103,3 +103,17 @@ export const getProfile = () => {
         })
 }
 
+export const getScores = () => {
+    return axios
+        .get('api/scores', {
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => {
+            console.log(response)
+            return response.data
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+

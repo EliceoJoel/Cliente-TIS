@@ -9,7 +9,7 @@ import Profile from './components/Profile'
 import List from './components/List'
 import Post from './components/Post'
 import Auxiliary_list from './components/Auxiliary_list'
-
+import Scores_list from './components/Scores_list'
 
 class App extends Component {
   render() {
@@ -25,6 +25,7 @@ class App extends Component {
             <Route exact path="/list" component={List} />
             <Route exact path="/post" component={Post} />
             <Route exact path="/auxiliary_list" component={Auxiliary_list} />
+            <Route exact path="/scores_list" component={Scores_list} />
             
          
 
