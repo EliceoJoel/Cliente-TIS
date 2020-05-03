@@ -21,7 +21,7 @@ export class PostulantEnable extends Component {
              reason: '' ,
              showList: false,
              auxst:[],
-             nombreauxiliatura:''
+             auxilisturaSeleccionada:''
              
         }
     }
@@ -122,9 +122,16 @@ export class PostulantEnable extends Component {
     }
     
     handleReq(e ){
-      e.preventDefault()
-      this.setState({nombreauxiliatura: e.target.value })
-      console.log(this.state.nombreauxiliatura)
+        console.log(e.axiliatura);
+        this.setState({auxilisturaSeleccionada:e.axiliatura})
+        let a = this.state.found[0].announcement
+        console.log("gil", a);
+        
+        
+      //e.preventDefault()
+      
+      //this.setState({nombreauxiliatura: e.target.value })
+      //console.log(this.state.nombreauxiliatura)
       this.setState({showList:true})
       let conv =  this.state.selectedOptionConv.label
       let send = new FormData()
@@ -145,7 +152,30 @@ export class PostulantEnable extends Component {
           }) 
     }
     handleEnable(e){
-            this.setState({showList:false})
+                 this.setState({showList:false})
+                 let name =  this.state.found[0].names +" "+ this.state.found[0].first_surname +" " + this.state.found[0].second_surname
+                 let auxiliary =  this.state.auxilisturaSeleccionada
+                 let announcement =  this.state.found[0].announcement
+                 let send = new FormData()
+              
+                     send.append('name', name )
+                     send.append('auxiliary', auxiliary )
+                     send.append('announcement', announcement )
+                     send.append('enable', true )
+                     send.append('reason', "reason" )
+                     axios({
+                        method: 'post',
+                        url: 'api/postulantenable',
+                        data: send,
+                        headers: {'Content-Type': 'multipart/form-data' }
+                        }).then(response =>{
+           
+                        // this.setState({req: response.data})
+                         //console.log(this.req)
+                     }) 
+                     .catch(error => {
+                         console.log(error)
+                     })   
 
 
     }
@@ -212,7 +242,7 @@ export class PostulantEnable extends Component {
                                  </div>
                                  )}
                                   {this.state.auxst.map(enable =>
-                                        <button className="btn btn-outline-info mt-4" variant="warning" value={enable.axiliatura} onClick ={(e) => this.handleReq(e)}htmlFor="cod_sys">{enable.axiliatura}</button>
+                                        <button className="btn btn-outline-info mt-4" variant="warning" value={enable.axiliatura} onClick ={(e) => this.handleReq(enable)}htmlFor="cod_sys">{enable.axiliatura}</button>
                                   
 
                                 
