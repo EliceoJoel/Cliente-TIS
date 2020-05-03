@@ -85,6 +85,7 @@ class Register extends Component {
         this.setState({showAux:true})
         this.setState({selectedOptionAux:null})
         //delete auxiliary array data
+        console.log(aux)
         var array = []
         aux = array
     }
@@ -92,7 +93,7 @@ class Register extends Component {
     fillAuxiliary(){
         
         getAnnouncementID(this.state.selectedConvOption.value).then(res => {
-            var auxiliary = JSON.parse(res.auxiliary)
+            var auxiliary = res.auxiliary//JSON.parse(res.auxiliary)
             for(var i=0 ; i<auxiliary.length ; i++){
                 var object = {}
                 object.value = auxiliary[i].item
@@ -380,8 +381,7 @@ class Register extends Component {
                             />
                             <p style={{color:"red"}}>{this.state.selectedConvOption_error}</p>
                         </div>
-                        {
-                        this.state.showAux?
+                        {this.state.showAux?
                         <div className="form-group col-md-6">
                             <label htmlFor="aux">Selecciona una auxiliatura</label>
                             <Select
