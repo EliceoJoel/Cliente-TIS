@@ -9,7 +9,7 @@ import Profile from './components/Profile'
 import List from './components/List'
 import Post from './components/Post'
 import PostulantEnable from './components/PostulantEnable'
-
+import RegisterDate from './components/RegisterDate'
 
 class App extends Component {
   render() {
@@ -25,12 +25,11 @@ class App extends Component {
             <Route exact path="/list" component={List} />
             <Route exact path="/post" component={Post} />
             <Route exact path="/PostulantEnable" component={PostulantEnable} />
-            
-         
-
-            
+            <Route exact path="/RegisterDate" component={RegisterDate} />
           </div>
+        
         </div>
+
       </Router>
     )
   }
