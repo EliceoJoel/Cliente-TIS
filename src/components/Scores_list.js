@@ -14,7 +14,8 @@ class Scores_list extends Component{
         show:"true",
         auxiliaturas:[],
         postulantes:[],
-        score:null,
+        score:[],
+        warningMesage:"",
     }
 }
 componentDidMount() {
@@ -29,19 +30,26 @@ componentDidMount() {
 }
 getStudents(){
     var postulants = []
+    var scores =[]
     getPostulantsEnabled().then(postulant => {
         for(var i=0; i<postulant.length;i++){
             if(postulant[i].auxiliary === this.state.selectedAux && postulant[i].announcement === this.state.selectedConv.label){
                 var object = {}
+                var score = {}
                 object.id = postulant[i].id
                 object.name = postulant[i].name
                 object.auxiliary = postulant[i].auxiliary
                 object.score = 0
+                object.oralScore = 0
+                score.score = 0
+                score.oralScore = 0
+                score.id = postulant[i].id
+                scores.push(score)
                 postulants.push(object)
             }
         }
-        this.setState({postulantes:postulants})
-        console.log(this.state.postulantes)
+        this.setState({postulantes:postulants, score:scores})
+        console.log(this.state.score)
     })
 }
 
@@ -106,14 +114,23 @@ render() {
                     <button type="button" class="col btn btn-info mt-2" onClick={() => this.getStudents()} >Generar lista</button>
                 </div>            
             </div>
+            <div >
+            </div>     
+            <br/>
+            <br/>  
             <div className="row">
                     <div class="col">nombre</div>
                     <div class="col">auxiliatura</div>
                     <div class="col">nota</div>
+                    <div class="col">nota Oral</div>
+                    <div class="col"></div>
                     <div class="col"></div>
                     <div class="col"></div>
             </div>
+            <form>
                 {this.renderTableData()}
+                <button type="button" class="col btn btn-info " onClick={() =>this.update()} >subir notas</button>
+            </form>
         </div>        
     )
 }
@@ -127,35 +144,82 @@ renderTableData() {
                 <div class="col">{postulant.name}</div>
                 <div class="col">{postulant.auxiliary}</div>
                 <div class="col">{this.fillScore(postulant.score)}</div>
+                <div class="col">{this.fillScore(postulant.oralScore)}</div>
                 <input 
+                    type = "number"
+                    id = {postulant.id} 
+                    name = "score"
+                    min="0"
+                    max="100"
                     className="col"  
-                    placeholder= "ingrese datos"
-                    type = "text"
-                    name = "year" 
+                    placeholder= "ingrese notas de conocimineto"
                     onChange = {this.onChange}                     
                 />
-                <div className="form-group col-3 mt-1">
-                    <button type="button" class="col" onClick={() =>this.update(postulant)} >postulante</button>
-                </div>       
+
+                <input 
+                    type = "number"
+                    id = {postulant.id} 
+                    name = "score"
+                    min="0"
+                    max="100"
+                    className="col"  
+                    placeholder= "ingrese notas de examen oral"
+                    onChange = {this.onChangeOral}                     
+                />
+                <div class="col">{this.state.warningMesage}</div>
             </div>
     ))
  }
-update(postulant){
-    var postu = this.state.postulantes
+update(){
+    var post = this.state.postulantes
     for(var i=0;i<this.state.postulantes.length;i++){
-        if(this.state.postulantes[i].id === postulant.id && this.state.score <101 && this.state.score != null){
-            postu[i].score = this.state.score
+        for(var j=0;j<this.state.score.length;j++){
+            if(post[i].id === this.state.score[j].id){
+                post[i].score = this.state.score[j].score
+                post[i].oralScore = this.state.score[j].oralScore
+            }
         }
     }
-    this.setState({postulantes:postu, score:null})
+    this.setState({postulantes:post})
+    console.log(this.state.postulantes)
 }
- onChange =  (event) =>{
-    this.setState({score:event.target.value})
-    console.log(this.state.score)
+
+ onChangeOral = (event) => {
+     if(event.target.value >100){ 
+        this.setState({warningMesage:"numero no valido"})
+        return
+     }
+     var scores = this.state.score
+    for(var i=0;i<this.state.score.length;i++){
+        this.setState({warningMesage:""})
+        // eslint-disable-next-line eqeqeq
+        if(event.target.id == scores[i].id && parseInt(event.target.value)< 101){
+            scores[i].oralScore = event.target.value
+        }
+    }
+    console.log(scores)
+    this.setState({score:scores})
+}
+
+onChange = (event) => {
+    if(event.target.value >100){ 
+       this.setState({warningMesage:"numero no valido"})
+       return
+    }
+    var scores = this.state.score
+   for(var i=0;i<this.state.score.length;i++){
+       this.setState({warningMesage:""})
+       // eslint-disable-next-line eqeqeq
+       if(event.target.id == scores[i].id && parseInt(event.target.value)< 101){
+           scores[i].score = event.target.value
+       }
+   }
+   this.setState({score:scores})
 }
 
 fillScore(score){
-    if(score === 0){
+    // eslint-disable-next-line eqeqeq
+    if(score == 0){
         return "abandono"
     } else return score
 }
