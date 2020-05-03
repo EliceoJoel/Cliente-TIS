@@ -42,7 +42,7 @@ fillAuxi(){
     getAnnouncement().then(conv =>{
         for(var i=0;i<conv.length;i++){
             if(conv[i].id === this.state.selectedConv.id){
-                var auxi = JSON.parse(conv[i].auxiliary)
+                var auxi = conv[i].auxiliary
                 for(var j=0;j<auxi.length;j++){
                     var object = {}
                     object.label = auxi[j].name
