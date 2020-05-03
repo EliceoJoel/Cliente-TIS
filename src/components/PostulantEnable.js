@@ -48,7 +48,7 @@ export class PostulantEnable extends Component {
         
        //this.setState({auxs: a})
       // this.auxs = "Hola Como estas"
-         let auxs = a.auxiliary.split(" ")
+         let auxs = a.auxiliary.split("\n")
         for(var i=0 ; i<auxs.length ; i++){
             var Componentes = {}
             Componentes.axiliatura = auxs[i]
@@ -97,8 +97,8 @@ export class PostulantEnable extends Component {
         //let found = []
             
             send.append('codSis', codSis)
-           // send.append('conv', conv )
-           send.append('conv', 'Conv-Aux' )
+            send.append('conv', conv )
+          // send.append('conv', 'Conv-Aux' )
             axios({
                method: 'post',
                url: 'api/registerBookEnable',
