@@ -29,7 +29,7 @@ getStudents(){
     var postulants = []
     getPostulantsEnabled().then(postulant => {
         for(var i=0; i<postulant.length;i++){
-            if(postulant[i].auxiliary === this.state.selectedAux && postulant[i].getAnnouncement === this.state.selectedConv.lavel){
+            if(postulant[i].auxiliary === this.state.selectedAux && postulant[i].announcement === this.state.selectedConv.lavel){
                 postulants.push(postulant[i])
             }
         }
@@ -99,7 +99,7 @@ render() {
                 </div>            
             </div>
             <div className="row">
-                    <div class="col">sis</div>
+                    <div class="col">nombre</div>
                     <div class="col">habilitado</div>
                     <div class="col">auxiliatura</div>
             </div>
@@ -114,7 +114,7 @@ render() {
 renderTableData() {
     return this.state.postulantes.map(postulant =>(
         <div className="row">
-                <div class="col">{postulant.sis_code}</div>
+                <div class="col">{postulant.name}</div>
                 <div class="col">{this.checkEnable(this.enable)}</div>
                 <div class="col">{postulant.auxiliary}</div>
         </div>
