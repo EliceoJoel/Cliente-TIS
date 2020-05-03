@@ -29,9 +29,10 @@ componentDidMount() {
 }
 getStudents(){
     var postulants = []
+    console.log()
     getPostulantsEnabled().then(postulant => {
         for(var i=0; i<postulant.length;i++){
-            if(postulant[i].auxiliary === this.state.selectedAux && postulant[i].announcement === this.state.selectedConv.lavel){
+            if(postulant[i].auxiliary === this.state.selectedAux && postulant[i].announcement === this.state.selectedConv.label){
                 postulants.push(postulant[i])
             }
         }
