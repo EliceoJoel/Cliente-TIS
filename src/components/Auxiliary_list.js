@@ -17,12 +17,14 @@ class Auxiliary_list extends Component{
 }
 componentDidMount() {
     getAnnouncement().then(res => {
-        for (var i=0; i < res.length; i++) {
-            var object = {}
-            object.id = res[i].id
-            object.label = res[i].name
-            conv[i] = object
-          }
+        if(res != null){
+            for (var i=0; i < res.length; i++) {
+                var object = {}
+                object.id = res[i].id
+                object.label = res[i].name
+                conv[i] = object
+            }
+        }
     })
 }
 getStudents(){
@@ -41,7 +43,7 @@ fillAuxi(){
     var aux =[]
     getAnnouncement().then(conv =>{
         for(var i=0;i<conv.length;i++){
-            if(conv[i].id === this.state.selectedConv.id){
+            if(conv[i].id === this.state.selectedConv.id && conv[i].auxiliary != null){
                 var auxi = JSON.parse(conv[i].auxiliary)
                 for(var j=0;j<auxi.length;j++){
                     var object = {}
