@@ -6,6 +6,7 @@ import {registerInBook} from './UserFunctions'
 var allPostulants = []
 var postulantions=[]
 var postulation
+var auxiliarys
 
 class PostulantRegister extends Component {
     constructor() {
@@ -154,6 +155,7 @@ class PostulantRegister extends Component {
        var fecha = new Date()
        this.setState({showData:true, showSubmit:true, date:this.date(fecha)})
        postulation = pos
+       auxiliarys= postulation.auxiliary.split("\n")
     }
 
     render() {
@@ -237,7 +239,9 @@ class PostulantRegister extends Component {
                                     </div>
                                     <div className="form-group col-md-6">
                                         <b>Auxiliatura(s):</b> 
-                                        <p>{postulation.auxiliary}</p>
+                                        {auxiliarys.map( aux =>(
+                                        <p>{aux}</p>
+                                        ))}
                                     </div>
                                 </div>
                                 <h3 className="h5 col-md-12 my-4 font-weight-normal text-center">

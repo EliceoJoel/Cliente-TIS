@@ -93,7 +93,7 @@ class Register extends Component {
     fillAuxiliary(){
         
         getAnnouncementID(this.state.selectedConvOption.value).then(res => {
-            var auxiliary = res.auxiliary//JSON.parse(res.auxiliary)
+            var auxiliary = JSON.parse(res.auxiliary)
             for(var i=0 ; i<auxiliary.length ; i++){
                 var object = {}
                 object.value = auxiliary[i].item
