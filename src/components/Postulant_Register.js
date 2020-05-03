@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import {getPostulant} from './UserFunctions'
+import {registerInBook} from './UserFunctions'
+
 
 var allPostulants = []
 var postulantions=[]
@@ -7,17 +9,16 @@ var postulation
 
 class PostulantRegister extends Component {
     constructor() {
-        var fecha = new Date()
         super()
         this.state = {
             sis_code:"",
             sis_code_error:"",
             documents:"",
             documents_error:"",
-            date:fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+" - "+fecha.getHours()+":"+fecha.getMinutes(),
+            date: "",
             date_error:"",
             showList:false,
-            showDocuments:false,
+            showData:false,
             showSubmit:false,
             notFoundPostulant:""
 
@@ -32,6 +33,21 @@ class PostulantRegister extends Component {
             allPostulants = res
             console.log(allPostulants)
         })
+    }
+
+    date(f){
+       var day= f.getDate()
+       var month= f.getMonth()+1
+       var year= f.getFullYear()
+       var hour= f.getHours()
+       var minutes= f.getMinutes()
+
+       if(day < 10) { day = '0' + day; }
+       if(month < 10) { month = '0' + month; }
+       if(hour < 10) { hour = '0' + hour; }
+       if(minutes < 10){ minutes = '0' + minutes}
+
+       return day + '/' + month + '/' + year + ' - ' + hour + ':' + minutes 
     }
 
     validSis(){
@@ -79,7 +95,36 @@ class PostulantRegister extends Component {
     onSubmit(e){
         e.preventDefault()
         if(this.validDoc()){
-            console.log("enviado")
+            const newRegister = {
+                names: postulation.names,
+                first_surname: postulation.first_surname,
+                second_surname: postulation.second_surname,
+                direction: postulation.direction,
+                email: postulation.email,
+                phone: postulation.phone,
+                ci: postulation.ci,
+                sis_code: postulation.sis_code,
+                announcement: postulation.announcement,
+                auxiliary: postulation.auxiliary,
+                docNumber: this.state.documents,
+                date: this.state.date
+            }
+               registerInBook(newRegister).then(res => {
+               this.props.history.push(`/postulant_register`)
+            })
+
+            this.setState({ 
+                showData:false,
+                showSubmit:false,
+                documents:""
+            })
+
+            for(var i=0 ; i<postulantions.length ; i++){
+                if(postulation.id === postulantions[i].id){
+                    postulantions.splice(i,1)
+                    console.log(postulantions)
+                }
+            }
         }
     }
 
@@ -106,10 +151,9 @@ class PostulantRegister extends Component {
     }
 
     generar(pos){
-       this.setState({showData:true})
-       this.setState({showSubmit:true})
+       var fecha = new Date()
+       this.setState({showData:true, showSubmit:true, date:this.date(fecha)})
        postulation = pos
-
     }
 
     render() {
@@ -141,7 +185,7 @@ class PostulantRegister extends Component {
                         {this.state.showList?  
                             <div className="form-row col-md-12">
                                 {postulantions.map( postulation =>( 
-                                <div className="col-md-4">
+                                <div key={postulation.id} className="col-md-4">
                                    <button type="button" className="col btn btn-outline-info mb-2" onClick={()=>this.generar(postulation)}>{postulation.announcement}</button>
                                 </div>
                                 ))}
