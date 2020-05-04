@@ -25,12 +25,15 @@ export class PostulantEnable extends Component {
              allRequirementsCheckList:[],
              enableButton:false,
              disableReasonInput:false,
+             enableMessageState:'INHABILITADO',
+             CorrectlySendChanges:'' ,
              //manejo de errores
             
              //selectedConvOption: null,
              selectedOptionConv: null,
              selectedConvOption_error:'',
-             codSis_error:''
+             codSis_error:'',
+             notfound_error:''
              
              
         }
@@ -87,7 +90,8 @@ export class PostulantEnable extends Component {
         e.preventDefault()
         this.setState({
             selectedConvOption_error:'',
-            codSis_error:''
+            codSis_error:'',
+            notfound_error:''
         })
         if(this.valid()){  
         let codSis = this.state.codSis
@@ -107,13 +111,15 @@ export class PostulantEnable extends Component {
 
                // this.found = response.data
                 this.setState({found: response.data})
-                console.log(this.found)
+                console.log(this.state.found)
                 this.splitArray()
                 console.log(this.state.auxst)
               
             }) 
             .catch(error => {
                 console.log(error)
+                this.setState({notfound_error:"No existe ese postulante en esa convocatoria"})
+                this.setState({showList:false})
             })
         }
            
@@ -161,6 +167,9 @@ export class PostulantEnable extends Component {
         else if(this.state.selectedOptionConv === null){
             this.setState({selectedConvOption_error:'Seleccione una convocatoria'})
         }
+        else if(this.state.found.length < 0){
+            this.setState({notfound_error:'No existe ese postulante en esa convocatoria'})
+        }
         else{
             return true;
         }
@@ -169,6 +178,7 @@ export class PostulantEnable extends Component {
     handleEnable(e){
 
                  this.setState({showList:false})
+                 this.setState({CorrectlySendChanges: "SE GUARDARON LOS CAMBIOS EN LA AUXILIATURA:" + this.state.auxilisturaSeleccionada})
                 // this.setState({allRequirementsCheckList:[]})
                 // this.setState({enableButton:false})
                  console.log("probando",this.state.req.length)
@@ -220,6 +230,9 @@ export class PostulantEnable extends Component {
             this.setState({allRequirementsCheckList: checkList})
             this.setState({enableButton:false})
             this.setState({disableReasonInput:false})
+            this.setState({enableMessageState:'INHABILITADO'})
+            this.setState({reason:' '})
+
         }
         console.log("the list", this.state.allRequirementsCheckList);
         
@@ -235,6 +248,8 @@ export class PostulantEnable extends Component {
         if(count === totalList){
             this.setState({enableButton:true})
             this.setState({disableReasonInput:true})
+            this.setState({enableMessageState:'HABILITADO'})
+            this.setState({reason:' '})
            // this.setState({enableButton:true})
         //console.log("isButtonEdddddddddddddnabled" , this.state.enableButton);
             
@@ -276,6 +291,7 @@ export class PostulantEnable extends Component {
                                   onChange = {this.onChange}                     
                         />
                          <p style={{color:"red"}}>{this.state.codSis_error}</p>
+                         <p style={{color:"red"}}>{this.state.notfound_error}</p>
                           </div>
                         <div className="form-group col-md-4">
                             <label htmlFor="conv">Selecciona una convocatoria</label>
@@ -302,25 +318,26 @@ export class PostulantEnable extends Component {
                                     <br></br>
                                     <label htmlFor="auxiliary"><b>Convocatoria:</b> {enable.announcement}</label>
                                     <br></br>
-                                    <label htmlFor="auxiliary"><b>Auxiliatura(s):</b> {enable.auxiliary}</label>
+                                    <label htmlFor="auxiliary"><b>Auxiliatura:</b> {this.state.auxilisturaSeleccionada}</label>
                                     <br></br>
                                     {/* <button className="btn btn-outline-info mt-4" variant="warning" onClick ={(e) => this.handleReq(e)}htmlFor="cod_sys">Auxiliatura</button> */}
                                 </div>
                                 )}
+                                  <div className="form-row col-md-12">
                                 {this.state.auxst.map(enable =>
-                                    <div className="form-row col-md-12">
-                                        <button className="col-md-6 btn btn-outline-info mt-4" variant="warning" value={enable.axiliatura} onClick ={(e) => this.handleReq(enable)}htmlFor="cod_sys">{enable.axiliatura}</button>
-                                    </div>
-                                 )}
+                                  
+                                        <button className="col-md-2 btn btn-outline-info mt-4 mx-3" variant="warning" value={enable.axiliatura} onClick ={(e) => this.handleReq(enable)}htmlFor="cod_sys">{enable.axiliatura}</button>
+                                   
+                                 )}</div>
+                                  <p style={{color:"green"}}>{this.state.CorrectlySendChanges}</p>
                         </div>
                         
-                                        <div>
-
-
-                                        </div>
                         <br></br>
                         {this.state.showList?
+                                
+                        
                         <div className="col-md-12">  
+                        
                         <div className="col-md-12">
                         <br></br>
                             <label className="col-md-8 text-info font-weight-bold" htmlFor="Nombre">REQUISITOS</label>
@@ -350,9 +367,14 @@ export class PostulantEnable extends Component {
                               </div> 
                       
                       <br></br>
+                      <div className="form-group col-md-12">
+                          <label htmlFor="Estado">Estado:</label>
+                          <p style={{color:"blue"}}>{this.state.enableMessageState}</p>
+                        
+                         </div>  
                       
                       <div className="form-group col-md-12">
-                          <label htmlFor="Motivo">Motivo</label>
+                          <label htmlFor="Motivo">Motivo de Inhabilitacion:</label>
                              <input    
                                   className="form-control"   
                                   placeholder="Ingrese un Motivo"                 
