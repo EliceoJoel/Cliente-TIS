@@ -30,7 +30,8 @@ export class PostulantEnable extends Component {
              //selectedConvOption: null,
              selectedOptionConv: null,
              selectedConvOption_error:'',
-             codSis_error:''
+             codSis_error:'',
+             notfound_error:''
              
              
         }
@@ -87,7 +88,8 @@ export class PostulantEnable extends Component {
         e.preventDefault()
         this.setState({
             selectedConvOption_error:'',
-            codSis_error:''
+            codSis_error:'',
+            notfound_error:''
         })
         if(this.valid()){  
         let codSis = this.state.codSis
@@ -107,7 +109,7 @@ export class PostulantEnable extends Component {
 
                // this.found = response.data
                 this.setState({found: response.data})
-                console.log(this.found)
+                console.log(this.state.found)
                 this.splitArray()
                 console.log(this.state.auxst)
               
@@ -160,6 +162,9 @@ export class PostulantEnable extends Component {
         }
         else if(this.state.selectedOptionConv === null){
             this.setState({selectedConvOption_error:'Seleccione una convocatoria'})
+        }
+        else if(this.state.found.length < 0){
+            this.setState({notfound_error:'No existe ese postulante en esa convocatoria'})
         }
         else{
             return true;
@@ -220,6 +225,8 @@ export class PostulantEnable extends Component {
             this.setState({allRequirementsCheckList: checkList})
             this.setState({enableButton:false})
             this.setState({disableReasonInput:false})
+            this.setState({reason:' '})
+
         }
         console.log("the list", this.state.allRequirementsCheckList);
         
@@ -276,6 +283,7 @@ export class PostulantEnable extends Component {
                                   onChange = {this.onChange}                     
                         />
                          <p style={{color:"red"}}>{this.state.codSis_error}</p>
+                         <p style={{color:"red"}}>{this.state.notfound_error}</p>
                           </div>
                         <div className="form-group col-md-4">
                             <label htmlFor="conv">Selecciona una convocatoria</label>
