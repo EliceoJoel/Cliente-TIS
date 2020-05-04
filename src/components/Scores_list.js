@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import Select from 'react-select'
 import {getAnnouncement} from './UserFunctions'
-import {getPostulantsEnabled} from './UserFunctions' 
-//import {getScores} from './UserFunctions'
+import {getStudents} from './UserFunctions' 
+import {updateScore} from './UserFunctions'
 
 var conv = []
 class Scores_list extends Component{
@@ -31,7 +31,7 @@ componentDidMount() {
 getStudents(){
     var postulants = []
     var scores =[]
-    getPostulantsEnabled().then(postulant => {
+    getStudents().then(postulant => {
         for(var i=0; i<postulant.length;i++){
             if(postulant[i].auxiliary === this.state.selectedAux && postulant[i].announcement === this.state.selectedConv.label){
                 var object = {}
@@ -39,17 +39,16 @@ getStudents(){
                 object.id = postulant[i].id
                 object.name = postulant[i].name
                 object.auxiliary = postulant[i].auxiliary
-                object.score = 0
-                object.oralScore = 0
-                score.score = 0
-                score.oralScore = 0
+                object.score = postulant[i].score
+                object.score_oral = postulant[i].score_oral
+                score.score = postulant[i].score
+                score.score_oral = postulant[i].score_oral
                 score.id = postulant[i].id
                 scores.push(score)
                 postulants.push(object)
             }
         }
         this.setState({postulantes:postulants, score:scores})
-        console.log(this.state.score)
     })
 }
 
@@ -144,7 +143,7 @@ renderTableData() {
                 <div class="col">{postulant.name}</div>
                 <div class="col">{postulant.auxiliary}</div>
                 <div class="col">{this.fillScore(postulant.score)}</div>
-                <div class="col">{this.fillScore(postulant.oralScore)}</div>
+                <div class="col">{this.fillScore(postulant.score_oral)}</div>
                 <input 
                     type = "number"
                     id = {postulant.id} 
@@ -171,17 +170,13 @@ renderTableData() {
     ))
  }
 update(){
-    var post = this.state.postulantes
+    var post = this.state.score
+    console.log(post)
     for(var i=0;i<this.state.postulantes.length;i++){
-        for(var j=0;j<this.state.score.length;j++){
-            if(post[i].id === this.state.score[j].id){
-                post[i].score = this.state.score[j].score
-                post[i].oralScore = this.state.score[j].oralScore
-            }
-        }
+        console.log(this.state.score[i])
+        updateScore(this.state.score[i])
     }
-    this.setState({postulantes:post})
-    console.log(this.state.postulantes)
+    this.getStudents()
 }
 
  onChangeOral = (event) => {
@@ -194,7 +189,7 @@ update(){
         this.setState({warningMesage:""})
         // eslint-disable-next-line eqeqeq
         if(event.target.id == scores[i].id && parseInt(event.target.value)< 101){
-            scores[i].oralScore = event.target.value
+            scores[i].score_oral = event.target.value
         }
     }
     console.log(scores)

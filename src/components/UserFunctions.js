@@ -117,3 +117,38 @@ export const getScores = () => {
         })
 }
 
+export const getStudents = () =>{
+    return axios
+       .get('api/students', {
+           headers: {'Content-Type': 'application/json'}
+       })
+       .then(response => {
+        return response.data
+       })
+       .catch(err => {
+           console.log(err)
+       })
+}
+
+export const updateScore = (score) =>{
+    return axios
+        .post(
+            'api/update/' + score.id,
+            {
+                id_postulant: score.id,
+                score: score.score,
+                score_oral: score.score_oral
+            },
+            {
+                headers: { 'Content-Type': 'application/json' }
+            }
+        )
+        .then(response => {
+            localStorage.setItem('usertoken', response.data.token)
+            return response.data.token
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
