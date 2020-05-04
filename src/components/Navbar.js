@@ -37,6 +37,10 @@ class Landing extends Component {
           </Link>
         </li>
         <li className = "nav-item">
+          <Link to ="/scores_list" className= "nav-link">
+            lista de notas
+          </Link>
+        </li>
           <Link to ="/enabled_list" className= "nav-link">
             Lista de Habilitados/Inhabilitados
           </Link>
@@ -46,7 +50,6 @@ class Landing extends Component {
             Registrar postulante
           </Link>
         </li>
-
       <li>  
         
         
