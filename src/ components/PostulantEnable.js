@@ -164,7 +164,7 @@ export class PostulantEnable extends Component {
         else{
             return true;
         }
-
+//
     }
     handleEnable(e){
 
