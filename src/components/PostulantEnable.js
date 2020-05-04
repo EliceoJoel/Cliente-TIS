@@ -23,12 +23,23 @@ export class PostulantEnable extends Component {
              auxst:[],
              auxilisturaSeleccionada:'',
              allRequirementsCheckList:[],
-             enableButton:false
+             enableButton:false,
+             disableReasonInput:false,
+             //manejo de errores
+            
+             //selectedConvOption: null,
+             selectedOptionConv: null,
+             selectedConvOption_error:'',
+             codSis_error:''
+             
              
         }
     }
     
     onChange =  (e) =>{
+        this.setState({[e.target.name]: e.target.value })
+    }
+    onChangeReason =  (e) =>{
         this.setState({[e.target.name]: e.target.value })
     }
     componentDidMount() {
@@ -61,38 +72,24 @@ export class PostulantEnable extends Component {
 
         console.log(auxs)
         this.setState({auxst:auxs})
-      //  this.setState({auxst: auxs.data})
-     //   console.log(auxst)
-     //   return auxs;
-      //  this.setState({auxst: auxs})
-       // console.log(auxst)
-       // liatura.push(auxs)
-        //console.log(liatura)
-        // this.setState({auxs:this.state.asdf})
-        // console.log(auxs)
-     
+    
         
     }
     
     selectConvChange = selectedConvOption =>{
        
         this.setState({selectedOptionConv:selectedConvOption})
-        //this.setState({[selectedop.target.name]: e.target.value })
-       // this.setState ({[selectedConvOption.name]: selectedConvOption.value })
        
     }
-    // getPostulantEnable() {
-    //     axios.get('/api/postulantenable')
-    //     .then(response => {
-    //         this.setState({postulantenable : response.data});
-    //     })
-    //     .catch(e => {
-    //         console.log(e);
-    //     })
-    //   }
+   
 
        handleSearch(e ){
         e.preventDefault()
+        this.setState({
+            selectedConvOption_error:'',
+            codSis_error:''
+        })
+        if(this.valid()){  
         let codSis = this.state.codSis
         let conv =  this.state.selectedOptionConv.label
         let send = new FormData()
@@ -118,7 +115,7 @@ export class PostulantEnable extends Component {
             .catch(error => {
                 console.log(error)
             })
-
+        }
            
         
     }
@@ -126,6 +123,7 @@ export class PostulantEnable extends Component {
     handleReq(e ){
         this.setState({allRequirementsCheckList:[]})
         this.setState({enableButton:false})
+        this.setState({disableReasonInput:false})
         console.log(e.axiliatura);
         this.setState({auxilisturaSeleccionada:e.axiliatura})
         let a = this.state.found[0].announcement
@@ -156,22 +154,37 @@ export class PostulantEnable extends Component {
               console.log(error)
           }) 
     }
+    valid(){        
+        if(this.state.codSis.length > 9 || this.state.codSis.length < 8 || isNaN(this.state.codSis)){
+            this.setState({codSis_error:'codigo sis incorrecto'})
+        }
+        else if(this.state.selectedOptionConv === null){
+            this.setState({selectedConvOption_error:'Seleccione una convocatoria'})
+        }
+        else{
+            return true;
+        }
+
+    }
     handleEnable(e){
+
                  this.setState({showList:false})
                 // this.setState({allRequirementsCheckList:[]})
                 // this.setState({enableButton:false})
                  console.log("probando",this.state.req.length)
+                
                  let name =  this.state.found[0].names +" "+ this.state.found[0].first_surname +" " + this.state.found[0].second_surname
                  let auxiliary =  this.state.auxilisturaSeleccionada
                  let announcement =  this.state.found[0].announcement
                  let enable = this.state.enableButton
+                 let reason = this.state.reason
                  let send = new FormData()
-              
+
                      send.append('name', name )
                      send.append('auxiliary', auxiliary )
                      send.append('announcement', announcement )
                      send.append('enable', enable )
-                     send.append('reason', "reason" )
+                     send.append('reason', reason )
                      axios({
                         method: 'post',
                         url: 'api/postulantenable',
@@ -185,9 +198,11 @@ export class PostulantEnable extends Component {
                      .catch(error => {
                          console.log(error)
                      })   
+                    
 
 
     }
+
     handleChange(evt, requirement) {
         let value =
           evt.target.type === "checkbox" ? evt.target.checked : evt.target.value;
@@ -204,6 +219,7 @@ export class PostulantEnable extends Component {
             }
             this.setState({allRequirementsCheckList: checkList})
             this.setState({enableButton:false})
+            this.setState({disableReasonInput:false})
         }
         console.log("the list", this.state.allRequirementsCheckList);
         
@@ -218,6 +234,7 @@ export class PostulantEnable extends Component {
         }
         if(count === totalList){
             this.setState({enableButton:true})
+            this.setState({disableReasonInput:true})
            // this.setState({enableButton:true})
         //console.log("isButtonEdddddddddddddnabled" , this.state.enableButton);
             
@@ -229,7 +246,7 @@ export class PostulantEnable extends Component {
       }
 
     render() {
-        const {codSis, reason} = this.state
+        const {codSis, reason, disableReasonInput} = this.state
         const { selectedOptionConv } = this.state
         //this.getPostulantEnable()
 
@@ -258,6 +275,7 @@ export class PostulantEnable extends Component {
                                   value = {codSis}  
                                   onChange = {this.onChange}                     
                         />
+                         <p style={{color:"red"}}>{this.state.codSis_error}</p>
                           </div>
                         <div className="form-group col-md-4">
                             <label htmlFor="conv">Selecciona una convocatoria</label>
@@ -270,7 +288,7 @@ export class PostulantEnable extends Component {
                                       value={selectedOptionConv}
                                       onChange={this.selectConvChange}
                          />
- 
+                             <p style={{color:"red"}}>{this.state.selectedConvOption_error}</p>
                         </div>
                         <div>
                         <button className="btn btn-outline-info mt-4" variant="warning" onClick ={  (e) => this.handleSearch(e)} >Buscar Postulante</button>
@@ -334,17 +352,18 @@ export class PostulantEnable extends Component {
                       
                       <br></br>
                       
-                      <div className="form-group col-md-12">
-                        <label htmlFor="Nombre">Motivo de Inhabilitacion</label>
-               
-                       <textarea    
-                           className="form-control"   
-                           placeholder="Ingrese un motivo"                   
-                             type = "text"
-                            name = "requirement"
-                            value = {reason}  
-                            onChange = {this.onChange}                
-                       />
+                      <div className="form-group col-md-10">
+                          <label htmlFor="Motivo">Motivo</label>
+                             <input    
+                                  className="form-control"   
+                                  placeholder="Ingrese un Motivo"                 
+                                  type = "text"
+                                  name = "reason"
+                                  value = {reason}  
+                                  disabled = {disableReasonInput}
+                                 
+                                  onChange = {this.onChangeReason}                     
+                                />
                         
                          </div>
                             
