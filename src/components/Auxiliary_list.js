@@ -29,7 +29,7 @@ getStudents(){
     var postulants = []
     getPostulantsEnabled().then(postulant => {
         for(var i=0; i<postulant.length;i++){
-            if(postulant[i].auxiliary === this.state.selectedAux && postulant[i].announcement === this.state.selectedConv.lavel){
+            if(postulant[i].auxiliary === this.state.selectedAux && postulant[i].announcement === this.state.selectedConv.label){
                 postulants.push(postulant[i])
             }
         }
@@ -56,7 +56,6 @@ fillAuxi(){
 
 
 render() {
-
     return (
         <div className="justify-content-center">
             <h1 className="h3 font-weight-normal text-center mt-3 p-3 bg-info text-white">
@@ -78,7 +77,7 @@ render() {
                 </div>
 
                 <div className="form-group col-3 mt-5">
-                    <button type="button" class="col btn btn-info mt-2" onClick={() => this.fillAuxi()} >seleccionar convocatoria</button>
+                    <button type="button" class="col btn btn-info mt-2" onClick={() => this.fillAuxi()} >Seleccionar convocatoria</button>
                 </div>
 
                 <div className="form-group col-8 my-4">
@@ -99,8 +98,9 @@ render() {
                 </div>            
             </div>
             <div className="row">
-                    <div class="col">nombre</div>
-                    <div class="col">auxiliatura</div>
+                    <div class="col">Nombre</div>
+                    <div class="col">Habilitado</div>
+                    <div class="col">Auxiliatura</div>
             </div>
                 {this.renderTableData()}
         </div>        

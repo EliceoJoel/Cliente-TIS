@@ -85,6 +85,7 @@ class Register extends Component {
         this.setState({showAux:true})
         this.setState({selectedOptionAux:null})
         //delete auxiliary array data
+        console.log(aux)
         var array = []
         aux = array
     }
@@ -188,7 +189,7 @@ class Register extends Component {
 
 
         if(this.valid()){  
-            this.generatePDF()
+            //this.generatePDF()
             
             const newPostulant = {
                 names: this.state.names,
@@ -380,8 +381,7 @@ class Register extends Component {
                             />
                             <p style={{color:"red"}}>{this.state.selectedConvOption_error}</p>
                         </div>
-                        {
-                        this.state.showAux?
+                        {this.state.showAux?
                         <div className="form-group col-md-6">
                             <label htmlFor="aux">Selecciona una auxiliatura</label>
                             <Select

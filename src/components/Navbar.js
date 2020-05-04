@@ -41,9 +41,28 @@ class Landing extends Component {
             lista de notas
           </Link>
         </li>
+          <Link to ="/enabled_list" className= "nav-link">
+            Lista de Habilitados/Inhabilitados
+          </Link>
+        </li>
+        <li className = "nav-item">
+          <Link to ="/postulant_register" className= "nav-link">
+            Registrar postulante
+          </Link>
+        </li>
+      <li>  
         
         
-        
+          <Link to ="/PostulantEnable" className= "nav-link">
+            Habilitar Postulante
+          </Link>
+        </li>
+        <li className = "nav-item">
+          <Link to ="/RegisterDate" className= "nav-link">
+            Registrar Fecha
+          </Link>
+        </li>
+
         
       </ul>
     )
