@@ -231,7 +231,7 @@ export class PostulantEnable extends Component {
             this.setState({enableButton:false})
             this.setState({disableReasonInput:false})
             this.setState({enableMessageState:'INHABILITADO'})
-            this.setState({reason:' '})
+            //this.setState({reason:' '})
 
         }
         console.log("the list", this.state.allRequirementsCheckList);
