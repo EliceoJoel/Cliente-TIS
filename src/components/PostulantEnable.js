@@ -116,6 +116,7 @@ export class PostulantEnable extends Component {
             }) 
             .catch(error => {
                 console.log(error)
+                this.setState({notfound_error:"No existe ese postulante en esa convocatoria"})
             })
         }
            
@@ -328,7 +329,9 @@ export class PostulantEnable extends Component {
                                         </div>
                         <br></br>
                         {this.state.showList?
+                        
                         <div className="col-md-12">  
+                        
                         <div className="col-md-12">
                         <br></br>
                             <label className="col-md-8 text-info font-weight-bold" htmlFor="Nombre">REQUISITOS</label>
