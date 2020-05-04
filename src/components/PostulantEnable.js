@@ -21,7 +21,9 @@ export class PostulantEnable extends Component {
              reason: '' ,
              showList: false,
              auxst:[],
-             auxilisturaSeleccionada:''
+             auxilisturaSeleccionada:'',
+             allRequirementsCheckList:[],
+             enableButton:false
              
         }
     }
@@ -122,6 +124,8 @@ export class PostulantEnable extends Component {
     }
     
     handleReq(e ){
+        this.setState({allRequirementsCheckList:[]})
+        this.setState({enableButton:false})
         console.log(e.axiliatura);
         this.setState({auxilisturaSeleccionada:e.axiliatura})
         let a = this.state.found[0].announcement
@@ -145,7 +149,8 @@ export class PostulantEnable extends Component {
              }).then(response =>{
 
               this.setState({req: response.data})
-              //console.log(this.req)
+
+             // console.log(this.state.req)
           }) 
           .catch(error => {
               console.log(error)
@@ -153,15 +158,19 @@ export class PostulantEnable extends Component {
     }
     handleEnable(e){
                  this.setState({showList:false})
+                // this.setState({allRequirementsCheckList:[]})
+                // this.setState({enableButton:false})
+                 console.log("probando",this.state.req.length)
                  let name =  this.state.found[0].names +" "+ this.state.found[0].first_surname +" " + this.state.found[0].second_surname
                  let auxiliary =  this.state.auxilisturaSeleccionada
                  let announcement =  this.state.found[0].announcement
+                 let enable = this.state.enableButton
                  let send = new FormData()
               
                      send.append('name', name )
                      send.append('auxiliary', auxiliary )
                      send.append('announcement', announcement )
-                     send.append('enable', true )
+                     send.append('enable', enable )
                      send.append('reason', "reason" )
                      axios({
                         method: 'post',
@@ -179,6 +188,45 @@ export class PostulantEnable extends Component {
 
 
     }
+    handleChange(evt, requirement) {
+        let value =
+          evt.target.type === "checkbox" ? evt.target.checked : evt.target.value;
+          console.log(value)
+
+        let checkList = this.state.allRequirementsCheckList
+        if(value){
+            checkList.push(requirement)
+            this.setState({allRequirementsCheckList: checkList})
+        }else{
+            const index = checkList.indexOf(requirement);
+            if (index > -1) {
+              checkList.splice(index, 1);
+            }
+            this.setState({allRequirementsCheckList: checkList})
+            this.setState({enableButton:false})
+        }
+        console.log("the list", this.state.allRequirementsCheckList);
+        
+
+        let totalList = this.state.req.length
+        let count = 0
+
+        console.log("totallist", totalList);
+        
+        for(let item in this.state.allRequirementsCheckList){
+            count++
+        }
+        if(count === totalList){
+            this.setState({enableButton:true})
+           // this.setState({enableButton:true})
+        //console.log("isButtonEdddddddddddddnabled" , this.state.enableButton);
+            
+        }
+
+        console.log("isButtonEnabled" , this.state.enableButton);
+        
+       
+      }
 
     render() {
         const {codSis, reason} = this.state
@@ -274,7 +322,8 @@ export class PostulantEnable extends Component {
                                                {enable.requirement} 
                                              </div>
                                               <div className="col-md-2">
-                                                  <input type="checkbox"></input>
+                                                  <input type="checkbox"  onChange={(event)=>this.handleChange(event,enable)}></input>
+                                                
                                               </div>
                                              </div>
                                              <div className="my-1" style={{border:"0.3px solid silver", width: "100%"}}></div>
@@ -292,9 +341,9 @@ export class PostulantEnable extends Component {
                            className="form-control"   
                            placeholder="Ingrese un motivo"                   
                              type = "text"
-                          name = "requirement"
-                          value = {reason}  
-                           onChange = {this.onChange}                     
+                            name = "requirement"
+                            value = {reason}  
+                            onChange = {this.onChange}                
                        />
                         
                          </div>
