@@ -290,31 +290,30 @@ export class PostulantEnable extends Component {
                          />
                              <p style={{color:"red"}}>{this.state.selectedConvOption_error}</p>
                         </div>
-                        <div>
-                        <button className="btn btn-outline-info mt-4" variant="warning" onClick ={  (e) => this.handleSearch(e)} >Buscar Postulante</button>
+                        <div className="form-group col-4 mt-3">
+                           <button type="button" class="col btn btn-info mt-3" variant="warning" onClick={(e) => this.handleSearch(e)} >Buscar Postulante</button>
                         </div>
                         <div  className="col-md-12">
                               {this.state.found.map(enable =>
                                 <div key = {enable.id}>                         
-                              <label htmlFor="nombre">Nombre : {enable.names} {enable.first_surname} {enable.second_surname}</label>
-                                      <br></br>
-                                     <label htmlFor="cod_sys">Codigo Sis : {enable.sis_code}</label>
-                                      <br></br>
-                                      <label htmlFor="auxiliary">Convocatoria: {enable.announcement}</label>
-                                     <br></br>
-                                     <label htmlFor="auxiliary">Auxiliatura(s): {enable.auxiliary}</label>
-                                     <br></br>
-                                     {/* <button className="btn btn-outline-info mt-4" variant="warning" onClick ={(e) => this.handleReq(e)}htmlFor="cod_sys">Auxiliatura</button> */}
-                                 </div>
+                                    <label htmlFor="nombre"><b>Nombre:</b> {enable.names} {enable.first_surname} {enable.second_surname}</label>
+                                    <br></br>
+                                    <label htmlFor="cod_sys"><b>Codigo Sis:</b> {enable.sis_code}</label>
+                                    <br></br>
+                                    <label htmlFor="auxiliary"><b>Convocatoria:</b> {enable.announcement}</label>
+                                    <br></br>
+                                    <label htmlFor="auxiliary"><b>Auxiliatura(s):</b> {enable.auxiliary}</label>
+                                    <br></br>
+                                    {/* <button className="btn btn-outline-info mt-4" variant="warning" onClick ={(e) => this.handleReq(e)}htmlFor="cod_sys">Auxiliatura</button> */}
+                                </div>
+                                )}
+                                {this.state.auxst.map(enable =>
+                                    <div className="form-row col-md-12">
+                                        <button className="col-md-6 btn btn-outline-info mt-4" variant="warning" value={enable.axiliatura} onClick ={(e) => this.handleReq(enable)}htmlFor="cod_sys">{enable.axiliatura}</button>
+                                    </div>
                                  )}
-                                  {this.state.auxst.map(enable =>
-                                        <button className="btn btn-outline-info mt-4" variant="warning" value={enable.axiliatura} onClick ={(e) => this.handleReq(enable)}htmlFor="cod_sys">{enable.axiliatura}</button>
-                                  
-
-                                
-                                 )}
-
                         </div>
+                        
                                         <div>
 
 
@@ -339,7 +338,7 @@ export class PostulantEnable extends Component {
                                              <div className="col-md-8">                         
                                                {enable.requirement} 
                                              </div>
-                                              <div className="col-md-2">
+                                              <div className="col-md-2 text-center">
                                                   <input type="checkbox"  onChange={(event)=>this.handleChange(event,enable)}></input>
                                                 
                                               </div>
@@ -352,7 +351,7 @@ export class PostulantEnable extends Component {
                       
                       <br></br>
                       
-                      <div className="form-group col-md-10">
+                      <div className="form-group col-md-12">
                           <label htmlFor="Motivo">Motivo</label>
                              <input    
                                   className="form-control"   
@@ -365,12 +364,8 @@ export class PostulantEnable extends Component {
                                   onChange = {this.onChangeReason}                     
                                 />
                         
-                         </div>
-                            
-                         <div className="form-group col-md-12 ">    
-                         <button className="btn btn-outline-info" variant="warning" onClick ={(AuxEvent) => this.handleEnable(AuxEvent)} >Guardar Cambios</button>
-                         </div>
-                     
+                         </div>  
+                         <button className="col btn btn-lg btn-info mt-2" variant="warning" onClick ={(AuxEvent) => this.handleEnable(AuxEvent)} >Guardar Cambios</button>
                        </div>             
                         :null}
                     </div>  
