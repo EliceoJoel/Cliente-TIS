@@ -36,10 +36,6 @@ class Landing extends Component {
             lista de postulantes de auxiliatura
           </Link>
         </li>
-        
-        
-        
-        
       </ul>
     )
 
