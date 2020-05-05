@@ -118,14 +118,14 @@ renderTableData() {
     return this.state.postulantes.map(postulant =>(
         <div className="row">
                 <div class="col">{postulant.name}</div>
-                <div class="col">{this.checkEnable(this.enable)}</div>
+                <div class="col">{this.checkEnable(postulant.enable)}</div>
                 <div class="col">{postulant.auxiliary}</div>
         </div>
     ))
  }
 
  checkEnable(enable){
-    if(!enable){
+    if(enable){
         return "si"
     }
     else return "no"
