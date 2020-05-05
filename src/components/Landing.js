@@ -32,13 +32,14 @@ class Landing extends Component {
         <section>
 
           <div className="col-md-12" >
-            <h2>AVISO DE FECHAS</h2>
+            <h2 className="col-md-10 ">AVISO DE FECHAS</h2>
           {this.state.arreglo.map(aviso =>
                     <div >
                                  
                                   <h5 className="col-md-10 " htmlFor="Nombre">{aviso.event}</h5>
+                                  <h6 className="col-md-8 " htmlFor="Nombre">fecha de evento:{aviso.date}</h6>
                                   <label className="col-md-5 " htmlFor="Nombre">{aviso.description}</label> 
-                                  <label className="col-md-8 " htmlFor="Nombre">{aviso.date}</label>
+                                 
                                  
                                   <br></br>
                                   </div>

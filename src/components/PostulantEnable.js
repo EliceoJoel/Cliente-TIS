@@ -403,7 +403,7 @@ export class PostulantEnable extends Component {
                                 />
                         
                          </div>  
-                         <button className="col btn btn-lg btn-info mt-2" variant="warning" onClick ={(AuxEvent) => this.handleEnable(AuxEvent)} >Guardar Cambios</button>
+                         <button className="col btn btn-lg btn-info mt-2" variant="warning" onClick ={(AuxEvent) => this.handleEnable(AuxEvent)} >REGISTRAR DATOS</button>
                        </div>             
                         :null}
                     </div>  
