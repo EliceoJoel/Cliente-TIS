@@ -126,9 +126,9 @@ renderTableData() {
 
  checkEnable(enable){
     if(!enable){
-        return "documentos en regla"
+        return "si"
     }
-    else return "falta de documentacion"
+    else return "no"
  }
 
 }
