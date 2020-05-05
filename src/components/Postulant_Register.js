@@ -276,7 +276,7 @@ class PostulantRegister extends Component {
                         }
                     </div>
                     {this.state.showSubmit?    
-                        <button type="submit" className="col btn btn-lg btn-info mt-2">Confirmar registro</button>
+                        <button type="submit" className="col btn btn-lg btn-info mt-2 mb-4">Confirmar registro</button>
                     :null
                     }
                 </form>    

@@ -17,17 +17,21 @@ class Auxiliary_list extends Component{
 }
 componentDidMount() {
     getAnnouncement().then(res => {
-        for (var i=0; i < res.length; i++) {
-            var object = {}
-            object.id = res[i].id
-            object.label = res[i].name
-            conv[i] = object
-          }
+        if(res != null){
+            for (var i=0; i < res.length; i++) {
+                var object = {}
+                object.id = res[i].id
+                object.label = res[i].name
+                conv[i] = object
+            }
+        }
     })
 }
 getStudents(){
     var postulants = []
+    console.log()
     getPostulantsEnabled().then(postulant => {
+        if (postulant == null) return;
         for(var i=0; i<postulant.length;i++){
             if(postulant[i].auxiliary === this.state.selectedAux && postulant[i].announcement === this.state.selectedConv.label){
                 postulants.push(postulant[i])
@@ -41,7 +45,7 @@ fillAuxi(){
     var aux =[]
     getAnnouncement().then(conv =>{
         for(var i=0;i<conv.length;i++){
-            if(conv[i].id === this.state.selectedConv.id){
+            if(conv[i].id === this.state.selectedConv.id && conv[i].auxiliary != null){
                 var auxi = JSON.parse(conv[i].auxiliary)
                 for(var j=0;j<auxi.length;j++){
                     var object = {}
@@ -56,10 +60,11 @@ fillAuxi(){
 
 
 render() {
+
     return (
         <div className="justify-content-center">
             <h1 className="h3 font-weight-normal text-center mt-3 p-3 bg-info text-white">
-               Lista de postulantes
+               Registro de calificaciones
             </h1>
             <div className="row">
                 <div className="form-group col-8 my-4">
@@ -77,7 +82,7 @@ render() {
                 </div>
 
                 <div className="form-group col-3 mt-5">
-                    <button type="button" class="col btn btn-info mt-2" onClick={() => this.fillAuxi()} >Seleccionar convocatoria</button>
+                    <button type="button" class="col btn btn-info mt-2" onClick={() => this.fillAuxi()} >seleccionar convocatoria</button>
                 </div>
 
                 <div className="form-group col-8 my-4">
@@ -98,9 +103,9 @@ render() {
                 </div>            
             </div>
             <div className="row">
-                    <div class="col">Nombre</div>
-                    <div class="col">Habilitado</div>
-                    <div class="col">Auxiliatura</div>
+                    <div class="col">nombre</div>
+                    <div class="col">habilitado</div>
+                    <div class="col">auxiliatura</div>
             </div>
                 {this.renderTableData()}
         </div>        
@@ -114,21 +119,17 @@ renderTableData() {
     return this.state.postulantes.map(postulant =>(
         <div className="row">
                 <div class="col">{postulant.name}</div>
-                <input 
-                        className="col"  
-                        type = "text"
-                        name = "year"
-                        value = {postulant.auxiliary}                    
-                        />
+                <div class="col">{this.checkEnable(postulant.enable)}</div>
+                <div class="col">{postulant.auxiliary}</div>
         </div>
     ))
  }
 
  checkEnable(enable){
-    if(!enable){
-        return "documentos en regla"
+    if(enable){
+        return "si"
     }
-    else return "falta de documentacion"
+    else return "no"
  }
 
 }

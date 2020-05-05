@@ -41,7 +41,7 @@ class Landing extends Component {
             lista de notas
           </Link>
         </li>
-        <li className = "nav-item">
+        <li>
           <Link to ="/enabled_list" className= "nav-link">
             Lista de Habilitados/Inhabilitados
           </Link>
@@ -116,3 +116,5 @@ class Landing extends Component {
 }
 
 export default withRouter(Landing)
+
+

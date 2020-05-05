@@ -101,10 +101,10 @@ class Enabled_list extends Component {
                     <div className="form-group col-4 mt-5">
                         <button type="button" class="col btn btn-info mt-2" onClick={() => this.show()} >Generar lista</button>
                     </div>
-                    <label className="col-md-3 text-info font-weight-bold" htmlFor="Nombre">Código Sis del postulante</label>
-                    <label className="col-md-3 text-info font-weight-bold" htmlFor="Nombre">Nombre de auxiliatura</label>
+                    <label className="col-md-3 text-info font-weight-bold" htmlFor="Nombre">Nombre del postulante</label>
+                    <label className="col-md-3 text-info font-weight-bold" htmlFor="Nombre">Nombre de la auxiliatura</label>
                     <label className="col-md-3 text-info font-weight-bold text-center" htmlFor="Nombre">Habilitado</label>
-                    <label className="col-md-3 text-info font-weight-bold" htmlFor="Nombre">Motivo de inhabilitación</label>
+                    <label className="col-md-3 text-info font-weight-bold text-center" htmlFor="Nombre">Observaciones</label>
                     <div className="my-1" style={{border:"0.5px solid silver", width: "100%"}}></div>
                     {this.state.showList?    
                         <div className="col-md-12">
