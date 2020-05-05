@@ -225,6 +225,8 @@ export class PostulantEnable extends Component {
                      })
                     
 
+                     
+
 
     }
 
