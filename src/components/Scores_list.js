@@ -126,6 +126,8 @@ render() {
             </div>
             <form>
                 {this.renderTableData()}
+                <br/>
+                <br/>
                 <button type="button" class="col btn btn-info " onClick={() =>this.update()} >subir notas</button>
             </form>
         </div>        
