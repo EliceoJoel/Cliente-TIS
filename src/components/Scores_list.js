@@ -15,7 +15,6 @@ class Scores_list extends Component{
         auxiliaturas:[],
         postulantes:[],
         score:[],
-        warningMesage:"",
     }
 }
 componentDidMount() {
@@ -122,12 +121,13 @@ render() {
                     <div class="col">auxiliatura</div>
                     <div class="col">nota</div>
                     <div class="col">nota Oral</div>
-                    <div class="col"></div>
-                    <div class="col"></div>
-                    <div class="col"></div>
+                    <div class="col">editar nota</div>
+                    <div class="col">editar nota oral</div>
             </div>
             <form>
                 {this.renderTableData()}
+                <br/>
+                <br/>
                 <button type="button" class="col btn btn-info " onClick={() =>this.update()} >subir notas</button>
             </form>
         </div>        
@@ -165,7 +165,6 @@ renderTableData() {
                     placeholder= "ingrese notas de examen oral"
                     onChange = {this.onChangeOral}                     
                 />
-                <div class="col">{this.state.warningMesage}</div>
             </div>
     ))
  }
@@ -181,12 +180,10 @@ update(){
 
  onChangeOral = (event) => {
      if(event.target.value >100){ 
-        this.setState({warningMesage:"numero no valido"})
         return
      }
      var scores = this.state.score
     for(var i=0;i<this.state.score.length;i++){
-        this.setState({warningMesage:""})
         // eslint-disable-next-line eqeqeq
         if(event.target.id == scores[i].id && parseInt(event.target.value)< 101){
             scores[i].score_oral = event.target.value
@@ -198,7 +195,6 @@ update(){
 
 onChange = (event) => {
     if(event.target.value >100){ 
-       this.setState({warningMesage:"numero no valido"})
        return
     }
     var scores = this.state.score
