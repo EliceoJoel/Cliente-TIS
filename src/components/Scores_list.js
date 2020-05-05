@@ -36,14 +36,14 @@ getStudents(){
             if(postulant[i].auxiliary === this.state.selectedAux && postulant[i].announcement === this.state.selectedConv.label){
                 var object = {}
                 var score = {}
-                object.id = postulant[i].id
+                object.id = postulant[i].id_book
                 object.name = postulant[i].name
                 object.auxiliary = postulant[i].auxiliary
                 object.score = postulant[i].score
                 object.score_oral = postulant[i].score_oral
                 score.score = postulant[i].score
                 score.score_oral = postulant[i].score_oral
-                score.id = postulant[i].id
+                score.id = postulant[i].id_book
                 scores.push(score)
                 postulants.push(object)
             }
