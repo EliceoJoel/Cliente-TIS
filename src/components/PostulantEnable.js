@@ -182,14 +182,14 @@ export class PostulantEnable extends Component {
                 // this.setState({allRequirementsCheckList:[]})
                 // this.setState({enableButton:false})
                  console.log("probando",this.state.req.length)
-                
+                 let idRegisterBook = this.state.found[0].id
                  let name =  this.state.found[0].names +" "+ this.state.found[0].first_surname +" " + this.state.found[0].second_surname
                  let auxiliary =  this.state.auxilisturaSeleccionada
                  let announcement =  this.state.found[0].announcement
                  let enable = this.state.enableButton
                  let reason = this.state.reason
                  let send = new FormData()
-
+                     send.append('idRegisterBook', idRegisterBook)
                      send.append('name', name )
                      send.append('auxiliary', auxiliary )
                      send.append('announcement', announcement )
@@ -197,7 +197,7 @@ export class PostulantEnable extends Component {
                      send.append('reason', reason )
                      axios({
                         method: 'post',
-                        url: 'api/postulantenable',
+                        url: 'api/postulantEnable',
                         data: send,
                         headers: {'Content-Type': 'multipart/form-data' }
                         }).then(response =>{
