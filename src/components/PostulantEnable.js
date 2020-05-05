@@ -189,7 +189,7 @@ export class PostulantEnable extends Component {
                  let enable = this.state.enableButton
                  let reason = this.state.reason
                  let send = new FormData()
-                     send.append('idRegisterBook', idRegisterBook)
+                     send.append('id_book', idRegisterBook)
                      send.append('name', name )
                      send.append('auxiliary', auxiliary )
                      send.append('announcement', announcement )
@@ -208,6 +208,21 @@ export class PostulantEnable extends Component {
                      .catch(error => {
                          console.log(error)
                      })   
+                     console.log(idRegisterBook)
+                     let score = new FormData()
+                     score.append('id_postulant', idRegisterBook)
+                     score.append('score', 0)
+                     score.append('score_oral', 0)
+                     axios({
+                        method: 'post',
+                        url: 'api/add',
+                        data: score,
+                        headers: {'Content-Type': 'multipart/form-data' }
+                        }).then(response =>{
+                     }) 
+                     .catch(error => {
+                         console.log(error)
+                     })
                     
 
 
@@ -242,6 +257,7 @@ export class PostulantEnable extends Component {
 
         console.log("totallist", totalList);
         
+        // eslint-disable-next-line no-unused-vars
         for(let item in this.state.allRequirementsCheckList){
             count++
         }
