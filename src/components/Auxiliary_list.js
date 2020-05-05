@@ -31,6 +31,7 @@ getStudents(){
     var postulants = []
     console.log()
     getPostulantsEnabled().then(postulant => {
+        if (postulant == null) return;
         for(var i=0; i<postulant.length;i++){
             if(postulant[i].auxiliary === this.state.selectedAux && postulant[i].announcement === this.state.selectedConv.label){
                 postulants.push(postulant[i])
@@ -63,7 +64,7 @@ render() {
     return (
         <div className="justify-content-center">
             <h1 className="h3 font-weight-normal text-center mt-3 p-3 bg-info text-white">
-               Lista de postulantes
+               Registro de calificaciones
             </h1>
             <div className="row">
                 <div className="form-group col-8 my-4">
