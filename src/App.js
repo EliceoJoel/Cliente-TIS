@@ -21,10 +21,8 @@ class App extends Component {
       <Router>
         <div className="App">
           <Navbar />
-          <Route exact path="/" component={Landing} />
           <div className="container">
             <Route exact path="/Generate_Rotulado" component={Generate_Rotulado} />
-            <Route exact path="/login" component={Login} />
             <Route exact path="/list" component={List} />
             <Route exact path="/post" component={Post} />
             <Route exact path="/auxiliary_list" component={Auxiliary_list} />

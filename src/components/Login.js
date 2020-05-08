@@ -1,18 +1,25 @@
 import React, { Component } from 'react'
 import { login } from './UserFunctions'
 
+
 class Login extends Component {
     constructor() {
         super()
         this.state = {
             user: '',
             password: '',
-            errors: {}
+            userError: '',
+            passwordError: '',
         }
 
         this.onChange = this.onChange.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
     }
+
+    ifValid(){
+
+    }
+
 
     onChange(e) {
         this.setState({ [e.target.name]: e.target.value })
@@ -20,16 +27,6 @@ class Login extends Component {
     onSubmit(e) {
         e.preventDefault()
 
-        const user = {
-            user: this.state.email,
-            password: this.state.password
-        }
-
-        login(user).then(res => {
-            if (res) {
-                this.props.history.push(`/profile`)
-            }
-        })
     }
 
     render() {
@@ -37,7 +34,7 @@ class Login extends Component {
             <div className="container">
                 <div className="row">
                     <div className="col-md-6 mx-auto d-flex justify-content-center">
-                        <form noValidate onSubmit={this.onSubmit}>
+                        <form noValidate>
                             <div className="mt-3 p-3 bg-info text-white">
                                 <h1 className="h3 font-weight-normal text-center">
                                     Ingresar a mi cuenta
@@ -45,7 +42,7 @@ class Login extends Component {
                             </div>
                             <div className="my-4 text-info text-center">
                                 <h4>
-                                   ¡Esta seccion solo es de acceso para los usuarios administradores!
+                                   ¡Esta seccion solo es de acceso para los usuarios autorizados!
                                 </h4>
                             </div>
                             <div className="form-group">
@@ -72,10 +69,11 @@ class Login extends Component {
                                 />
                             </div>
                             <button
-                                type="submit"
+                                type="button"
+                                onClick={this.onSubmit}
                                 className="btn btn-lg btn-info btn-block mt-4"
                             >
-                                Sign in
+                                Iniciar sesión
                             </button>
                         </form>
                     </div>
