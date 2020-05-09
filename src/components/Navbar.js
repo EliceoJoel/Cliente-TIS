@@ -179,7 +179,7 @@ class Landing extends Component {
                                     className="form-control"
                                     name="password"
                                     placeholder="ingrese su contraseña"
-                                    maxLength="50"
+                                    maxLength="60"
                                     autocomplete="on"
                                     value={this.state.password}
                                     onChange={this.onChange}
