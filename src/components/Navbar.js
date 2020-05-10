@@ -1,24 +1,50 @@
 import React, { Component } from 'react'
 import { Link, withRouter } from 'react-router-dom'
 import{Modal, Button} from 'react-bootstrap'
+import {getUser} from './UserFunctions'
 
-
+var Users
 
 class Landing extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
+        User: null,
         user: '',
         password: '',
         userError: '',
         passwordError: '',
+        userNotExist:'',
         showLogin:false,
         showInicialItem:true,
+        showItems:false,
+        showSesionLink:this.isLogged(),
     }
 
     this.onChange = this.onChange.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
+  }
+
+  //fill users
+  componentDidMount() {
+    getUser().then(res => {
+        Users = res
+        //console.log(Users)
+    })
+  }
+
+  isLogged(){
+    var result=true
+    getUser().then(res =>{
+      for(var i=0; i<res.length; i++){
+        if(res[i].logged === true){
+          result = false
+          this.setState({showSesionLink:false})
+        }
+      }
+    })
+    return result
   }
 
   valid(){
@@ -32,15 +58,31 @@ class Landing extends Component {
       return true;
     }
   }
+
+  isUser(){
+    var result = false
+      for (var i=0; i < Users.length; i++) {
+          if(Users[i].user === this.state.user && Users[i].password === this.state.password){
+            this.setState({User:Users[i]}, console.log(Users[i]))
+            result = true
+          }
+        }
+    return result
+  }
   
   onChange(e) {
       this.setState({ [e.target.name]: e.target.value })
-      this.setState({userError:'', passwordError:''})
+      this.setState({userError:'', passwordError:'', userNotExist:''})
   }
   onSubmit(e) {
       e.preventDefault()
+      this.setState({password:""})
       if(this.valid()){
-      console.log("entra")
+        if(this.isUser()){
+          this.setState({showLogin:false, showInicialItem:false, showItems:true})
+        }else{
+          this.setState({userError:"Usuario incorrecto", passwordError:"Contraseña incorrecta"})
+        }
       }
   }
 
@@ -121,13 +163,16 @@ class Landing extends Component {
                 <img src="http://127.0.0.1:8000/storage/file/icon.svg" width="30" height="30" className="d-inline-block align-top mr-2" alt=""/>
                 AConv
               </a>
-              <ul className="navbar-nav ml-auto">
-                <li className="nav-item px-2" onClick={()=>this.setState({showLogin:true})}>
-                  <Link to="/" className="nav-link">
-                    Iniciar Sesión
-                  </Link>
-                </li>
-              </ul>
+              {this.state.showSesionLink?
+                <ul className="navbar-nav ml-auto">
+                  <li className="nav-item px-2" onClick={()=>this.setState({showLogin:true})}>
+                    <Link to="/" className="nav-link">
+                      Iniciar Sesión
+                    </Link>
+                  </li>
+                </ul>
+              :null
+              }
             </nav>         
               <nav className="navbar navbar-expand-lg navbar-light bg-light">
                 <button
@@ -144,10 +189,25 @@ class Landing extends Component {
                 {this.state.showInicialItem?
                   <div className="collapse navbar-collapse justify-content-md-center" id="navbar">
                     {this.navItems()}
-                    {//loginRegLink}
-                    }
                   </div>
                 :null
+                }
+                {this.state.showItems?
+                  <div className="collapse navbar-collapse justify-content-md-center" id="navbar">
+                    <ul className="navbar-nav">
+                      <li className="nav-item" onClick={()=>this.setState({showLogin:false})}>
+                        <Link to="/list" className="nav-link">
+                          link 1
+                        </Link>
+                      </li>
+                      <li className="nav-item" onClick={()=>this.setState({showLogin:false})}>
+                        <Link to="/Generate_Rotulado" className="nav-link">
+                          link 2
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                  :null
                 }   
               </nav>
             
@@ -202,7 +262,7 @@ class Landing extends Component {
                             </form>
                 </Modal.Body>
                 <Modal.Footer>
-                  <Button variant="danger" size="lg" onClick={()=>this.setState({showLogin:false})}  block>Cerrar</Button>
+                  <Button variant="danger" size="lg" onClick={()=>this.setState({showLogin:false, userError:'', passwordError:'', user:'', password:''})}  block>Cerrar</Button>
                 </Modal.Footer>
               </Modal> 
               

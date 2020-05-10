@@ -13,6 +13,20 @@ export const register = newPostulant => {
         })
 }
 
+
+export const getUser = () => {
+    return axios
+        .get('api/user', {
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => {
+            return response.data
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
 export const registerInBook = newRegister => {
     return axios
         .post('api/registerBook', newRegister, {
@@ -87,28 +101,6 @@ export const registerAnnouncement = newAnnouncement => {
         })
         .then(response => {
             console.log(response)
-        })
-        .catch(err => {
-            console.log(err)
-        })
-}
-
-
-export const login = user => {
-    return axios
-        .post(
-            'api/login',
-            {
-                email: user.email,
-                password: user.password
-            },
-            {
-                headers: { 'Content-Type': 'application/json' }
-            }
-        )
-        .then(response => {
-            localStorage.setItem('usertoken', response.data.token)
-            return response.data.token
         })
         .catch(err => {
             console.log(err)

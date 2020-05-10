@@ -401,7 +401,7 @@ class Register extends Component {
                         <div style={{color:'red'}} className=" h5 col-md-12 mt-4 text-center">
                             <p>¡Antes de confirmar verifica tus datos!</p>
                         </div>
-                        <button type="submit" className="col btn btn-lg btn-info mt-2">
+                        <button type="submit" className="col btn btn-lg btn-info mt-2 mb-5">
                             Confirmar registro e imprimir Rotulado
                         </button>
                     </div>
