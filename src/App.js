@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 
 import Navbar from './components/Navbar'
-import Landing from './components/Landing'
-import Login from './components/Login'
 import Generate_Rotulado from './components/Generate_Rotulado'
 import List from './components/List'
 import Post from './components/Post'
@@ -16,7 +14,7 @@ import RegisterDate from './components/RegisterDate'
 
 
 class App extends Component {
-  render() {
+  render() { 
     return (
       <Router>
         <div className="App">

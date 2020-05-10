@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
 import { Link, withRouter } from 'react-router-dom'
+import{Modal, Button} from 'react-bootstrap'
 
 
 
 class Landing extends Component {
 
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
         user: '',
         password: '',
@@ -31,14 +32,6 @@ class Landing extends Component {
       return true;
     }
   }
-
-  hide(){
-    this.setState({showLogin:false})
-  }
-
-  show(){
-    this.setState({showLogin:true})
-  }
   
   onChange(e) {
       this.setState({ [e.target.name]: e.target.value })
@@ -51,8 +44,8 @@ class Landing extends Component {
       }
   }
 
-
   render() {
+    
     const loginRegLink = (
       <ul className="navbar-nav">
         <li className="nav-item">
@@ -122,21 +115,33 @@ class Landing extends Component {
     )
 
     return (
-        <div>          
-              <nav className="navbar navbar-expand-lg navbar-dark bg-dark rounded">
+        <div> 
+            <nav className="navbar navbar-dark bg-dark">
+              <a className="navbar-brand" href="/">
+                AConv
+              </a>
+              <ul className="navbar-nav ml-auto">
+                <li className="nav-item px-2" onClick={()=>this.setState({showLogin:true})}>
+                  <Link to="/" className="nav-link">
+                    Iniciar Sesión
+                  </Link>
+                </li>
+              </ul>
+            </nav>         
+              <nav className="navbar navbar-expand-lg navbar-light bg-light">
                 <button
-                  className="navbar-toggler"
+                  className="navbar-toggler navbar-toggler-left"
                   type="button"
                   data-toggle="collapse"
-                  data-target="#navbarsExample10"
-                  aria-controls="navbarsExample10"
+                  data-target="#navbar"
+                  aria-controls="navbar"
                   aria-expanded="false"
                   aria-label="Toggle navigation"
                 >
                   <span className="navbar-toggler-icon" />
                 </button>
                 {this.state.showInicialItem?
-                  <div className="collapse navbar-collapse justify-content-md-center" id="navbarsExample10">
+                  <div className="collapse navbar-collapse justify-content-md-center" id="navbar">
                     {this.navItems()}
                     {//loginRegLink}
                     }
@@ -144,61 +149,63 @@ class Landing extends Component {
                 :null
                 }   
               </nav>
-            {this.state.showLogin?
-              <div className="container">
-                <div className="row">
-                    <div className="col-md-6 mx-auto d-flex justify-content-center">
-                        <form noValidate>
-                            <div className="mt-3 p-3 bg-info text-white">
-                                <h1 className="h3 font-weight-normal text-center">
-                                    Ingresar a mi cuenta
-                                </h1>
-                            </div>
-                            <div className="my-4 text-info text-center">
-                                <h4>
-                                   ¡Esta seccion solo es de acceso para los usuarios autorizados!
-                                </h4>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="user">Usuario</label>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    name="user"
-                                    placeholder="Ingrese su usuario"
-                                    maxLength="50"
-                                    value={this.state.email}
-                                    onChange={this.onChange}
-                                />
-                                <p style={{color:"red"}}>{this.state.userError}</p>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="password">Contraseña</label>
-                                <input
-                                    type="password"
-                                    className="form-control"
-                                    name="password"
-                                    placeholder="ingrese su contraseña"
-                                    maxLength="60"
-                                    autocomplete="on"
-                                    value={this.state.password}
-                                    onChange={this.onChange}
-                                />
-                                <p style={{color:"red"}}>{this.state.passwordError}</p>
-                            </div>
-                            <button
-                                type="button"
-                                onClick={this.onSubmit}
-                                className="btn btn-lg btn-info btn-block mt-4"
-                            >
-                                Iniciar sesión
-                            </button>
-                        </form>
-                    </div>
-                </div>
-              </div>
-              :null
-            }
+            
+              <Modal
+              show = {this.state.showLogin}
+              aria-labelledby="contained-modal-title-vcenter"
+              centered
+              >
+              <Modal.Header>
+                <Modal.Title id="Iniciar Sesión">
+                </Modal.Title>
+              </Modal.Header>
+                <Modal.Body>
+                            <form>
+                                <div className="h3 text-center mb-5">
+                                  Iniciar Sesión
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="user">Usuario</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        name="user"
+                                        placeholder="Ingrese su usuario"
+                                        maxLength="50"
+                                        value={this.state.email}
+                                        onChange={this.onChange}
+                                    />
+                                    <p style={{color:"red"}}>{this.state.userError}</p>
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="password">Contraseña</label>
+                                    <input
+                                        type="password"
+                                        className="form-control"
+                                        name="password"
+                                        placeholder="ingrese su contraseña"
+                                        maxLength="60"
+                                        autocomplete="on"
+                                        value={this.state.password}
+                                        onChange={this.onChange}
+                                    />
+                                    <p style={{color:"red"}}>{this.state.passwordError}</p>
+                                </div>
+                                <button
+                                    type="button"
+                                    onClick={this.onSubmit}
+                                    className="btn btn-lg btn-info btn-block mt-4"
+                                >
+                                    Iniciar sesión
+                                </button>
+                            </form>
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button variant="danger" size="lg" onClick={()=>this.setState({showLogin:false})}  block>Cerrar</Button>
+                </Modal.Footer>
+              </Modal> 
+              
+            
         </div>
     )
   }
@@ -206,17 +213,12 @@ class Landing extends Component {
   navItems() {
     return (
       <ul className="navbar-nav">
-        <li className="nav-item" onClick={()=>this.show()}>
-          <Link to="/" className="nav-link">
-            Iniciar Sesión
-          </Link>
-        </li>
-        <li className="nav-item" onClick={()=>this.hide()}>
+        <li className="nav-item" onClick={()=>this.setState({showLogin:false})}>
           <Link to="/list" className="nav-link">
             Lista de convocatorias
           </Link>
         </li>
-        <li className="nav-item" onClick={()=>this.hide()}>
+        <li className="nav-item" onClick={()=>this.setState({showLogin:false})}>
           <Link to="/Generate_Rotulado" className="nav-link">
             Generar Rotulado
           </Link>
@@ -224,9 +226,6 @@ class Landing extends Component {
       </ul>
     )
  }  
-
 }
-
-
 
 export default withRouter(Landing)
