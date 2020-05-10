@@ -118,6 +118,7 @@ class Landing extends Component {
         <div> 
             <nav className="navbar navbar-dark bg-dark">
               <a className="navbar-brand" href="/">
+                <img src="http://127.0.0.1:8000/storage/file/icon.svg" width="30" height="30" className="d-inline-block align-top mr-2" alt=""/>
                 AConv
               </a>
               <ul className="navbar-nav ml-auto">
