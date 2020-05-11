@@ -2,15 +2,42 @@ import React, { Component } from 'react'
 import { Link, withRouter } from 'react-router-dom'
 import{Modal, Button} from 'react-bootstrap'
 import {getUser} from './UserFunctions'
+import {updateUser} from './UserFunctions'
 
 var Users
+var permissions = [
+  {
+    "id": 1,
+    "idRol": 1,
+    "permission": "Registrar postulante",
+    "route":"postulant_register",
+    "created_at": "2020-05-09 18:43:53",
+    "updated_at": "2020-05-09 18:43:53"
+  },
+  {
+    "id": 2,
+    "idRol": 1,
+    "permission": "Publicar Convocatoria",
+    "route":"Post",
+    "created_at": "2020-05-09 18:43:53",
+    "updated_at": "2020-05-09 18:43:53"
+  },
+  {
+    "id": 3,
+    "idRol": 1,
+    "permission": "Lista de habilitados e inhabilitados",
+    "route":"enabled_list",
+    "created_at": "2020-05-09 18:43:53",
+    "updated_at": "2020-05-09 18:43:53"
+  }
+]
 
 class Landing extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
-        User: null,
+        UserLogged: null,
         user: '',
         password: '',
         userError: '',
@@ -19,6 +46,7 @@ class Landing extends Component {
         showLogin:false,
         showInicialItem:true,
         showItems:false,
+        showLogout:false,
         showSesionLink:this.isLogged(),
     }
 
@@ -40,11 +68,19 @@ class Landing extends Component {
       for(var i=0; i<res.length; i++){
         if(res[i].logged === true){
           result = false
+          this.setState({UserLogged:res[i]}, this.fillPermission(res[i]))
           this.setState({showSesionLink:false})
+          this.setState({showInicialItem:false})
+          this.setState({showItems:true})
+          this.setState({showLogout:true})
         }
       }
     })
     return result
+  }
+
+  fillPermission(us){
+    console.log(us)
   }
 
   valid(){
@@ -63,11 +99,26 @@ class Landing extends Component {
     var result = false
       for (var i=0; i < Users.length; i++) {
           if(Users[i].user === this.state.user && Users[i].password === this.state.password){
-            this.setState({User:Users[i]}, console.log(Users[i]))
+            this.setState({UserLogged:Users[i]}, this.editUserLog(Users[i], true))
             result = true
           }
         }
     return result
+  }
+
+  editUserLog(us, value){
+    const userUpdate = {
+      id: us.id,
+      logged: value
+    }
+    updateUser(userUpdate).then(res => {
+      this.props.history.push(`/`)
+   })
+  }
+
+  LogoutSesion(){
+    this.setState({showInicialItem:true, showItems:false, showSesionLink:true, showLogout:false})
+    this.editUserLog(this.state.UserLogged, false)
   }
   
   onChange(e) {
@@ -76,10 +127,11 @@ class Landing extends Component {
   }
   onSubmit(e) {
       e.preventDefault()
+      
       this.setState({password:""})
       if(this.valid()){
         if(this.isUser()){
-          this.setState({showLogin:false, showInicialItem:false, showItems:true})
+          this.setState({showLogin:false, showInicialItem:false, showItems:true, showLogout:true, showSesionLink:false})
         }else{
           this.setState({userError:"Usuario incorrecto", passwordError:"Contraseña incorrecta"})
         }
@@ -87,75 +139,6 @@ class Landing extends Component {
   }
 
   render() {
-    
-    const loginRegLink = (
-      <ul className="navbar-nav">
-        <li className="nav-item">
-          <Link to="/login" className="nav-link">
-            Admin
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link to="/Generate_Rotulado" className="nav-link">
-            Generar Rotulado
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link to="/list" className="nav-link">
-            Lista de convocatorias
-          </Link>
-        </li>
-        <li className = "nav-item">
-          <Link to ="/Post" className= "nav-link">
-            Publicar Convocatoria
-          </Link>
-        </li>
-        <li className = "nav-item">
-          <Link to ="/auxiliary_list" className= "nav-link">
-            lista de postulantes de auxiliatura
-          </Link>
-        </li>
-        <li className = "nav-item">
-          <Link to ="/scores_list" className= "nav-link">
-            lista de notas
-          </Link>
-        </li>
-        <li>
-          <Link to ="/enabled_list" className= "nav-link">
-            Lista de Habilitados/Inhabilitados
-          </Link>
-        </li>
-        <li className = "nav-item">
-          <Link to ="/postulant_register" className= "nav-link">
-            Registrar postulante
-          </Link>
-        </li>
-       <li>  
-          <Link to ="/PostulantEnable" className= "nav-link">
-            Habilitar Postulante
-          </Link>
-        </li>
-        <li className = "nav-item">
-          <Link to ="/RegisterDate" className= "nav-link">
-            Registrar Fecha
-          </Link>
-        </li>
-
-        
-      </ul>
-    )
-
-
-    const userLink = (
-      <ul className="navbar-nav">
-        <li className="nav-item">
-          <a href=" " onClick="" className="nav-link">
-            Logout
-          </a>
-        </li>
-      </ul>
-    )
-
     return (
         <div> 
             <nav className="navbar navbar-dark bg-dark">
@@ -168,6 +151,16 @@ class Landing extends Component {
                   <li className="nav-item px-2" onClick={()=>this.setState({showLogin:true})}>
                     <Link to="/" className="nav-link">
                       Iniciar Sesión
+                    </Link>
+                  </li>
+                </ul>
+              :null
+              }
+              {this.state.showLogout?
+                <ul className="navbar-nav ml-auto">
+                  <li className="nav-item px-2" onClick={() => this.LogoutSesion()}>
+                    <Link to="/" className="nav-link">
+                      Cerrar Sesion
                     </Link>
                   </li>
                 </ul>
@@ -195,16 +188,13 @@ class Landing extends Component {
                 {this.state.showItems?
                   <div className="collapse navbar-collapse justify-content-md-center" id="navbar">
                     <ul className="navbar-nav">
-                      <li className="nav-item" onClick={()=>this.setState({showLogin:false})}>
-                        <Link to="/list" className="nav-link">
-                          link 1
+                    {permissions.map( permission =>(
+                      <li className="nav-item" key= {permission.id} onClick={()=>this.setState({showLogin:false})}>
+                        <Link to={{ pathname: permission.route, state: {UserLogged:this.state.UserLogged}}} className="nav-link">
+                          {permission.permission}
                         </Link>
                       </li>
-                      <li className="nav-item" onClick={()=>this.setState({showLogin:false})}>
-                        <Link to="/Generate_Rotulado" className="nav-link">
-                          link 2
-                        </Link>
-                      </li>
+                    ))}
                     </ul>
                   </div>
                   :null
@@ -275,12 +265,12 @@ class Landing extends Component {
     return (
       <ul className="navbar-nav">
         <li className="nav-item" onClick={()=>this.setState({showLogin:false})}>
-          <Link to="/list" className="nav-link">
+          <Link to="list" className="nav-link">
             Lista de convocatorias
           </Link>
         </li>
         <li className="nav-item" onClick={()=>this.setState({showLogin:false})}>
-          <Link to="/Generate_Rotulado" className="nav-link">
+          <Link to="Generate_Rotulado" className="nav-link">
             Generar Rotulado
           </Link>
         </li>
