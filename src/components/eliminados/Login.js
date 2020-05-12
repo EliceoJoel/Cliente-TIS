@@ -1,19 +1,25 @@
 import React, { Component } from 'react'
 import { login } from './UserFunctions'
-import {Modal, Button} from 'react-bootstrap'
+
 
 class Login extends Component {
-    constructor(props) {
-        super(props)
+    constructor() {
+        super()
         this.state = {
-            email: '',
+            user: '',
             password: '',
-            errors: {}
+            userError: '',
+            passwordError: '',
         }
 
         this.onChange = this.onChange.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
     }
+
+    ifValid(){
+
+    }
+
 
     onChange(e) {
         this.setState({ [e.target.name]: e.target.value })
@@ -21,52 +27,50 @@ class Login extends Component {
     onSubmit(e) {
         e.preventDefault()
 
-        const user = {
-            email: this.state.email,
-            password: this.state.password
-        }
-
-        login(user).then(res => {
-            if (res) {
-                this.props.history.push(`/profile`)
-            }
-        })
     }
 
     render() {
-        return(
+        return (
             <div className="container">
                 <div className="row">
-                    <div className="col-md-6 mt-5 mx-auto">
-                        <form noValidate onSubmit={this.onSubmit}>
-                            <h1 className="h3 mb-3 font-weight-normal text-center">
-                                Inicio de sesión
-                            </h1>
+                    <div className="col-md-6 mx-auto d-flex justify-content-center">
+                        <form noValidate>
+                            <div className="mt-3 p-3 bg-info text-white">
+                                <h1 className="h3 font-weight-normal text-center">
+                                    Ingresar a mi cuenta
+                                </h1>
+                            </div>
+                            <div className="my-4 text-info text-center">
+                                <h4>
+                                   ¡Esta seccion solo es de acceso para los usuarios autorizados!
+                                </h4>
+                            </div>
                             <div className="form-group">
-                                <label htmlFor="email">Email</label>
+                                <label htmlFor="user">Usuario</label>
                                 <input
-                                    type="email"
+                                    type="text"
                                     className="form-control"
-                                    name="email"
-                                    placeholder="Enter email"
+                                    name="user"
+                                    placeholder="Ingrese su usuario"
                                     value={this.state.email}
                                     onChange={this.onChange}
                                 />
+                                <i className="fa fa-eye password-icon"/>
                             </div>
                             <div className="form-group">
-                                <label htmlFor="password">Password</label>
+                                <label htmlFor="password">Contraseña</label>
                                 <input
                                     type="password"
                                     className="form-control"
                                     name="password"
-                                    placeholder="Password"
-                                    autoComplete="on"
+                                    placeholder="ingrese su contraseña"
                                     value={this.state.password}
                                     onChange={this.onChange}
                                 />
                             </div>
                             <button
-                                type="submit"
+                                type="button"
+                                onClick={this.onSubmit}
                                 className="btn btn-lg btn-info btn-block mt-4"
                             >
                                 Iniciar sesión
@@ -74,10 +78,9 @@ class Login extends Component {
                         </form>
                     </div>
                 </div>
-            </div> 
-        )   
+            </div>
+        )
     }
 }
-
 
 export default Login

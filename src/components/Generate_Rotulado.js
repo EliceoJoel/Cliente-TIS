@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import * as jsPDF from 'jspdf'
 import Select from 'react-select'
 //import axios from 'axios'
-import {register} from './UserFunctions'
+import {registerP} from './UserFunctions'
 import {getAnnouncement} from './UserFunctions'
 import {getAnnouncementID} from './UserFunctions'
 
@@ -189,7 +189,7 @@ class Register extends Component {
 
 
         if(this.valid()){  
-            //this.generatePDF()
+            this.generatePDF()
             
             const newPostulant = {
                 names: this.state.names,
@@ -204,7 +204,7 @@ class Register extends Component {
                 auxiliary:this.getAuxs()
             }
 
-            register(newPostulant).then(res => {
+            registerP(newPostulant).then(res => {
                this.props.history.push(`/Generate_Rotulado`)
             })
 
