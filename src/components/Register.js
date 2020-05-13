@@ -7,7 +7,7 @@ class Register extends Component {
         this.state = {
             first_name: '',
             last_name: '',
-            email: '',
+            user: '',
             password: '',
             errors: {}
         }
@@ -23,9 +23,11 @@ class Register extends Component {
         e.preventDefault()
 
         const newUser = {
-            name: this.state.first_name + ' ' + this.state.last_name,
-            email: this.state.email,
-            password: this.state.password
+            fullname: this.state.first_name + ' ' + this.state.last_name,
+            user: this.state.user,
+            password: this.state.password,
+            idRol:1,
+            idAnnouncement:1
         }
 
         register(newUser).then(res => {
@@ -39,39 +41,39 @@ class Register extends Component {
                 <div className="row">
                     <div className="col-md-6 mt-5 mx-auto">
                         <form noValidate onSubmit={this.onSubmit}>
-                            <h1 className="h3 mb-3 font-weight-normal">
-                                Register
+                            <h1 className="h3 mb-3 font-weight-normal text-center">
+                                Registro de usuarios
                             </h1>
                             <div className="form-group">
-                                <label htmlFor="name">First name</label>
+                                <label htmlFor="name">Nombres</label>
                                 <input
                                     type="text"
                                     className="form-control"
                                     name="first_name"
-                                    placeholder="Enter your first name"
+                                    placeholder="Ingrese su nombre o nombres"
                                     value={this.state.first_name}
                                     onChange={this.onChange}
                                 />
                             </div>
                             <div className="form-group">
-                                <label htmlFor="name">Last name</label>
+                                <label htmlFor="name">Apellidos</label>
                                 <input
                                     type="text"
                                     className="form-control"
                                     name="last_name"
-                                    placeholder="Enter your lastname name"
+                                    placeholder="Ingrese su apellido o apellidos"
                                     value={this.state.last_name}
                                     onChange={this.onChange}
                                 />
                             </div>
                             <div className="form-group">
-                                <label htmlFor="email">Email address</label>
+                                <label htmlFor="user">Nombre de usuario</label>
                                 <input
-                                    type="email"
+                                    type="user"
                                     className="form-control"
-                                    name="email"
-                                    placeholder="Enter email"
-                                    value={this.state.email}
+                                    name="user"
+                                    placeholder="Ingresa el nombre de ususario"
+                                    value={this.state.user}
                                     onChange={this.onChange}
                                 />
                             </div>
@@ -81,7 +83,7 @@ class Register extends Component {
                                     type="password"
                                     className="form-control"
                                     name="password"
-                                    placeholder="Password"
+                                    placeholder="Ingresa su contraseña"
                                     autoComplete="on"
                                     value={this.state.password}
                                     onChange={this.onChange}
@@ -89,9 +91,9 @@ class Register extends Component {
                             </div>
                             <button
                                 type="submit"
-                                className="btn btn-lg btn-primary btn-block"
+                                className="btn btn-lg btn-info btn-block"
                             >
-                                Register!
+                                Registrar
                             </button>
                         </form>
                     </div>

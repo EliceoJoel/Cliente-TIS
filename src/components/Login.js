@@ -1,18 +1,30 @@
 import React, { Component } from 'react'
 import { login } from './UserFunctions'
-import {Modal, Button} from 'react-bootstrap'
 
 class Login extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            email: '',
+            user: '',
             password: '',
-            errors: {}
+            userError: '',
+            passwordError: '',
         }
 
         this.onChange = this.onChange.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
+    }
+
+    valid(){
+        if(this.state.user === ''){
+            this.setState({userError:'Campo vacio'})
+          }
+          else if(this.state.password === ''){
+            this.setState({passwordError:'Campo vacio'})
+          }
+          else{
+            return true;
+          }
     }
 
     onChange(e) {
@@ -21,16 +33,18 @@ class Login extends Component {
     onSubmit(e) {
         e.preventDefault()
 
-        const user = {
-            email: this.state.email,
-            password: this.state.password
-        }
-
-        login(user).then(res => {
-            if (res) {
-                this.props.history.push(`/profile`)
+        if(this.valid()){
+            const user = {
+                user: this.state.user,
+                password: this.state.password
             }
-        })
+    
+            login(user).then(res => {
+                if (res) {
+                    this.props.history.push(`/profile`)
+                }
+            })
+        }
     }
 
     render() {
@@ -43,27 +57,31 @@ class Login extends Component {
                                 Inicio de sesión
                             </h1>
                             <div className="form-group">
-                                <label htmlFor="email">Email</label>
+                                <label htmlFor="user">Nombre de usuario</label>
                                 <input
-                                    type="email"
+                                    type="text"
                                     className="form-control"
-                                    name="email"
-                                    placeholder="Enter email"
-                                    value={this.state.email}
+                                    name="user"
+                                    placeholder="Ingrese su nombre de usuario"
+                                    maxLength="50"
+                                    value={this.state.user}
                                     onChange={this.onChange}
                                 />
+                                <p style={{color:"red"}}>{this.state.userError}</p>
                             </div>
                             <div className="form-group">
-                                <label htmlFor="password">Password</label>
+                                <label htmlFor="password">Contraseña</label>
                                 <input
                                     type="password"
                                     className="form-control"
                                     name="password"
-                                    placeholder="Password"
+                                    placeholder="Ingrese su contraseña"
                                     autoComplete="on"
+                                    maxLength="50"
                                     value={this.state.password}
                                     onChange={this.onChange}
                                 />
+                                <p style={{color:"red"}}>{this.state.passwordError}</p>
                             </div>
                             <button
                                 type="submit"

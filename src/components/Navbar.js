@@ -4,7 +4,6 @@ import { Link, withRouter } from 'react-router-dom'
 class Landing extends Component {
 
 
-
   logOut(e) {
     e.preventDefault()
     localStorage.removeItem('usertoken')
@@ -12,9 +11,7 @@ class Landing extends Component {
   }
 
   render() {
-
-    let addModalClose =() =>this.setState({addModalShow:false})
-
+    console.log(localStorage.usertoken)
     const loginLink = (
       <ul className="navbar-nav ml-auto">
         <li className="nav-item px-2">
@@ -28,7 +25,7 @@ class Landing extends Component {
     const logoutLink = (
       <ul className="navbar-nav ml-auto">
         <li className="nav-item px-2">
-          <a href="" onClick={this.logOut.bind(this)} className="nav-link">
+          <a href="/" onClick={this.logOut.bind(this)} className="nav-link">
             Cerrar sesión
           </a>
         </li>

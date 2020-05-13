@@ -5,7 +5,7 @@ export const login = user => {
         .post(
             'api/login',
             {
-                email: user.email,
+                user: user.user,
                 password: user.password
             },
             {
