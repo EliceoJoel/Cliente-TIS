@@ -1,17 +1,38 @@
 import React, { Component } from 'react'
 import { Link, withRouter } from 'react-router-dom'
+import {getPermissions} from './UserFunctions'
+import { getProfile } from './UserFunctions'
+
 
 class Landing extends Component {
+  constructor() {
+      super()
+      this.state = {
+          items:[]
+      }
+  }
 
+  componentDidMount() {
+    if(localStorage.usertoken){
+      getProfile().then(res => {
+        getPermissions(res.user.idRol).then(permissions =>{
+          this.setState({
+            items: permissions
+          })
+        })
+      })
+    }
+  }
 
+  
   logOut(e) {
     e.preventDefault()
     localStorage.removeItem('usertoken')
     this.props.history.push(`/`)
   }
 
+
   render() {
-    console.log(localStorage.usertoken)
     const loginLink = (
       <ul className="navbar-nav ml-auto">
         <li className="nav-item px-2">
@@ -32,30 +53,15 @@ class Landing extends Component {
       </ul>
     )
 
-    const userLinks = (
-      <ul className="navbar-nav">
-        <li className="nav-item">
-          <Link to="/profile" className="nav-link">
-            User
-          </Link>
-        </li>
-      </ul>
-    )
-
     const noUserLinks = (
       <ul className="navbar-nav">
         <li className="nav-item ml-auto px-2">
-          <Link to="/register" className="nav-link">
-            Register
-          </Link>
-        </li>
-        <li className="nav-item ml-auto px-2">
-          <Link to="/Generate_Rotulado" className="nav-link">
+          <Link to="Lista.de.puntos" className="nav-link">
             Generar rotulado
           </Link>
         </li>
         <li className="nav-item ml-auto px-2">
-          <Link to="/list" className="nav-link">
+          <Link to="Convocatorias" className="nav-link">
             Convocatorias
           </Link>
         </li>
@@ -88,12 +94,22 @@ class Landing extends Component {
             className="collapse navbar-collapse justify-content-md-center"
             id="navbarsExample10"
           >
-            {localStorage.usertoken ? userLinks : noUserLinks}
+            {localStorage.usertoken ? this.state.items.map(item=>(
+              <ul className="navbar-nav" key={item.id}>
+                <li className="nav-item">
+                  <Link to={item.route} className="nav-link">
+                    {item.permission}
+                  </Link>
+                </li>
+              </ul> 
+            )) : noUserLinks}
+            
           </div>
         </nav>
       </div>
     )
   }
+ 
 }
 
 export default withRouter(Landing)

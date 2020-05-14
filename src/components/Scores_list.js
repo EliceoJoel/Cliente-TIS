@@ -75,7 +75,7 @@ render() {
     return (
         <div className="justify-content-center">
             <h1 className="h3 font-weight-normal text-center mt-3 p-3 bg-info text-white">
-               Lista de postulantes
+               Lista de puntos
             </h1>
             <div className="row">
                 <div className="form-group col-8 my-4">

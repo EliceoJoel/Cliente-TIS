@@ -61,6 +61,7 @@ export const getUser = () => {
         })
 }
 
+
 export const updateUser = user => {
     console.log(user.logged)
     return axios
@@ -69,6 +70,19 @@ export const updateUser = user => {
         })
         .then(response => {
             console.log(response)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+export const getPermissions = (idRol) => {
+    return axios
+        .get('api/permission/rol/'+idRol, {
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => {
+            return response.data
         })
         .catch(err => {
             console.log(err)

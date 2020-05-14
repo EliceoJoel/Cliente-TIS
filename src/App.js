@@ -25,18 +25,18 @@ class App extends Component {
           <Navbar />
           <Route exact path="/" component={Landing} />
           <div className="container">
-            <Route exact path="/register" component={Register} />
+            <Route exact path="/Registrar.usuario" component={Register} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/profile" component={Profile} />
-            <Route exact path="/Generate_Rotulado" component={Generate_Rotulado} />
-            <Route exact path="/list" component={List} />
-            <Route exact path="/post" component={Post} />
-            <Route exact path="/auxiliary_list" component={Auxiliary_list} />
-            <Route exact path="/scores_list" component={Scores_list} />
-            <Route exact path="/enabled_list" component={Enabled_list} />
-            <Route exact path="/postulant_register" component={Postulant_Register} />
-            <Route exact path="/PostulantEnable" component={PostulantEnable} />
-            <Route exact path="/RegisterDate" component={RegisterDate} />
+            <Route exact path="/Generar.rotulado" component={Generate_Rotulado} />
+            <Route exact path="/Convocatorias" component={List} />
+            <Route exact path="/Publicar.convocatoria" component={Post} />
+            <Route exact path="/Lista.por.auxiliaturas" component={Auxiliary_list} />
+            <Route exact path="/Lista.de.puntos" component={Scores_list} />
+            <Route exact path="/Lista.de.habilitados" component={Enabled_list} />
+            <Route exact path="/Registrar.postulante" component={Postulant_Register} />
+            <Route exact path="/Habilitar.postulante" component={PostulantEnable} />
+            <Route exact path="/Registrar.fecha" component={RegisterDate} />
           </div>
         
         </div>
