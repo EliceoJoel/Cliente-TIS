@@ -1,12 +1,88 @@
 import axios from 'axios'
 
-export const register = newPostulant => {
+export const login = user => {
+    return axios
+        .post(
+            'api/login',
+            {
+                user: user.user,
+                password: user.password
+            },
+            {
+                headers: { 'Content-Type': 'application/json' }
+            }
+        )
+        .then(response => {
+            localStorage.setItem('usertoken', response.data.token)
+            return response.data.token
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+export const register = newUser => {
+    return axios
+        .post('api/register', newUser, {
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => {
+            console.log(response)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+export const registerP = newPostulant => {
     return axios
         .post('api/postulant', newPostulant, {
             headers: { 'Content-Type': 'application/json' }
         })
         .then(response => {
             console.log(response)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+
+export const getUser = () => {
+    return axios
+        .get('api/user', {
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => {
+            return response.data
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+
+export const updateUser = user => {
+    console.log(user.logged)
+    return axios
+        .post('api/user/'+user.id, user, {
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => {
+            console.log(response)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+export const getPermissions = (idRol) => {
+    return axios
+        .get('api/permission/rol/'+idRol, {
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => {
+            return response.data
         })
         .catch(err => {
             console.log(err)
@@ -45,7 +121,6 @@ export const getAnnouncement = () => {
             headers: { 'Content-Type': 'application/json' }
         })
         .then(response => {
-            console.log(response)
             return response.data
         })
         .catch(err => {
@@ -87,28 +162,6 @@ export const registerAnnouncement = newAnnouncement => {
         })
         .then(response => {
             console.log(response)
-        })
-        .catch(err => {
-            console.log(err)
-        })
-}
-
-
-export const login = user => {
-    return axios
-        .post(
-            'api/login',
-            {
-                email: user.email,
-                password: user.password
-            },
-            {
-                headers: { 'Content-Type': 'application/json' }
-            }
-        )
-        .then(response => {
-            localStorage.setItem('usertoken', response.data.token)
-            return response.data.token
         })
         .catch(err => {
             console.log(err)

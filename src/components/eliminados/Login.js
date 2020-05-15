@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import { login } from './UserFunctions'
 
+
 class Login extends Component {
-    constructor(props) {
-        super(props)
+    constructor() {
+        super()
         this.state = {
             user: '',
             password: '',
@@ -15,17 +16,10 @@ class Login extends Component {
         this.onSubmit = this.onSubmit.bind(this)
     }
 
-    valid(){
-        if(this.state.user === ''){
-            this.setState({userError:'Campo vacio'})
-          }
-          else if(this.state.password === ''){
-            this.setState({passwordError:'Campo vacio'})
-          }
-          else{
-            return true;
-          }
+    ifValid(){
+
     }
+
 
     onChange(e) {
         this.setState({ [e.target.name]: e.target.value })
@@ -33,42 +27,35 @@ class Login extends Component {
     onSubmit(e) {
         e.preventDefault()
 
-        if(this.valid()){
-            const user = {
-                user: this.state.user,
-                password: this.state.password
-            }
-    
-            login(user).then(res => {
-                if (res) {
-                    this.props.history.push(`/`)
-                    window.location.reload()
-                }
-            })
-        }
     }
 
     render() {
-        return(
+        return (
             <div className="container">
                 <div className="row">
-                    <div className="col-md-6 mt-5 mx-auto">
-                        <form noValidate onSubmit={this.onSubmit}>
-                            <h1 className="h3 mb-3 font-weight-normal text-center">
-                                Inicio de sesión
-                            </h1>
+                    <div className="col-md-6 mx-auto d-flex justify-content-center">
+                        <form noValidate>
+                            <div className="mt-3 p-3 bg-info text-white">
+                                <h1 className="h3 font-weight-normal text-center">
+                                    Ingresar a mi cuenta
+                                </h1>
+                            </div>
+                            <div className="my-4 text-info text-center">
+                                <h4>
+                                   ¡Esta seccion solo es de acceso para los usuarios autorizados!
+                                </h4>
+                            </div>
                             <div className="form-group">
-                                <label htmlFor="user">Nombre de usuario</label>
+                                <label htmlFor="user">Usuario</label>
                                 <input
                                     type="text"
                                     className="form-control"
                                     name="user"
-                                    placeholder="Ingrese su nombre de usuario"
-                                    maxLength="50"
-                                    value={this.state.user}
+                                    placeholder="Ingrese su usuario"
+                                    value={this.state.email}
                                     onChange={this.onChange}
                                 />
-                                <p style={{color:"red"}}>{this.state.userError}</p>
+                                <i className="fa fa-eye password-icon"/>
                             </div>
                             <div className="form-group">
                                 <label htmlFor="password">Contraseña</label>
@@ -76,16 +63,14 @@ class Login extends Component {
                                     type="password"
                                     className="form-control"
                                     name="password"
-                                    placeholder="Ingrese su contraseña"
-                                    autoComplete="on"
-                                    maxLength="50"
+                                    placeholder="ingrese su contraseña"
                                     value={this.state.password}
                                     onChange={this.onChange}
                                 />
-                                <p style={{color:"red"}}>{this.state.passwordError}</p>
                             </div>
                             <button
-                                type="submit"
+                                type="button"
+                                onClick={this.onSubmit}
                                 className="btn btn-lg btn-info btn-block mt-4"
                             >
                                 Iniciar sesión
@@ -93,10 +78,9 @@ class Login extends Component {
                         </form>
                     </div>
                 </div>
-            </div> 
-        )   
+            </div>
+        )
     }
 }
-
 
 export default Login

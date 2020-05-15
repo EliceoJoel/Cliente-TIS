@@ -32,7 +32,6 @@ class PostulantRegister extends Component {
     componentDidMount() {
         getPostulant().then(res => {
             allPostulants = res
-            console.log(allPostulants)
         })
     }
 
