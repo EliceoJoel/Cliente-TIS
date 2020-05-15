@@ -56,7 +56,7 @@ class Landing extends Component {
     const noUserLinks = (
       <ul className="navbar-nav">
         <li className="nav-item ml-auto px-2">
-          <Link to="Lista.de.puntos" className="nav-link">
+          <Link to="Generar.rotulado" className="nav-link">
             Generar rotulado
           </Link>
         </li>
