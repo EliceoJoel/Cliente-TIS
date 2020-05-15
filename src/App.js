@@ -15,7 +15,8 @@ import Enabled_list from './components/Enabled_list'
 import Postulant_Register from './components/Postulant_Register'
 import PostulantEnable from './components/PostulantEnable'
 import RegisterDate from './components/RegisterDate'
-
+import ScoreSetup from './components/ScoreSetup'
+import AnnouncementSetup from './components/AnnouncementSetup'
 
 class App extends Component {
   render() { 
@@ -27,6 +28,7 @@ class App extends Component {
           <div className="container">
             <Route exact path="/Registrar.usuario" component={Register} />
             <Route exact path="/login" component={Login} />
+<<<<<<< HEAD
             <Route exact path="/profile" component={Profile} />
             <Route exact path="/Generar.rotulado" component={Generate_Rotulado} />
             <Route exact path="/Convocatorias" component={List} />
@@ -37,6 +39,18 @@ class App extends Component {
             <Route exact path="/Registrar.postulante" component={Postulant_Register} />
             <Route exact path="/Habilitar.postulante" component={PostulantEnable} />
             <Route exact path="/Registrar.fecha" component={RegisterDate} />
+=======
+            <Route exact path="/list" component={List} />
+            <Route exact path="/post" component={Post} />
+            <Route exact path="/auxiliary_list" component={Auxiliary_list} />
+            <Route exact path="/scores_list" component={Scores_list} />
+            <Route exact path="/enabled_list" component={Enabled_list} />
+            <Route exact path="/postulant_register" component={Postulant_Register} />
+            <Route exact path="/PostulantEnable" component={PostulantEnable} />
+            <Route exact path="/RegisterDate" component={RegisterDate} />
+            <Route exact path="/ScoreSetup" component={ScoreSetup} />
+            <Route exact path="/AnnouncementSetup" component={AnnouncementSetup} />
+>>>>>>> ya envia datos a la db scoresetup
           </div>
         
         </div>

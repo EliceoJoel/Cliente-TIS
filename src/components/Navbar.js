@@ -40,8 +40,21 @@ class Landing extends Component {
             Iniciar sesión
           </Link>
         </li>
+<<<<<<< HEAD
       </ul>
     )
+=======
+        <li className = "nav-item">
+          <Link to ="/ScoreSetup" className= "nav-link">
+            Configuracion Notas
+          </Link>
+        </li>
+        <li className = "nav-item">
+          <Link to ="/AnnouncementSetup" className= "nav-link">
+            Configuracion Convocatoria
+          </Link>
+        </li>
+>>>>>>> ya envia datos a la db scoresetup
 
     const logoutLink = (
       <ul className="navbar-nav ml-auto">

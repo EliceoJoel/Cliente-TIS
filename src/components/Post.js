@@ -23,7 +23,8 @@ var ArrayAuxi = []
             item_error:'',
             auxiliary:'',
             auxiliary_error:'',
-            requirement:''
+            requirement:'',
+            tematica:''
 
 
          }
@@ -180,10 +181,28 @@ var ArrayAuxi = []
 
      }
     
+     handleTematica(e){
+        e.preventDefault()
+        let tematica= this.state.tematica
+            let send = new FormData()
+            send.append('name',tematica)
+            axios({
+                method: 'post',
+                url: 'api/themeAuxiliary',
+                data: send,
+                headers: {'Content-Type': 'multipart/form-data' }
+                }).then(response =>{
+                 console.log(response)
+             }) 
+             .catch(error => {
+                 console.log(error)
+             })
+
+     }
 
 
     render() {
-         const {name ,year, type, departament,item,auxiliary, requirement} =this.state
+         const {name ,year, type, departament,item,auxiliary, requirement, tematica} =this.state
          
 
         
@@ -307,6 +326,26 @@ var ArrayAuxi = []
                       <button className="btn btn-outline-info" variant="warning" onClick ={(AuxEvent) => this.handleAux(AuxEvent)} >Agregar</button>
                       <button   className="btn btn-outline-info mx-3" variant="warning"onClick ={(AuxEvent) => this.handleRemove(AuxEvent)} >Remover Ultimo Ingresado</button>
                      <p style={{color:"red"}}>{this.state.array_error}</p>
+                    </div>
+                    <h3 className="h5 col-md-12 my-4 font-weight-normal text-center">
+                            Datos de Tematica</h3>
+                      <div className="form-group col-md-6">
+                        <label htmlFor="Nombre">Item</label>
+               
+                       <input    
+                           className="form-control"   
+                           placeholder="Ingrese una tematica"                   
+                             type = "text"
+                          name = "tematica"
+                          value = {tematica}  
+                           onChange = {this.onChangeAux}                     
+                       />
+                       
+                        </div>                    
+                     
+                      <div className="form-group col-md-12 ">    
+                      <button className="btn btn-outline-info" variant="warning" onClick ={(e) => this.handleTematica(e)} >Agregar</button>
+                 
                     </div>
                     <p></p>
                     <div className="ml-4">
