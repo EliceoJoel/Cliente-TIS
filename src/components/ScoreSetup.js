@@ -86,7 +86,7 @@ export class ScoreSetup extends Component {
         send2.append('id_announcement', this.state.found[0].id)
         axios({
             method: 'post',
-            url: 'api/themeAuxiliarySearch',
+            url: 'api/auxiliarySearch',
             data: send2,
             headers: {'Content-Type': 'multipart/form-data' }
             }).then(res =>{
@@ -108,7 +108,7 @@ export class ScoreSetup extends Component {
          })
         axios({
             method: 'post',
-            url: 'api/auxiliarySearch',
+            url: 'api/themeAuxiliarySearch',
             data: send,
             headers: {'Content-Type': 'multipart/form-data' }
             }).then(response =>{
@@ -132,12 +132,13 @@ export class ScoreSetup extends Component {
      
     }
     handleAddPorcentage(){
-        let aux =  this.state.selectedOptionAux.value
-        let theme = this.state.selectedOptionTheme.value
+        let aux =  this.state.selectedOptionAux.label
+        let theme = this.state.selectedOptionTheme.label
         let porcentage = this.state.porcentage
         let send = new FormData()
-        send.append ('id_auxiliary', aux)
-        send.append ('id_theme', theme)
+        send.append('id_announcement', this.state.found[0].id)
+        send.append ('auxiliary', aux)
+        send.append ('theme', theme)
         send.append ('percentage' , porcentage)
         axios({
             method: 'post',
@@ -152,7 +153,19 @@ export class ScoreSetup extends Component {
          })
 
     }
-    
+    handleMeritScore(){
+        return(
+            <div>
+            <h1>Hoal prueba</h1>
+            <h1>Hoal prueba</h1>
+            <h1>Hoal prueba</h1>
+            <h1>Hoal prueba</h1>
+            <label>dsgafd</label>
+            </div>
+        )
+    }
+
+  
     render() {
         const { selectedOptionConv , selectedOptionAux , selectedOptionTheme, porcentage} = this.state
         return (
@@ -198,10 +211,15 @@ export class ScoreSetup extends Component {
                         </div>
                         <div  className="col-md-12">
                         <button className="btn btn-outline-info" variant="warning" onClick ={(AuxEvent) => this.handleMeritScore(AuxEvent)} >CONFIGURAR MERITO</button>
+                      
                         {this.state.announcementlab?
                         <button   className="btn btn-outline-info mx-3" variant="warning"onClick ={(AuxEvent) => this.handleKnowledge(AuxEvent)} >CONFIGURAR CONOCIMIENTO</button>
                          :null}
+                         <br></br>
+                          <div className="row">
+                          <br></br>
                              <div className="form-group col-md-4">
+                             <br></br>
                             <label htmlFor="aux">Selecciona una auxiliatura</label>
                                  <Select
                                       name="aux"
@@ -215,6 +233,7 @@ export class ScoreSetup extends Component {
                             
                          </div>
                          <div className="form-group col-md-4">
+                         <br></br>
                             <label htmlFor="theme">Selecciona una Tematica</label>
                                  <Select
                                       name="theme"
@@ -227,12 +246,13 @@ export class ScoreSetup extends Component {
                            />
                            
                          </div> 
-                         <div className="form-group col-md-6">
+                         <div className="form-group col-md-3">
+                         <br></br>
                         <label htmlFor="porcentaje">porcentaje</label>
-               
+                       
                        <input    
                            className="form-control"   
-                           placeholder="Ingrese una porcentaje"                   
+                           placeholder="Porcentaje"                   
                              type = "text"
                           name = "porcentage"
                           value = {porcentage}  
@@ -245,13 +265,21 @@ export class ScoreSetup extends Component {
                       <button className="btn btn-outline-info" variant="warning" onClick ={(e) => this.handleAddPorcentage(e)} >Agregar</button>
                  
                     </div>
-                        
-                        </div>
-                        
+                    <h3 className="h5 col-md-12 my-4 font-weight-normal text-center">
+                            Tabla de CONOCIMIENTO</h3>
+                                <div>
 
-                   </div>
 
-              </div>
+
+
+
+                                 </div>
+                      </div>
+                    </div>
+
+               </div>
+
+          </div>
           
         )
     }
