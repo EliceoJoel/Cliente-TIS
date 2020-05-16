@@ -65,6 +65,16 @@ class Landing extends Component {
             Convocatorias
           </Link>
         </li>
+        <li className="nav-item ml-auto px-2">
+          <Link to="Registrar.usuario" className="nav-link">
+            registrar Usuario
+          </Link>
+        </li>
+        <li className="nav-item ml-auto px-2">
+          <Link to="Publicar.convocatoria" className="nav-link">
+            conv
+          </Link>
+        </li>
       </ul>  
     )    
 

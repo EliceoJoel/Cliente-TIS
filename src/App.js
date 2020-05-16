@@ -39,7 +39,7 @@ class App extends Component {
             <Route exact path="/Habilitar.postulante" component={PostulantEnable} />
             <Route exact path="/Registrar.fecha" component={RegisterDate} />
             <Route exact path="/Configuracion.notas" component={ScoreSetup} />
-            <Route exact path="/Configuracion.convocatoria" component={AnnouncementSetup} />
+            <Route exact path="/Configuracion.convocatoria" component={AnnouncementSetup}/>
           </div>
         
         </div>
