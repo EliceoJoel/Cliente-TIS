@@ -31,7 +31,6 @@ getStudents(){
     var postulants = []
     console.log()
     getPostulantsEnabled().then(postulant => {
-        if (postulant == null) return;
         for(var i=0; i<postulant.length;i++){
             if(postulant[i].auxiliary === this.state.selectedAux && postulant[i].announcement === this.state.selectedConv.label){
                 postulants.push(postulant[i])
@@ -64,7 +63,7 @@ render() {
     return (
         <div className="justify-content-center">
             <h1 className="h3 font-weight-normal text-center mt-3 p-3 bg-info text-white">
-               Registro de calificaciones
+               Lista por auxiliatura
             </h1>
             <div className="row">
                 <div className="form-group col-8 my-4">
@@ -119,14 +118,14 @@ renderTableData() {
     return this.state.postulantes.map(postulant =>(
         <div className="row">
                 <div class="col">{postulant.name}</div>
-                <div class="col">{this.checkEnable(postulant.enable)}</div>
+                <div class="col">{this.checkEnable(this.enable)}</div>
                 <div class="col">{postulant.auxiliary}</div>
         </div>
     ))
  }
 
  checkEnable(enable){
-    if(enable){
+    if(!enable){
         return "si"
     }
     else return "no"

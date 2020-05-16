@@ -60,7 +60,7 @@ export class RegisterDate extends Component {
         if(this.state.date === ''){
             this.setState({date_error:'Introduce una fecha'})
         }
-        else if(this.state.date.length > 10){
+        else if(this.state.date.length > 30){
             this.setState({date_error: 'fecha incorrecta'})
         }
         else if(this.state.event === ''){

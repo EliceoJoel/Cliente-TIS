@@ -15,6 +15,7 @@ class Scores_list extends Component{
         auxiliaturas:[],
         postulantes:[],
         score:[],
+        warningMesage:"",
     }
 }
 componentDidMount() {
@@ -35,14 +36,14 @@ getStudents(){
             if(postulant[i].auxiliary === this.state.selectedAux && postulant[i].announcement === this.state.selectedConv.label){
                 var object = {}
                 var score = {}
-                object.id = postulant[i].id_book
+                object.id = postulant[i].id
                 object.name = postulant[i].name
                 object.auxiliary = postulant[i].auxiliary
                 object.score = postulant[i].score
                 object.score_oral = postulant[i].score_oral
                 score.score = postulant[i].score
                 score.score_oral = postulant[i].score_oral
-                score.id = postulant[i].id_book
+                score.id = postulant[i].id
                 scores.push(score)
                 postulants.push(object)
             }
@@ -74,7 +75,7 @@ render() {
     return (
         <div className="justify-content-center">
             <h1 className="h3 font-weight-normal text-center mt-3 p-3 bg-info text-white">
-               Lista de postulantes
+               Lista de puntos
             </h1>
             <div className="row">
                 <div className="form-group col-8 my-4">
@@ -121,13 +122,12 @@ render() {
                     <div class="col">auxiliatura</div>
                     <div class="col">nota</div>
                     <div class="col">nota Oral</div>
-                    <div class="col">editar nota</div>
-                    <div class="col">editar nota oral</div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+                    <div class="col"></div>
             </div>
             <form>
                 {this.renderTableData()}
-                <br/>
-                <br/>
                 <button type="button" class="col btn btn-info " onClick={() =>this.update()} >subir notas</button>
             </form>
         </div>        
@@ -165,6 +165,7 @@ renderTableData() {
                     placeholder= "ingrese notas de examen oral"
                     onChange = {this.onChangeOral}                     
                 />
+                <div class="col">{this.state.warningMesage}</div>
             </div>
     ))
  }
@@ -180,10 +181,12 @@ update(){
 
  onChangeOral = (event) => {
      if(event.target.value >100){ 
+        this.setState({warningMesage:"numero no valido"})
         return
      }
      var scores = this.state.score
     for(var i=0;i<this.state.score.length;i++){
+        this.setState({warningMesage:""})
         // eslint-disable-next-line eqeqeq
         if(event.target.id == scores[i].id && parseInt(event.target.value)< 101){
             scores[i].score_oral = event.target.value
@@ -195,6 +198,7 @@ update(){
 
 onChange = (event) => {
     if(event.target.value >100){ 
+       this.setState({warningMesage:"numero no valido"})
        return
     }
     var scores = this.state.score
