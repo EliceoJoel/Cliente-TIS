@@ -28,6 +28,7 @@ export const register = newUser => {
         })
         .then(response => {
             console.log(response)
+            return response.data
         })
         .catch(err => {
             console.log(err)
@@ -231,3 +232,28 @@ export const updateScore = (score) =>{
         })
 }
 
+export const getRol = () =>{
+    return axios
+       .get('api/rol', {
+           headers: {'Content-Type': 'application/json'}
+       })
+       .then(response => {
+        return response.data
+       })
+       .catch(err => {
+           console.log(err)
+       })
+}
+
+export const saveAnnouncement = data => {
+    return axios
+        .post('api/userAnnouncement', data, {
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => {
+            console.log(response)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}

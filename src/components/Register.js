@@ -2,8 +2,11 @@ import React, { Component } from 'react'
 import { register } from './UserFunctions'
 import Select from 'react-select'
 import {getAnnouncement} from './UserFunctions'
+import {getRol} from './UserFunctions'
+import {saveAnnouncement} from './UserFunctions'
 
 var conv = []
+var rol = []
 class Register extends Component {
     constructor() {
         super()
@@ -14,13 +17,13 @@ class Register extends Component {
             password: '',
             errors: {},
             rol:'',
-            convocatoria:'',
+            convocatoria:[],
             convocatoria_temp: '',
-            rol_temp: ''
+            rol_temp: '',
+            userID:{}
         }
 
         this.onChange = this.onChange.bind(this)
-        this.onSubmit = this.onSubmit.bind(this)
     }
 
     componentDidMount() {
@@ -32,25 +35,40 @@ class Register extends Component {
                 conv[i] = object
               }
         })
+
+        getRol().then(roles => {
+            for (var i=0; i < roles.length; i++) {
+                var object = {}
+                object.id = roles[i].id
+                object.label = roles[i].rol
+                rol[i] = object
+              }
+        })
     }
 
     onChange (e) {
         this.setState({ [e.target.name]: e.target.value })
     }
-    onSubmit (e) {
-        e.preventDefault()
-
-        const newUser = {
+    register() {
+        var newUser = {
             fullname: this.state.first_name + ' ' + this.state.last_name,
             user: this.state.user,
             password: this.state.password,
-            idRol:1,
-            idAnnouncement:1
+            idRol:this.state.rol.id,
         }
-
         register(newUser).then(res => {
-            this.props.history.push(`/login`)
-        })
+                console.log(res.user.id)
+                this.setState({userID:res.user.id})
+                console.log(this.state.userID)
+                for(var i =0; i<this.state.convocatoria.length; i++){
+                    var announcement = {
+                        idAnnouncement:this.state.convocatoria[i].id,
+                        idUser:this.state.userID
+                    }
+                    saveAnnouncement(announcement);
+                }
+            }
+        )
     }
 
     render () {
@@ -110,7 +128,7 @@ class Register extends Component {
                         </div>
                     </div>
                 <div className="row">
-                    <div className="form-group col-md-6">
+                    <div className="form-group col-md-6 text-center">
                         <label htmlFor="Nombre">Selecciona una convocatoria</label>
                         <Select
                         name="conv"
@@ -120,20 +138,24 @@ class Register extends Component {
                         className="basic-select"
                         classNamePrefix="select"
                         />
-                        <label htmlFor="Nombre">{this.state.convocatoria.label}</label>
+                        <br/>
+                        {this.state.convocatoria.map( convocatoria => (
+                            <h5 htmlFor="Nombre">{convocatoria.label}</h5>
+                    ))}
                     </div>
 
-                    <div className="form-group col-md-6">
+                    <div className="form-group col-md-6 text-center">
                         <label htmlFor="Nombre">Selecciona un rol</label>
                         <Select
-                        name="conv"
-                        options={conv}
+                        name="rol"
+                        options={rol}
                         onChange={(e) => this.setState({rol_temp:e})}
                         placeholder=""
                         className="basic-select"
                         classNamePrefix="select"
                         />
-                        <label htmlFor="Nombre">{this.state.rol.label}</label>
+                        
+                        <h5 htmlFor="Nombre">{this.state.rol.label}</h5>
                     </div>
                 </div>
 
@@ -145,14 +167,12 @@ class Register extends Component {
                         <button type="button" class="col btn btn-info mt-2" onClick={() => this.selectRol()}>seleccionar rol</button>
                     </div>
                 </div>
-
-
-                    <button
-                        type="submit"
+                <button
                         className="btn btn-lg btn-info btn-block"
+                        onClick = {() => this.register()}
                     >
                         Registrar
-                    </button>
+                </button>
                 </form>
             </div>
         )
@@ -161,12 +181,13 @@ class Register extends Component {
     selectRol(){
         var roles = this.state.rol_temp;
         this.setState({rol:roles})
-        console.log(this.state.rol)
     }
     
     selectConv(){
-        var convocatorias = this.state.convocatoria_temp;
+        var convocatorias = this.state.convocatoria;
+        convocatorias.push(this.state.convocatoria_temp)
         this.setState({convocatoria:convocatorias})
+        console.log(this.state.convocatoria)
     }
 }
 
