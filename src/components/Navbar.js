@@ -15,6 +15,7 @@ class Landing extends Component {
   componentDidMount() {
     if(localStorage.usertoken){
       getProfile().then(res => {
+        console.log(res)
         getPermissions(res.user.idRol).then(permissions =>{
           this.setState({
             items: permissions
