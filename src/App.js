@@ -17,6 +17,7 @@ import PostulantEnable from './components/PostulantEnable'
 import RegisterDate from './components/RegisterDate'
 import ScoreSetup from './components/ScoreSetup'
 import AnnouncementSetup from './components/AnnouncementSetup'
+import Roles_permission from './components/Roles_permission'
 
 class App extends Component {
   render() { 
@@ -40,6 +41,7 @@ class App extends Component {
             <Route exact path="/Registrar.fecha" component={RegisterDate} />
             <Route exact path="/Configuracion.notas" component={ScoreSetup} />
             <Route exact path="/Configuracion.convocatoria" component={AnnouncementSetup} />
+            <Route exact path="/Registro.de.rol" component={Roles_permission} />
           </div>
         
         </div>
