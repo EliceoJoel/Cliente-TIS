@@ -249,6 +249,7 @@ export class PostulantEnable extends Component {
 
         console.log("totallist", totalList);
         
+        // eslint-disable-next-line no-unused-vars
         for(let item in this.state.allRequirementsCheckList){
             count++
         }
