@@ -10,11 +10,13 @@ class Landing extends Component {
       this.state = {
           items:[]
       }
+      this.loadLinks()
   }
 
-  componentDidMount() {
+  loadLinks() {
     if(localStorage.usertoken){
       getProfile().then(res => {
+        console.log(res)
         getPermissions(res.user.idRol).then(permissions =>{
           this.setState({
             items: permissions
@@ -35,7 +37,7 @@ class Landing extends Component {
   render() {
     const loginLink = (
       <ul className="navbar-nav ml-auto">
-        <li className="nav-item px-2">
+        <li className="nav-item px-2 ">
           <Link to="/login" className="nav-link">
             Iniciar sesión
           </Link>

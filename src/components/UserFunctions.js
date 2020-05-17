@@ -17,7 +17,7 @@ export const login = user => {
             return response.data.token
         })
         .catch(err => {
-            console.log(err)
+            //console.log(err)
         })
 }
 
@@ -175,7 +175,6 @@ export const getProfile = () => {
             headers: { Authorization: `Bearer ${localStorage.usertoken}` }
         })
         .then(response => {
-            console.log(response)
             return response.data
         })
         .catch(err => {
@@ -257,3 +256,30 @@ export const saveAnnouncement = data => {
             console.log(err)
         })
 }
+
+export const registerRol = newRegister => {
+    return axios
+        .post('api/rol', newRegister, {
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => {
+            return response.data
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+export const registerPermission = newRegister => {
+    return axios
+        .post('api/permission', newRegister, {
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => {
+            console.log(response)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+

@@ -127,6 +127,10 @@ export class PostulantEnable extends Component {
     }
     
     handleReq(e ){
+        this.setState({req:[]})
+        this.setState({ enableMessageState:'INHABILITADO'})
+        //this.listaDeChecks()
+       // this.gil(true)
         this.setState({allRequirementsCheckList:[]})
         this.setState({enableButton:false})
         this.setState({disableReasonInput:false})
@@ -152,6 +156,9 @@ export class PostulantEnable extends Component {
              headers: {'Content-Type': 'multipart/form-data' }
              }).then(response =>{
 
+
+                console.log("alvaro", "map");
+                
               this.setState({req: response.data})
 
              // console.log(this.state.req)
@@ -261,16 +268,19 @@ export class PostulantEnable extends Component {
        
       }
 
+
+  
+
     render() {
         const {codSis, reason, disableReasonInput} = this.state
+       // const {codSis, reason, disableReasonInput} = this.state
         const { selectedOptionConv } = this.state
         //this.getPostulantEnable()
 
         //let lista = this.state.postulant.auxiliary
         //let found = this.state.found
        // let newlista = lista
-       // console.log(newlista);
-        
+       // console.log(newlista);   
         return (
            
             <div className="justify-content-center">
@@ -334,9 +344,10 @@ export class PostulantEnable extends Component {
                         </div>
                         
                         <br></br>
+                        
                         {this.state.showList?
                                 
-                        
+                      
                         <div className="col-md-12">  
                         
                         <div className="col-md-12">

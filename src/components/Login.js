@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { login } from './UserFunctions'
+import axios from 'axios'
+
 
 class Login extends Component {
     constructor(props) {
@@ -29,6 +30,8 @@ class Login extends Component {
 
     onChange(e) {
         this.setState({ [e.target.name]: e.target.value })
+        this.setState({passwordError:""})
+        this.setState({userError:""})
     }
     onSubmit(e) {
         e.preventDefault()
@@ -39,11 +42,29 @@ class Login extends Component {
                 password: this.state.password
             }
     
-            login(user).then(res => {
-                if (res) {
-                    this.props.history.push(`/`)
-                    window.location.reload()
+            axios
+            .post(
+            'api/login',
+                {
+                    user: user.user,
+                    password: user.password
+                },
+                {
+                    headers: { 'Content-Type': 'application/json' }
                 }
+            )
+            .then(response => {
+                localStorage.setItem('usertoken', response.data.token)
+                this.props.history.push(`/`)
+                window.location.reload()
+                return response.data.token
+            })
+            .catch(err => {
+                console.log(err)
+                this.setState({
+                    userError:"Usuario incorrecto",
+                    passwordError:"Contraseña incorrecta"
+                })
             })
         }
     }
