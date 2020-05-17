@@ -16,7 +16,11 @@ export class ScoreSetup extends Component {
             announcementlab: false,
             themeaux:[],
             aux:[],
-            porcentage:''
+            porcentage:'',
+            tabla: [] ,
+            addpercentage: false ,
+            tablaOrdenada: [],
+            auxiliarylist: false
              
         }
     }
@@ -50,6 +54,8 @@ export class ScoreSetup extends Component {
     }
 
     handleSearchAnnouncement (){
+        this.setState({auxiliarylist:false})
+        this.setState({addpercentage: false})
         this.setState({announcementlab: false})
         let conv =  this.state.selectedOptionConv.label
         console.log(conv);
@@ -75,10 +81,12 @@ export class ScoreSetup extends Component {
              console.log(error)
             
          })
+       
         
 
     }
     handleKnowledge(e){
+        this.setState({addpercentage: true})
         e.preventDefault()
         let send = new FormData()
         let send2 = new FormData()
@@ -132,6 +140,7 @@ export class ScoreSetup extends Component {
      
     }
     handleAddPorcentage(){
+        this.setState({auxiliarylist:true})
         let aux =  this.state.selectedOptionAux.label
         let theme = this.state.selectedOptionTheme.label
         let porcentage = this.state.porcentage
@@ -146,11 +155,31 @@ export class ScoreSetup extends Component {
             data: send,
             headers: {'Content-Type': 'multipart/form-data' }
             }).then(response =>{
-             console.log(response)
+             console.log('a',response)
          }) 
          .catch(error => {
              console.log(error)
          })
+         axios.get('/api/percentageAuxiliary')
+          .then(response => {
+             this.setState({tabla : response.data});
+             console.log(this.state.tabla);
+             this.state.tabla.sort(function (a, b) {
+                if (a.auxiliary > b.auxiliary) {
+                  return 1;
+                }
+                if (a.auxiliary < b.auxiliary) {
+                  return -1;
+                }
+                return 0;
+              });
+             
+              console.log(this.state.tabla);
+              this.setState({tablaOrdenada : this.state.tabla});
+         })
+            .catch(e => {
+              console.log(e);
+      })
 
     }
     handleMeritScore(){
@@ -210,76 +239,113 @@ export class ScoreSetup extends Component {
                                 )}
                         </div>
                         <div  className="col-md-12">
-                        <button className="btn btn-outline-info" variant="warning" onClick ={(AuxEvent) => this.handleMeritScore(AuxEvent)} >CONFIGURAR MERITO</button>
+                        {/* <button className="btn btn-outline-info" variant="warning" onClick ={(AuxEvent) => this.handleMeritScore(AuxEvent)} >CONFIGURAR MERITO</button> */}
                       
                         {this.state.announcementlab?
                         <button   className="btn btn-outline-info mx-3" variant="warning"onClick ={(AuxEvent) => this.handleKnowledge(AuxEvent)} >CONFIGURAR CONOCIMIENTO</button>
                          :null}
                          <br></br>
-                          <div className="row">
-                          <br></br>
-                             <div className="form-group col-md-4">
-                             <br></br>
-                            <label htmlFor="aux">Selecciona una auxiliatura</label>
-                                 <Select
-                                      name="aux"
-                                      options={auxSelect}
-                                      className="basic-multi-select "
-                                      classNamePrefix="select"
-                                      placeholder=""
-                                      value={selectedOptionAux}
-                                      onChange={this.selectAuxSelectChange}
-                           />
+                         {this.state.addpercentage? 
+
+
+                        
+                                  <div className="row">
+                                       <br></br>
+                                            <div className="form-group col-md-4">
+                                       <br></br>
+                                                 <label htmlFor="aux">Selecciona una auxiliatura</label>
+                                                        <Select
+                                                          name="aux"
+                                                          options={auxSelect}
+                                                          className="basic-multi-select "
+                                                          classNamePrefix="select"
+                                                          placeholder=""
+                                                          value={selectedOptionAux}
+                                                          onChange={this.selectAuxSelectChange}
+                                                          />
                             
-                         </div>
-                         <div className="form-group col-md-4">
-                         <br></br>
-                            <label htmlFor="theme">Selecciona una Tematica</label>
-                                 <Select
-                                      name="theme"
-                                      options={themeSelect}
-                                      className="basic-multi-select "
-                                      classNamePrefix="select"
-                                      placeholder=""
-                                      value={selectedOptionTheme}
-                                      onChange={this.selectThemeSelectChange}
-                           />
+                                               </div>
+                                               <div className="form-group col-md-4">
+                                      <br></br>
+                                                  <label htmlFor="theme">Selecciona una Tematica</label>
+                                                      <Select
+                                                         name="theme"
+                                                        options={themeSelect}
+                                                          className="basic-multi-select "
+                                                          classNamePrefix="select"
+                                                           placeholder=""
+                                                               value={selectedOptionTheme}
+                                                            onChange={this.selectThemeSelectChange}
+                                                      />
                            
-                         </div> 
-                         <div className="form-group col-md-3">
-                         <br></br>
-                        <label htmlFor="porcentaje">porcentaje</label>
+                                               </div> 
+                                               <div className="form-group col-md-3">
+                                       <br></br>
+                                                 <label htmlFor="porcentaje">porcentaje</label>
                        
-                       <input    
-                           className="form-control"   
-                           placeholder="Porcentaje"                   
-                             type = "text"
-                          name = "porcentage"
-                          value = {porcentage}  
-                           onChange = {this.onChange}                     
-                       />
-                       
-                        </div>                    
+                                                          <input    
+                                                         className="form-control"   
+                                                         placeholder="Porcentaje"                   
+                                                          type = "text"
+                                                           name = "porcentage"
+                                                          value = {porcentage}  
+                                                           onChange = {this.onChange}                     
+                                                         />
+                        
+                                              </div>                    
                      
-                      <div className="form-group col-md-12 ">    
-                      <button className="btn btn-outline-info" variant="warning" onClick ={(e) => this.handleAddPorcentage(e)} >Agregar</button>
+                                                  <div className="form-group col-md-12 ">    
+                                                          <button className="btn btn-outline-info" variant="warning" onClick ={(e) => this.handleAddPorcentage(e)} >Agregar</button>
                  
-                    </div>
-                    <h3 className="h5 col-md-12 my-4 font-weight-normal text-center">
-                            Tabla de CONOCIMIENTO</h3>
-                                <div>
+                                                  </div>
+                         </div>
+                         
+                        :null}
+                       {this.state.auxiliarylist?     
+                      <div>
+                          
+                      <div className="col-md-12">
+                        <br></br>
+                            <label className="col-md-4 text-info font-weight-bold" htmlFor="Nombre">AUXILIATURA</label>
+                            <label className="col-md-4 text-info font-weight-bold text-center" htmlFor="Nombre">TEMATICA</label>
+                            <label className="col-md-2 text-info font-weight-bold text-center" htmlFor="Nombre">PORCENTAJE</label>
+                          
+                              <div className="my-1" style={{border:"0.5px solid silver", width: "100%"}}></div>     
+                        </div>  
+                        
+                              <div className="col-md-12">
+                        
+                              {this.state.tablaOrdenada.map(data =>
+                                <div key = {data.id}>
+                                     <div className="container">
+                                         <div className="row row-cols-4">
+                                             <div className="col-md-4">                         
+                                               {data.auxiliary} 
+                                             </div>
+                                              <div className="col-md-4 text-center">
+                                                 {data.theme}
+                                                
+                                              </div>
+                                              <div className="col-md-2 text-center">
+                                                 {data.percentage}
+                                                
+                                              </div>
+                                              <br></br>
+                                             </div>
+                                             <div className="my-1" style={{border:"0.3px solid silver", width: "100%"}}></div>
+                                         </div>
+                                </div>
+                                )}
 
-
-
-
-
-                                 </div>
+                                </div>
+                             
+                            </div> :null}
                       </div>
                     </div>
 
                </div>
 
-          </div>
+         
           
         )
     }
