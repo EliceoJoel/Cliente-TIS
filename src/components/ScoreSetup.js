@@ -20,7 +20,14 @@ export class ScoreSetup extends Component {
             tabla: [] ,
             addpercentage: false ,
             tablaOrdenada: [],
-            auxiliarylist: false
+            auxiliarylist: false,
+            selectedConvOption_error: '',
+            selectedOptionConv: null , 
+            selectedAuxOption_error: '',
+            selectedThemeOption_error:'',
+            percentage_error:'',
+            selectedOptionAux: null ,
+            selectedOptionTheme: null 
              
         }
     }
@@ -54,7 +61,13 @@ export class ScoreSetup extends Component {
     }
 
     handleSearchAnnouncement (){
-        this.setState({auxiliarylist:false})
+        this.setState({
+            selectedConvOption_error:'',
+            
+        })
+        if(this.validAnnouncement()){
+          
+           // this.setState({auxiliarylist:false})
         this.setState({addpercentage: false})
         this.setState({announcementlab: false})
         let conv =  this.state.selectedOptionConv.label
@@ -73,6 +86,7 @@ export class ScoreSetup extends Component {
              console.log(this.state.found)
              if (this.state.found[0].type === 'Laboratorio'){
                 this.setState({announcementlab: true})
+                this.setState({auxiliarylist:true})
              }
             
            
@@ -81,6 +95,60 @@ export class ScoreSetup extends Component {
              console.log(error)
             
          })
+
+         let idconv = this.state.selectedOptionConv.value
+         let sendIdAnnouncement = new FormData()
+         sendIdAnnouncement.append( 'id_announcement' , idconv)
+         axios({
+            method: 'post',
+            url: 'api/percentageAuxiliaryAnnouncement',
+            data: sendIdAnnouncement,
+            headers: {'Content-Type': 'multipart/form-data' }
+            }).then(response =>{
+                this.setState({tabla : response.data});
+                console.log(this.state.tabla);
+                this.state.tabla.sort(function (a, b) {
+                   if (a.auxiliary > b.auxiliary) {
+                     return 1;
+                   }
+                   if (a.auxiliary < b.auxiliary) {
+                     return -1;
+                   }
+                   return 0;
+                 });
+                
+                 console.log(this.state.tabla);
+                 this.setState({tablaOrdenada : this.state.tabla});
+            
+           
+         }) 
+         .catch(error => {
+             console.log(error)
+            
+         })
+
+    //      axios.get('/api/percentageAuxiliary')
+    //      .then(response => {
+    //         this.setState({tabla : response.data});
+    //         console.log(this.state.tabla);
+    //         this.state.tabla.sort(function (a, b) {
+    //            if (a.auxiliary > b.auxiliary) {
+    //              return 1;
+    //            }
+    //            if (a.auxiliary < b.auxiliary) {
+    //              return -1;
+    //            }
+    //            return 0;
+    //          });
+            
+    //          console.log(this.state.tabla);
+    //          this.setState({tablaOrdenada : this.state.tabla});
+    //     })
+    //        .catch(e => {
+    //          console.log(e);
+    //  })
+         }
+        
        
         
 
@@ -140,6 +208,13 @@ export class ScoreSetup extends Component {
      
     }
     handleAddPorcentage(){
+        this.setState({
+            selectedAuxOption_error:'',
+            selectedThemeOption_error:'',
+            percentage_error:''
+            
+        })
+        if(this.validPercentage()){
         this.setState({auxiliarylist:true})
         let aux =  this.state.selectedOptionAux.label
         let theme = this.state.selectedOptionTheme.label
@@ -156,6 +231,9 @@ export class ScoreSetup extends Component {
             headers: {'Content-Type': 'multipart/form-data' }
             }).then(response =>{
              console.log('a',response)
+             if(response.data === false ){
+                 this.setState({percentage_error:'el digito excede el porcentaje'})
+             }
          }) 
          .catch(error => {
              console.log(error)
@@ -181,6 +259,8 @@ export class ScoreSetup extends Component {
               console.log(e);
       })
 
+        }
+       
     }
     handleMeritScore(){
         return(
@@ -193,7 +273,34 @@ export class ScoreSetup extends Component {
             </div>
         )
     }
+    validAnnouncement(){        
+       
+        if(this.state.selectedOptionConv === null){
+            this.setState({selectedConvOption_error:'Seleccione una convocatoria'})
+        }
+        else{
+            return true;
+        }
 
+    }
+    validPercentage(){        
+        if(this.state.selectedOptionAux === null){
+            this.setState({selectedAuxOption_error:'Seleccione una auxiliatura'})
+        }
+        else if(this.state.selectedOptionTheme === null){
+            this.setState({selectedThemeOption_error:'Seleccione una tematica'})
+        }
+        else if(this.state.porcentage === ''){
+            this.setState({percentage_error:'Campo Vacio'})
+        }
+        else if(this.state.porcentage.length > 2  || isNaN(this.state.porcentage)){
+            this.setState({percentage_error:'Porcentaje Incorrecto'})
+        }
+        else{
+            return true;
+        }
+
+    }
   
     render() {
         const { selectedOptionConv , selectedOptionAux , selectedOptionTheme, porcentage} = this.state
@@ -263,7 +370,7 @@ export class ScoreSetup extends Component {
                                                           value={selectedOptionAux}
                                                           onChange={this.selectAuxSelectChange}
                                                           />
-                            
+                                                 <p style={{color:"red"}}>{this.state.selectedAuxOption_error}</p>
                                                </div>
                                                <div className="form-group col-md-4">
                                       <br></br>
@@ -277,26 +384,26 @@ export class ScoreSetup extends Component {
                                                                value={selectedOptionTheme}
                                                             onChange={this.selectThemeSelectChange}
                                                       />
-                           
+                                                       <p style={{color:"red"}}>{this.state.selectedThemeOption_error}</p>
                                                </div> 
                                                <div className="form-group col-md-3">
                                        <br></br>
-                                                 <label htmlFor="porcentaje">porcentaje</label>
+                                                 <label htmlFor="porcentaje">Porcentaje</label>
                        
                                                           <input    
                                                          className="form-control"   
-                                                         placeholder="Porcentaje"                   
-                                                          type = "text"
+                                                         placeholder="Ejemplo:1-100"                   
+                                                          type = "number"
                                                            name = "porcentage"
                                                           value = {porcentage}  
                                                            onChange = {this.onChange}                     
                                                          />
-                        
+                                                    <p style={{color:"red"}}>{this.state.percentage_error}</p>
                                               </div>                    
                      
                                                   <div className="form-group col-md-12 ">    
                                                           <button className="btn btn-outline-info" variant="warning" onClick ={(e) => this.handleAddPorcentage(e)} >Agregar</button>
-                 
+                                                        
                                                   </div>
                          </div>
                          
@@ -341,6 +448,12 @@ export class ScoreSetup extends Component {
                              
                             </div> :null}
                       </div>
+                    </div>
+                    <div>
+                        <br></br>
+                        <br></br>
+                        <br></br>
+                        <br></br>
                     </div>
 
                </div>
