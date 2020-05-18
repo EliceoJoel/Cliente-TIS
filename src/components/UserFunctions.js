@@ -256,3 +256,48 @@ export const registerPermission = newRegister => {
         })
 }
 
+export const auxiliary = id => {
+    return axios
+        .post('api/auxiliary', id, {
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => {
+            console.log(response)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+export const getStudentData = data => {
+    return axios
+        .get('api/studentsData', data, {
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => {
+            console.log(response)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+export const  percentageData = (course) =>{
+    return axios
+        .get(
+            'api/percentageData',
+            {
+                auxiliary: course.auxiliary,
+                announcement: course.announcement
+            },
+            {
+                headers: { 'Content-Type': 'application/json' }
+            }
+        )
+        .then(response => {
+            return response
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
