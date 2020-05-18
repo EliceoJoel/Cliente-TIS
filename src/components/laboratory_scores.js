@@ -2,7 +2,10 @@ import React, {Component} from 'react';
 import {getAnnouncement} from './UserFunctions'
 import Select from 'react-select'
 import {getStudentData} from './UserFunctions' 
+import { getProfile } from './UserFunctions'
 import {percentageData} from './UserFunctions' 
+import {getUserAnnouncements} from './UserFunctions'
+
 //import {getStudents} from './UserFunctions' 
 import axios from 'axios'
 
@@ -21,17 +24,20 @@ class Laboratory_scores extends Component{
             postulantes:[],
             tematics:[],
             warningMesage:"",
-            notas:[]
+            notas:[],
         }
     }
     componentDidMount() {
-        getAnnouncement().then(res => {
-            for (var i=0; i < res.length; i++) {
-                var object = {}
-                object.id = res[i].id
-                object.label = res[i].name
-                conv[i] = object
-              }
+        getProfile().then(user => {
+            console.log(user.user.id)
+            getUserAnnouncements(user.user.id).then(res => {
+                for (var i=0; i < res.length; i++) {
+                    var object = {}
+                    object.id = res[i].id
+                    object.label = res[i].name
+                    conv[i] = object
+                }
+            })
         })
     }
 
