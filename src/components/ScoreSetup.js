@@ -67,7 +67,7 @@ export class ScoreSetup extends Component {
         })
         if (this.validAnnouncement()) {
 
-            // this.setState({auxiliarylist:false})
+             this.setState({auxiliarylist:false})
             this.setState({ addpercentage: false })
             this.setState({ announcementlab: false })
             let conv = this.state.selectedOptionConv.label
@@ -106,7 +106,7 @@ export class ScoreSetup extends Component {
                 headers: { 'Content-Type': 'multipart/form-data' }
             }).then(response => {
                 this.setState({ tabla: response.data });
-                console.log(this.state.tabla);
+                //console.log(this.state.tabla);
                 this.state.tabla.sort(function (a, b) {
                     if (a.auxiliary > b.auxiliary) {
                         return 1;
@@ -117,7 +117,7 @@ export class ScoreSetup extends Component {
                     return 0;
                 });
 
-                console.log(this.state.tabla);
+                //console.log(this.state.tabla);
                 this.setState({ tablaOrdenada: this.state.tabla });
 
 
@@ -154,6 +154,12 @@ export class ScoreSetup extends Component {
 
     }
     handleKnowledge(e) {
+        this.setState({
+            selectedOptionAux: null,
+            selectedOptionTheme: null,
+            porcentage: ''
+
+        })
         this.setState({ addpercentage: true })
         e.preventDefault()
         let send = new FormData()
@@ -211,7 +217,8 @@ export class ScoreSetup extends Component {
         this.setState({
             selectedAuxOption_error: '',
             selectedThemeOption_error: '',
-            percentage_error: ''
+            percentage_error: '' ,
+            
 
         })
         if (this.validPercentage()) {
@@ -237,9 +244,37 @@ export class ScoreSetup extends Component {
             })
                 .catch(error => {
                     console.log(error)
+                    
                 })
-            axios.get('/api/percentageAuxiliary')
-                .then(response => {
+            // axios.get('/api/percentageAuxiliary')
+            //     .then(response => {
+            //         this.setState({ tabla: response.data });
+            //         console.log(this.state.tabla);
+            //         this.state.tabla.sort(function (a, b) {
+            //             if (a.auxiliary > b.auxiliary) {
+            //                 return 1;
+            //             }
+            //             if (a.auxiliary < b.auxiliary) {
+            //                 return -1;
+            //             }
+            //             return 0;
+            //         });
+
+            //         console.log(this.state.tabla);
+            //         this.setState({ tablaOrdenada: this.state.tabla });
+            //     })
+            //     .catch(e => {
+            //         console.log(e);
+            //     })
+            let idconv = this.state.selectedOptionConv.value
+            let sendIdAnnouncement = new FormData()
+            sendIdAnnouncement.append('id_announcement', idconv)
+                axios({
+                    method: 'post',
+                    url: 'api/percentageAuxiliaryAnnouncement',
+                    data: sendIdAnnouncement,
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                }).then(response => {
                     this.setState({ tabla: response.data });
                     console.log(this.state.tabla);
                     this.state.tabla.sort(function (a, b) {
@@ -251,13 +286,16 @@ export class ScoreSetup extends Component {
                         }
                         return 0;
                     });
-
+    
                     console.log(this.state.tabla);
                     this.setState({ tablaOrdenada: this.state.tabla });
+    
+    
                 })
-                .catch(e => {
-                    console.log(e);
-                })
+                    .catch(error => {
+                        console.log(error)
+    
+                    })
 
         }
 
@@ -302,8 +340,56 @@ export class ScoreSetup extends Component {
 
     }
     handleRemoveElement(e){
+        
+        console.log(e.id);
+        let idpercentage = e.id 
+        let send = new FormData()
+        send.append('id_percentage', idpercentage)
+        axios({
+            method: 'post',
+            url: 'api/percentageAuxiliaryDelete',
+            data: send,
+            headers: { 'Content-Type': 'multipart/form-data' }
+        }).then(res => {
+            console.log(res);
+            
+        })
+            .catch(error => {
+                console.log(error)
 
-        console.log(e.percentage);
+            })
+            let idconv = this.state.selectedOptionConv.value
+            let sendIdAnnouncement = new FormData()
+            sendIdAnnouncement.append('id_announcement', idconv)
+                axios({
+                    method: 'post',
+                    url: 'api/percentageAuxiliaryAnnouncement',
+                    data: sendIdAnnouncement,
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                }).then(response => {
+                    this.setState({ tabla: response.data });
+                    console.log(this.state.tabla);
+                    this.state.tabla.sort(function (a, b) {
+                        if (a.auxiliary > b.auxiliary) {
+                            return 1;
+                        }
+                        if (a.auxiliary < b.auxiliary) {
+                            return -1;
+                        }
+                        return 0;
+                    });
+    
+                    console.log(this.state.tabla);
+                    this.setState({ tablaOrdenada: this.state.tabla });
+    
+    
+                })
+                    .catch(error => {
+                        console.log(error)
+    
+                    })
+
+          
         
     }
     render() {
@@ -442,8 +528,9 @@ export class ScoreSetup extends Component {
 
                                                     </div>
                                                     
-                                <div className="form-group col-md-12 ">
-                                    <button className="btn btn-outline-info" variant="warning" onClick={(e) => {console.log(data)}
+                             
+                                <div className="col-md-2 text-center">
+                                    <button className="btn btn-outline-info" variant="warning" onClick={(e) => this.handleRemoveElement(data)
                                     } >Eliminar</button>
 
                                 </div>
