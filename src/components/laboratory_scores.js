@@ -4,8 +4,11 @@ import Select from 'react-select'
 import {getStudentData} from './UserFunctions' 
 import {percentageData} from './UserFunctions' 
 //import {getStudents} from './UserFunctions' 
+import axios from 'axios'
+
 
 var conv =[]
+var notas = []
 class Laboratory_scores extends Component{
 
     constructor() {
@@ -18,6 +21,7 @@ class Laboratory_scores extends Component{
             postulantes:[],
             tematics:[],
             warningMesage:"",
+            notas:[]
         }
     }
     componentDidMount() {
@@ -50,18 +54,62 @@ class Laboratory_scores extends Component{
 
     getStudents(){
         const data =  {
-            "announcement":'1',
-            "auxiliary": 'fisicoquimica'
+            "announcement": this.state.selectedConv.id,
+            "auxiliary": this.state.selectedAux
         }
         getStudentData(data).then(postulant => {
             this.setState({postulantes:postulant})
-            console.log(postulant)
-
         })
-
         percentageData(data).then(course => {
-            this.setState({tematics:course})
+            this.setState({tematics:course});
         })
+        this.fillMatrix()
+    }
+
+    fillMatrix(){
+        console.log(this.state.postulantes.length)
+        for(var i=0; i<this.state.postulantes.length; i++) {
+            notas[i] = [];
+            for(var j=0; j<this.state.tematics.length; j++) {
+                notas[i][j] = {
+                    id:this.state.postulantes[i].id,
+                    theme:this.state.tematics[j].id,
+                    score:0
+                };
+                console.log(notas[i][j])
+            }
+        }
+        console.log(notas)
+    }
+
+    changeScore(e,fila,col){
+        if(notas.length <= 0){
+            this.fillMatrix()
+        }
+        notas[col][fila].score = e.target.value
+        console.log(notas[col][fila])
+    }
+
+    uploadScore(){
+        for(var i=0; i<this.state.postulantes.length; i++) {
+            for(var j=0; j<this.state.tematics.length; j++) {
+                let score = new FormData()
+                score.append('idPostulant', notas[i][j].id)
+                score.append('idtTheme', notas[i][j].theme)
+                score.append('score', notas[i][j].score)
+                console.log(score)
+                axios({
+                    method: 'post',
+                    url: 'api/labScore',
+                    data: score,
+                    headers: {'Content-Type': 'multipart/form-data' }
+                    }).then(response =>{
+                }) 
+                .catch(error => {
+                     console.log(error)
+                })
+            }
+        }
     }
 
     render(){
@@ -103,9 +151,39 @@ class Laboratory_scores extends Component{
                 </div>
 
                 <div className="form-group col-3 mt-5">
-                    <button type="button" class="col btn btn-info mt-2" onClick={() => this.getStudents()} >Generar lista</button>
+                    <button type="button" class="col btn btn-info mt-2" onClick={() => this.getStudents()} >seleccionar convocatoria</button>
                 </div>            
             </div>
+            <div className = "row">
+                <div className = "col"> 
+                    <label className="h2 font-weight-normal text-center p-1 bg-info text-white">postulante</label> 
+                    <div > {this.state.postulantes.map(postulant => (
+                        <div > {postulant.name} <br/> </div> 
+                    ))} 
+                    </div>
+                </div>
+                {this.state.tematics.map((temas,tema) => (
+                    <div className = "col"> 
+                        <label className="h2 font-weight-normal text-center p-1 bg-info text-white">{temas.theme} </label>
+                        <div > {this.state.postulantes.map((postulants,postulant) => (
+                            <div > 
+                                <input 
+                                type = "number"
+                                name = "score"
+                                min="0"
+                                max="100"
+                                onChange={e => this.changeScore(e,tema,postulant)}                
+                                /> <br/> 
+                            </div> 
+                            ))} 
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            <button type="button" className="col btn btn-info mt-2" onClick ={(e) => this.uploadScore()}>
+                subir notas 
+            </button>
         </div>
         )
     }
