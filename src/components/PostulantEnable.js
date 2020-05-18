@@ -157,7 +157,7 @@ export class PostulantEnable extends Component {
              }).then(response =>{
 
 
-                console.log("alvaro", "map");
+               
                 
               this.setState({req: response.data})
 

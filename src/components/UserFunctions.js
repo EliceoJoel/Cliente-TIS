@@ -246,7 +246,8 @@ export const getRol = () =>{
 
 export const saveAnnouncement = data => {
     return axios
-        .post('api/userAnnouncement', data, {
+   
+            .post('api/userAnnouncement', data, {
             headers: { 'Content-Type': 'application/json' }
         })
         .then(response => {
