@@ -284,3 +284,58 @@ export const registerPermission = newRegister => {
         })
 }
 
+export const auxiliary = id => {
+    return axios
+        .post('api/auxiliary', id, {
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => {
+            console.log(response)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+export const getStudentData = data => {
+    return axios
+        .post('api/studentsData', data, {
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => {
+            return response.data
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+export const  percentageData = (data) =>{
+    return axios
+        .post(
+            'api/percentageData',data,
+            {
+                headers: { 'Content-Type': 'application/json' }
+            }
+        )
+        .then(response => {
+            return response.data
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+
+export const getUserAnnouncements = (id) => {
+    return axios
+        .get('api/userAnnouncement/'+id, {
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => {
+            return response.data
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
