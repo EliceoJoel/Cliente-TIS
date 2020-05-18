@@ -127,6 +127,10 @@ export class PostulantEnable extends Component {
     }
     
     handleReq(e ){
+        this.setState({req:[]})
+        this.setState({ enableMessageState:'INHABILITADO'})
+        //this.listaDeChecks()
+       // this.gil(true)
         this.setState({allRequirementsCheckList:[]})
         this.setState({enableButton:false})
         this.setState({disableReasonInput:false})
@@ -152,6 +156,9 @@ export class PostulantEnable extends Component {
              headers: {'Content-Type': 'multipart/form-data' }
              }).then(response =>{
 
+
+                console.log("alvaro", "map");
+                
               this.setState({req: response.data})
 
              // console.log(this.state.req)
@@ -182,14 +189,14 @@ export class PostulantEnable extends Component {
                 // this.setState({allRequirementsCheckList:[]})
                 // this.setState({enableButton:false})
                  console.log("probando",this.state.req.length)
-                
+                 let idRegisterBook = this.state.found[0].id
                  let name =  this.state.found[0].names +" "+ this.state.found[0].first_surname +" " + this.state.found[0].second_surname
                  let auxiliary =  this.state.auxilisturaSeleccionada
                  let announcement =  this.state.found[0].announcement
                  let enable = this.state.enableButton
                  let reason = this.state.reason
                  let send = new FormData()
-
+                     send.append('id_book', idRegisterBook)
                      send.append('name', name )
                      send.append('auxiliary', auxiliary )
                      send.append('announcement', announcement )
@@ -208,6 +215,21 @@ export class PostulantEnable extends Component {
                      .catch(error => {
                          console.log(error)
                      })   
+                     let score = new FormData()
+                     score.append('id_postulant', idRegisterBook)
+                     score.append('score', 0)
+                     score.append('score_oral', 0)
+                     axios({
+                        method: 'post',
+                        url: 'api/add',
+                        data: score,
+                        headers: {'Content-Type': 'multipart/form-data' }
+                        }).then(response =>{
+                     }) 
+                     .catch(error => {
+                         console.log(error)
+                     })
+                    
                     
 
 
@@ -242,6 +264,7 @@ export class PostulantEnable extends Component {
 
         console.log("totallist", totalList);
         
+        // eslint-disable-next-line no-unused-vars
         for(let item in this.state.allRequirementsCheckList){
             count++
         }
@@ -260,16 +283,19 @@ export class PostulantEnable extends Component {
        
       }
 
+
+  
+
     render() {
         const {codSis, reason, disableReasonInput} = this.state
+       // const {codSis, reason, disableReasonInput} = this.state
         const { selectedOptionConv } = this.state
         //this.getPostulantEnable()
 
         //let lista = this.state.postulant.auxiliary
         //let found = this.state.found
        // let newlista = lista
-       // console.log(newlista);
-        
+       // console.log(newlista);   
         return (
            
             <div className="justify-content-center">
@@ -333,9 +359,10 @@ export class PostulantEnable extends Component {
                         </div>
                         
                         <br></br>
+                        
                         {this.state.showList?
                                 
-                        
+                      
                         <div className="col-md-12">  
                         
                         <div className="col-md-12">
