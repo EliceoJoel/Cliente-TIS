@@ -17,7 +17,7 @@ import PostulantEnable from './components/PostulantEnable'
 import RegisterDate from './components/RegisterDate'
 import ScoreSetup from './components/ScoreSetup'
 import AnnouncementSetup from './components/AnnouncementSetup'
-import Roles_permission from './components/roles_permission'
+import Roles_permission from './components/Roles_permission'
 
 
 class App extends Component {
