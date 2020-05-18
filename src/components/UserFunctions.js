@@ -245,17 +245,17 @@ export const getRol = () =>{
 }
 
 export const saveAnnouncement = data => {
-    //return axios
-    console.log(data);
-            // .post('api/userAnnouncement', data, {
-        //     headers: { 'Content-Type': 'application/json' }
-        // })
-        // .then(response => {
-        //     console.log(response)
-        // })
-        // .catch(err => {
-        //     console.log(err)
-        // })
+    return axios
+   
+            .post('api/userAnnouncement', data, {
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => {
+            console.log(response)
+        })
+        .catch(err => {
+            console.log(err)
+        })
 }
 
 export const registerRol = newRegister => {
