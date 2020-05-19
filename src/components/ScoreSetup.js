@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import Select from 'react-select'
-import { getAnnouncement } from './UserFunctions'
+import {  getProfile , getUserAnnouncements } from './UserFunctions'
+//getAnnouncement ,
 import axios from 'axios'
-var conv = []
-var auxSelect = []
-var themeSelect = []
+//var conv = []
+//var auxSelect = []
+//var themeSelect = []
 
 export class ScoreSetup extends Component {
 
@@ -27,7 +28,11 @@ export class ScoreSetup extends Component {
             selectedThemeOption_error: '',
             percentage_error: '',
             selectedOptionAux: null,
-            selectedOptionTheme: null
+            selectedOptionTheme: null ,
+            idUser: '' ,
+            conv: [] ,
+            auxSelect: [] , 
+            themeSelect: []
 
         }
     }
@@ -50,14 +55,44 @@ export class ScoreSetup extends Component {
 
     }
     componentDidMount() {
-        getAnnouncement().then(res => {
-            for (var i = 0; i < res.length; i++) {
-                var object = {}
-                object.value = res[i].id
-                object.label = res[i].name
-                conv[i] = object
-            }
+        // getAnnouncement().then(res => {
+        //     console.log(res);
+            
+        //     for (var i = 0; i < res.length; i++) {
+        //         var object = {}
+        //         object.value = res[i].id
+        //         object.label = res[i].name
+        //         conv[i] = object
+        //     }
+        // })
+        getProfile().then(res => {
+            console.log(res);
+            
+            this.setState({
+                idUser: res.user.id
+               
+                
+            }) 
+            console.log(this.state.idUser);
+            getUserAnnouncements(this.state.idUser).then(res=>{
+                console.log(res);
+                let announcement = []
+                for (var i = 0; i < res.length; i++) {
+                    var object = {}
+                    object.value = res[i].id
+                    object.label = res[i].name
+                    announcement[i] = object
+                }
+                this.setState({conv :announcement})
+            })
+
         })
+       
+        // console.log('hola' ,this.state.idUser);
+        // getUserAnnouncements(this.state.idUser).then(res=>{
+        //     console.log(res);
+            
+        // })
     }
 
     handleSearchAnnouncement() {
@@ -172,7 +207,7 @@ export class ScoreSetup extends Component {
             data: send2,
             headers: { 'Content-Type': 'multipart/form-data' }
         }).then(res => {
-
+            let AuxArray = []
             // this.found = response.data
             this.setState({ themeaux: res.data })
             console.log(this.state.themeaux)
@@ -180,9 +215,9 @@ export class ScoreSetup extends Component {
                 var object = {}
                 object.value = this.state.themeaux[i].id
                 object.label = this.state.themeaux[i].name
-                auxSelect[i] = object
+                AuxArray[i] = object
             }
-
+            this.setState({ auxSelect:AuxArray})
         })
             .catch(error => {
                 console.log(error)
@@ -194,7 +229,7 @@ export class ScoreSetup extends Component {
             data: send,
             headers: { 'Content-Type': 'multipart/form-data' }
         }).then(response => {
-
+            let ThemeArray =  []
             // this.found = response.data
             this.setState({ aux: response.data })
             console.log(this.state.aux)
@@ -202,9 +237,9 @@ export class ScoreSetup extends Component {
                 var object = {}
                 object.value = this.state.aux[i].id
                 object.label = this.state.aux[i].name
-                themeSelect[i] = object
+                ThemeArray[i] = object
             }
-
+            this.setState({ themeSelect:ThemeArray})
 
         })
             .catch(error => {
@@ -393,7 +428,7 @@ export class ScoreSetup extends Component {
         
     }
     render() {
-        const { selectedOptionConv, selectedOptionAux, selectedOptionTheme, porcentage } = this.state
+        const { selectedOptionConv, selectedOptionAux, selectedOptionTheme, porcentage ,conv , auxSelect , themeSelect} = this.state
         return (
 
             <div className="justify-content-center">
