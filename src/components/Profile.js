@@ -14,6 +14,8 @@ class Profile extends Component {
 
     componentDidMount() {
         getProfile().then(res => {
+            console.log(res);
+            
             this.setState({
                 fullname: res.user.fullname,
                 user: res.user.user,
