@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import {getAnnouncement} from './UserFunctions'
+import {getAnnouncement , getProfile , getUserAnnouncements} from './UserFunctions'
 import Select from 'react-select'
 import axios from 'axios'
 //import {getAnnouncementID} from './UserFunctions'
-var conv  = [] 
+//var conv  = [] 
 // var auxst = []
 //var liatura = []
 //var postulantenable = []
@@ -33,7 +33,8 @@ export class PostulantEnable extends Component {
              selectedOptionConv: null,
              selectedConvOption_error:'',
              codSis_error:'',
-             notfound_error:''
+             notfound_error:'' ,
+             conv: []
              
              
         }
@@ -46,15 +47,35 @@ export class PostulantEnable extends Component {
         this.setState({[e.target.name]: e.target.value })
     }
     componentDidMount() {
-        getAnnouncement().then(res => {
-            for (var i=0; i < res.length; i++) {
-                var object = {}
-                object.value = res[i].id
-                object.label = res[i].name
-                conv[i] = object
-              }
-        })
+        // getAnnouncement().then(res => {
+        //     for (var i=0; i < res.length; i++) {
+        //         var object = {}
+        //         object.value = res[i].id
+        //         object.label = res[i].name
+        //         conv[i] = object
+        //       }
+        // })
+        getProfile().then(res => {
+            console.log(res);
+            
+            this.setState({
+                idUser: res.user.id
+               
+                
+            }) 
+            console.log(this.state.idUser);
+            getUserAnnouncements(this.state.idUser).then(res=>{
+                let announcementArray = []
+                console.log(res);
+                for (var i = 0; i < res.length; i++) {
+                    var object = {}
+                    object.value = res[i].id
+                    object.label = res[i].name
+                    announcementArray[i] = object
+                } this.setState({conv: announcementArray})
+            })
 
+        })
         
         
     }
@@ -287,7 +308,7 @@ export class PostulantEnable extends Component {
   
 
     render() {
-        const {codSis, reason, disableReasonInput} = this.state
+        const {codSis, reason, disableReasonInput ,conv} = this.state
        // const {codSis, reason, disableReasonInput} = this.state
         const { selectedOptionConv } = this.state
         //this.getPostulantEnable()
