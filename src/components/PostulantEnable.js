@@ -34,7 +34,8 @@ export class PostulantEnable extends Component {
              selectedConvOption_error:'',
              codSis_error:'',
              notfound_error:'' ,
-             conv: []
+             conv: [] , 
+            
              
              
         }
@@ -149,6 +150,8 @@ export class PostulantEnable extends Component {
     
     handleReq(e ){
         this.setState({req:[]})
+       
+
         this.setState({ enableMessageState:'INHABILITADO'})
         //this.listaDeChecks()
        // this.gil(true)
@@ -180,11 +183,14 @@ export class PostulantEnable extends Component {
 
                
                 
-              this.setState({req: response.data})
+                 this.setState({req: response.data})
+                
 
+                // this.setState({isRequirementEmpty:false})
              // console.log(this.state.req)
           }) 
           .catch(error => {
+              
               console.log(error)
           }) 
     }
@@ -393,26 +399,26 @@ export class PostulantEnable extends Component {
                           
                               <div className="my-1" style={{border:"0.5px solid silver", width: "100%"}}></div>     
                         </div>  
+                               <div className="col-md-12">
+                           
+                           {this.state.req.map(enable =>
+                             <div key = {enable.id}>
+                                  <div className="container">
+                                      <div className="row row-cols-4">
+                                          <div className="col-md-8">                         
+                                            {enable.requirement} 
+                                          </div>
+                                           <div className="col-md-2 text-center">
+                                               <input type="checkbox"  onChange={(event)=>this.handleChange(event,enable)}></input>
+                                             
+                                           </div>
+                                          </div>
+                                          <div className="my-1" style={{border:"0.3px solid silver", width: "100%"}}></div>
+                                      </div>
+                                    
+                              </div>)}
+                           </div>                               
                              
-                              <div className="col-md-12">
-                        
-                              {this.state.req.map(enable =>
-                                <div key = {enable.id}>
-                                     <div className="container">
-                                         <div className="row row-cols-4">
-                                             <div className="col-md-8">                         
-                                               {enable.requirement} 
-                                             </div>
-                                              <div className="col-md-2 text-center">
-                                                  <input type="checkbox"  onChange={(event)=>this.handleChange(event,enable)}></input>
-                                                
-                                              </div>
-                                             </div>
-                                             <div className="my-1" style={{border:"0.3px solid silver", width: "100%"}}></div>
-                                         </div>
-                                       
-                                 </div>)}
-                              </div> 
                       
                       <br></br>
                       <div className="form-group col-md-12">
@@ -439,6 +445,11 @@ export class PostulantEnable extends Component {
                        </div>             
                         :null}
                     </div>  
+                    <div>
+                    <br></br>
+                    <br></br>
+                  
+                </div>
               </div>
               
                 
