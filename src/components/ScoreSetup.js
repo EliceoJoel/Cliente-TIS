@@ -32,7 +32,9 @@ export class ScoreSetup extends Component {
             idUser: '' ,
             conv: [] ,
             auxSelect: [] , 
-            themeSelect: []
+            themeSelect: [] , 
+            deleteWarning:'' ,
+            modifyWarning: ''
 
         }
     }
@@ -98,6 +100,7 @@ export class ScoreSetup extends Component {
     handleSearchAnnouncement() {
         this.setState({
             selectedConvOption_error: '',
+            deleteWarning: ''
 
         })
         if (this.validAnnouncement()) {
@@ -192,7 +195,10 @@ export class ScoreSetup extends Component {
         this.setState({
             selectedOptionAux: null,
             selectedOptionTheme: null,
-            porcentage: ''
+            porcentage: '',
+            deleteWarning: '' ,
+            modifyWarning:''
+
 
         })
         this.setState({ addpercentage: true })
@@ -253,6 +259,9 @@ export class ScoreSetup extends Component {
             selectedAuxOption_error: '',
             selectedThemeOption_error: '',
             percentage_error: '' ,
+            modifyWarning:'' ,
+            deleteWarning:'' ,
+            //porcentage: ''
             
 
         })
@@ -275,11 +284,15 @@ export class ScoreSetup extends Component {
                 console.log('a', response)
                 if (response.data === false) {
                     this.setState({ percentage_error: 'el digito excede el porcentaje' })
+                } else { 
+                    this.setState({ modifyWarning: 'Elemento Modificado con exito' })
+                    this.setState({ porcentage: '' })
+                
                 }
             })
                 .catch(error => {
                     console.log(error)
-                    
+                 
                 })
             // axios.get('/api/percentageAuxiliary')
             //     .then(response => {
@@ -366,7 +379,7 @@ export class ScoreSetup extends Component {
         else if (this.state.porcentage === '') {
             this.setState({ percentage_error: 'Campo Vacio' })
         }
-        else if (this.state.porcentage.length > 2 || isNaN(this.state.porcentage)) {
+        else if (this.state.porcentage.length > 2 || isNaN(this.state.porcentage )|| this.state.porcentage<1) {
             this.setState({ percentage_error: 'Porcentaje Incorrecto' })
         }
         else {
@@ -375,8 +388,14 @@ export class ScoreSetup extends Component {
 
     }
     handleRemoveElement(e){
+        this.setState({
+            deleteWarning: '',
+            modifyWarning:''
+
+        })
         
         console.log(e.id);
+         
         let idpercentage = e.id 
         let send = new FormData()
         send.append('id_percentage', idpercentage)
@@ -387,12 +406,13 @@ export class ScoreSetup extends Component {
             headers: { 'Content-Type': 'multipart/form-data' }
         }).then(res => {
             console.log(res);
-            
+           
         })
             .catch(error => {
                 console.log(error)
-
+          
             })
+             this.setState({deleteWarning:'se elimino el elemento con exito' })
             let idconv = this.state.selectedOptionConv.value
             let sendIdAnnouncement = new FormData()
             sendIdAnnouncement.append('id_announcement', idconv)
@@ -523,12 +543,14 @@ export class ScoreSetup extends Component {
                                         value={porcentage}
                                         onChange={this.onChange}
                                     />
+                                    
                                     <p style={{ color: "red" }}>{this.state.percentage_error}</p>
                                 </div>
 
                                 <div className="form-group col-md-12 ">
-                                    <button className="btn btn-outline-info" variant="warning" onClick={(e) => this.handleAddPorcentage(e)} >Agregar</button>
-
+                                    <button className="btn btn-outline-info" variant="warning" onClick={(e) => this.handleAddPorcentage(e)} >Agregar Cambio</button>
+                                    <p style={{ color: "red" }}>{this.state.deleteWarning}</p>
+                                      <p style={{ color: "green" }}>{this.state.modifyWarning}</p>
                                 </div>
                             </div>
 
@@ -567,6 +589,7 @@ export class ScoreSetup extends Component {
                                 <div className="col-md-2 text-center">
                                     <button className="btn btn-outline-info" variant="warning" onClick={(e) => this.handleRemoveElement(data)
                                     } >Eliminar</button>
+
 
                                 </div>
                                                     <br></br>
