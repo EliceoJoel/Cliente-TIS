@@ -2,8 +2,10 @@ import React, { Component } from 'react'
 import {getQualifiedPostulants} from './UserFunctions'
 import {getConfigMeritos} from './UserFunctions'
 
-var notas = []
-var configs = []
+let notasOne =[]
+let notasTwo = []
+let configsOne =[]
+let configsTwo = []
 
 class MeritosRegister extends Component {
   constructor() {
@@ -17,7 +19,9 @@ class MeritosRegister extends Component {
         showPostulants:false,
         showPostulantData:false,
         showTable:false,
-        total:0,
+        aprob:0.0,
+        gral:0.0,
+        total:0.0,
         errorNota:''
       }
       this.onSubmit = this.onSubmit.bind(this)      
@@ -30,14 +34,15 @@ class MeritosRegister extends Component {
   }
 
   filter(event){
-    notas = []
+    notasOne = []
+    notasTwo = []
     this.setState({
         showPostulants:true, 
         showPostulantData:false,
         showTable:false,
         errorNota:''
     })
-    var text = event.target.value
+    let text = event.target.value
     const data = this.state.postulantsBackup
     const newData = data.filter(function(item){
       const itemData = item.name.toUpperCase()
@@ -52,6 +57,8 @@ class MeritosRegister extends Component {
   }
 
   selectPostulant(postulant){
+    configsOne=[]
+    configsTwo=[]
     this.setState({
       textBuscar:postulant.name,
       auxiliary:postulant.auxiliary,
@@ -59,55 +66,94 @@ class MeritosRegister extends Component {
       showPostulantData:true,
       showPostulants:false,
     })
-    getConfigMeritos(postulant.announcement).then(res =>{
-      configs = res
+    getConfigMeritos(postulant.announcement).then(res =>{  
+      for(let i=0 ; i<res.length ; i++){
+        if(res[i].percentage>=30){
+          configsOne.push(res[i])
+        }else{
+          configsTwo.push(res[i])
+        }
+      }
       this.setState({showTable:true}, this.llenarNotasCero(res))
     })
   }
 
-  changeNota(event, config){
-    this.setState({errorNota:''})
-    var nota
-    if(event.target.value !== ''){
-       nota = parseInt(event.target.value, 10)
-    }else{
-      nota = 0
+  llenarNotasCero(res){
+    for(let i=0 ; i<res.length ; i++){
+      let object = {}
+      object.id = res[i].id
+      object.nota = 0
+      if(res[i].percentage>=30){
+       notasOne.push(object)
+      }else{
+        notasTwo.push(object)
+      }
     }
-    var posicion = notas.map(function(e) { return e.merito; }).indexOf(config.name);
-    notas[posicion].nota = nota
+  }
+
+  changeNota1(n, event){
+    let nota = 0.0
+    if(event.target.value !== ''){
+      nota = parseFloat(event.target.value)
+    }else{
+      nota = 0.0
+    }
+    nota = nota * (configsOne[n].percentage/100)
+    nota = 	this.redondear(nota,2)
+    if(n===0){
+      this.setState({aprob:nota})
+    }else{
+      this.setState({gral:nota})
+    }
+    notasOne[n].nota = nota
     this.updateTotal()
   }
 
-  llenarNotasCero(res){
-    for( var i=0 ; i<res.length ; i++){
-      var object = {}
-      object.merito = res[i].name
-      object.nota = 0
-      notas.push(object)
+  changeNota2(event, config){
+    this.setState({errorNota:''})
+    let nota = 0.0
+    if(event.target.value !== ''){
+       nota = parseFloat(event.target.value)
+    }else{
+      nota = 0.0
     }
+    let posicion = notasTwo.map(function(e) { return e.id; }).indexOf(config.id);
+    notasTwo[posicion].nota = nota
+    this.updateTotal()
   }
 
   updateTotal(){
-    var suma = 0
-    for(var i=0 ; i< notas.length ; i++){
-      suma = suma + notas[i].nota
+    let suma = 0.0
+    suma = suma + notasOne[0].nota + notasOne[1].nota 
+    for(let i=0 ; i< notasTwo.length ; i++){
+      suma = suma + notasTwo[i].nota
     }
+    suma = this.redondear(suma,2)
     if(suma>100){
       suma = null
-      this.setState({errorNota:"Se ha introducido incorrectamente una nota"})
+      this.setState({errorNota:"Se ha introducido incorrectamente una nota, la suma de notas sobrepasa los 100 pts"})
     }
     this.setState({total:suma})
+  }
+
+  redondear(numero, decimales) {
+    let numeroRegexp = new RegExp('\\d\\.(\\d){' + decimales + ',}');
+    if (numeroRegexp.test(numero)) {
+        return Number(numero.toFixed(decimales));
+    } else {
+        return Number(numero.toFixed(decimales)) === 0 ? 0 : numero;
+    }
   }
 
 
   onSubmit(e){
     e.preventDefault()
     console.log("entra")
-    var postulants = this.state.postulantsBackup
-    for( var i=0 ; i<postulants.length ; i++){
+    let postulants = this.state.postulantsBackup
+    for( let i=0 ; i<postulants.length ; i++){
       if(postulants[i].name === this.state.textBuscar){
         postulants.splice(i,1)
-        console.log("aqui")
+        i = postulants.length
       }
     }
   }
@@ -151,28 +197,66 @@ class MeritosRegister extends Component {
                 <table className="table table-bordered">
                   <thead>
                     <tr className="d-flex table-info">
-                      <th className="col-md-11">Descripción</th>
+                      <th className="col-md-10">Descripción</th>
+                      <th className="col-md-1">Promedio</th>
                       <th className="col-md-1">Nota</th>
                     </tr>
                   </thead>
                   <tbody>
-                  {configs.map(con =>(
+                  <tr className="d-flex">
+                      <td className="col-md-10">{configsOne[0].name} <b>{"  ("+configsOne[0].percentage+" puntos max.)" }</b>
+                      </td>
+                      <td className="col-md-1">
+                        <input
+                          className="form-control"
+                          type="number"
+                          step="0.01"
+                          min="0"
+                          max="100"
+                          required
+                          onChange={(event)=>this.changeNota1(0, event)}
+                        />
+                      </td>
+                      <td className="col-md-1">{this.state.aprob}</td>
+                    </tr>
+                    <tr className="d-flex">
+                      <td className="col-md-10">{configsOne[1].name} <b>{"  ("+configsOne[1].percentage+" puntos max.)" }</b>
+                      </td>
+                      <td className="col-md-1">
+                        <input
+                          className="form-control"
+                          type="number"
+                          step="0.01"
+                          min="0"
+                          max="100"
+                          required
+                          onChange={(event)=>this.changeNota1(1, event)}
+                        />
+                      </td>
+                      <td className="col-md-1">{this.state.gral}</td>
+                    </tr>
+                  {configsTwo.map(con =>(
                     <tr className="d-flex" key={con.id}>
-                        <td className="col-md-11">{con.name} <b>{"  ("+con.percentage+" puntos max.)" }</b></td>
-                        <td className="col-md-1">
-                          <input
-                            className="form-control"
-                            type="number"
-                            min="0"
-                            max={con.percentage}
-                            required
-                            onChange={(event)=>this.changeNota(event,con)}
-                          />
-                        </td>
+                      <td className="col-md-10">
+                        {con.name} <b>{"  ("+con.percentage+" puntos max.)" }</b><br />
+                        {con.description}
+                      </td>
+                      <td className="col-md-1"></td>
+                      <td className="col-md-1">
+                        <input
+                          className="form-control"
+                          type="number"
+                          step="0.01"
+                          min="0"
+                          max={con.percentage}
+                          required
+                          onChange={(event)=>this.changeNota2(event,con)}
+                        />
+                      </td>
                     </tr>
                     ))}
                     <tr className="d-flex">
-                      <td className="col-md-11"><b>Total (sobre 100 puntos) </b></td>
+                      <td className="col-md-11" colSpan="11"><b>Total (sobre 100 puntos) </b></td>
                       <td className="col-md-1 table-info text-center">
                         {this.state.total}
                       </td>

@@ -73,7 +73,7 @@ class Landing extends Component {
       <div>
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
           <a className="navbar-brand" href="/">
-            <img src="/storage/file/icon.svg" width="30" height="30" className="d-inline-block align-top mr-2" alt="" />
+            <img src="storage/logo.svg" width="30" height="30" className="d-inline-block align-top mr-2" alt="" />
               AConv
             </a>
           {localStorage.usertoken ? logoutLink : loginLink}
