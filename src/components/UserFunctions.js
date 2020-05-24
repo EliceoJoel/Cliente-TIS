@@ -342,3 +342,30 @@ export const getUserAnnouncements = (id) => {
             console.log(err)
         })
 }
+
+export const getQualifiedPostulants = () => {
+    return axios
+        .get('api/enablePostulant', {
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => {
+            return response.data
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+export const getConfigMeritos = (announcement) => {
+    return axios
+        .get('api/getMerit/'+announcement, {
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => {
+            //console.log(response.data)
+            return response.data
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}

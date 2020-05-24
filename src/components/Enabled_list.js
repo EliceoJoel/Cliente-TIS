@@ -99,7 +99,7 @@ class Enabled_list extends Component {
                         <p style={{color:"red"}}>{this.state.selectConvError}</p>
                     </div>
                     <div className="form-group col-4 mt-5">
-                        <button type="button" class="col btn btn-info mt-2" onClick={() => this.show()} >Generar lista</button>
+                        <button type="button" className="col btn btn-info mt-2" onClick={() => this.show()} >Generar lista</button>
                     </div>
                     <label className="col-md-3 text-info font-weight-bold" htmlFor="Nombre">Nombre del postulante</label>
                     <label className="col-md-3 text-info font-weight-bold" htmlFor="Nombre">Nombre de la auxiliatura</label>

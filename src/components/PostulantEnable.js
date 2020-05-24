@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {getAnnouncement , getProfile , getUserAnnouncements} from './UserFunctions'
+import {getProfile , getUserAnnouncements} from './UserFunctions'
 import Select from 'react-select'
 import axios from 'axios'
 //import {getAnnouncementID} from './UserFunctions'
