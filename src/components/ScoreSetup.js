@@ -34,7 +34,12 @@ export class ScoreSetup extends Component {
             auxSelect: [] , 
             themeSelect: [] , 
             deleteWarning:'' ,
-            modifyWarning: ''
+            modifyWarning: '' ,
+            meritSelect: [] , 
+            type:'Porcentaje' ,
+            number:'' ,
+            selectedOptionMerit: null ,
+            announcementFound:false
 
         }
     }
@@ -51,22 +56,18 @@ export class ScoreSetup extends Component {
         this.setState({ selectedOptionAux: selectedAuxOption })
 
     }
+    selectMeritSelectChange = selectedMeritOption => {
+
+        this.setState({ selectedOptionMerit: selectedMeritOption })
+
+    }
     selectThemeSelectChange = selectedThemeOption => {
 
         this.setState({ selectedOptionTheme: selectedThemeOption })
 
     }
     componentDidMount() {
-        // getAnnouncement().then(res => {
-        //     console.log(res);
-            
-        //     for (var i = 0; i < res.length; i++) {
-        //         var object = {}
-        //         object.value = res[i].id
-        //         object.label = res[i].name
-        //         conv[i] = object
-        //     }
-        // })
+    
         getProfile().then(res => {
             console.log(res);
             
@@ -90,11 +91,7 @@ export class ScoreSetup extends Component {
 
         })
        
-        // console.log('hola' ,this.state.idUser);
-        // getUserAnnouncements(this.state.idUser).then(res=>{
-        //     console.log(res);
-            
-        // })
+      
     }
 
     handleSearchAnnouncement() {
@@ -108,6 +105,7 @@ export class ScoreSetup extends Component {
              this.setState({auxiliarylist:false})
             this.setState({ addpercentage: false })
             this.setState({ announcementlab: false })
+            this.setState({addMeritPercentage:false}) 
             let conv = this.state.selectedOptionConv.label
             console.log(conv);
             let send = new FormData()
@@ -118,7 +116,8 @@ export class ScoreSetup extends Component {
                 data: send,
                 headers: { 'Content-Type': 'multipart/form-data' }
             }).then(response => {
-
+                this.setState({announcementFound:true}) 
+                  this.setState({announcementFound:true}) 
                 // this.found = response.data
                 this.setState({ found: response.data })
                 console.log(this.state.found)
@@ -165,26 +164,7 @@ export class ScoreSetup extends Component {
 
                 })
 
-            //      axios.get('/api/percentageAuxiliary')
-            //      .then(response => {
-            //         this.setState({tabla : response.data});
-            //         console.log(this.state.tabla);
-            //         this.state.tabla.sort(function (a, b) {
-            //            if (a.auxiliary > b.auxiliary) {
-            //              return 1;
-            //            }
-            //            if (a.auxiliary < b.auxiliary) {
-            //              return -1;
-            //            }
-            //            return 0;
-            //          });
-
-            //          console.log(this.state.tabla);
-            //          this.setState({tablaOrdenada : this.state.tabla});
-            //     })
-            //        .catch(e => {
-            //          console.log(e);
-            //  })
+        
         }
 
 
@@ -202,6 +182,7 @@ export class ScoreSetup extends Component {
 
         })
         this.setState({ addpercentage: true })
+        this.setState({addMeritPercentage: false })
         e.preventDefault()
         let send = new FormData()
         let send2 = new FormData()
@@ -294,26 +275,7 @@ export class ScoreSetup extends Component {
                     console.log(error)
                  
                 })
-            // axios.get('/api/percentageAuxiliary')
-            //     .then(response => {
-            //         this.setState({ tabla: response.data });
-            //         console.log(this.state.tabla);
-            //         this.state.tabla.sort(function (a, b) {
-            //             if (a.auxiliary > b.auxiliary) {
-            //                 return 1;
-            //             }
-            //             if (a.auxiliary < b.auxiliary) {
-            //                 return -1;
-            //             }
-            //             return 0;
-            //         });
-
-            //         console.log(this.state.tabla);
-            //         this.setState({ tablaOrdenada: this.state.tabla });
-            //     })
-            //     .catch(e => {
-            //         console.log(e);
-            //     })
+       
             let idconv = this.state.selectedOptionConv.value
             let sendIdAnnouncement = new FormData()
             sendIdAnnouncement.append('id_announcement', idconv)
@@ -348,16 +310,64 @@ export class ScoreSetup extends Component {
         }
 
     }
-    handleMeritScore() {
-        return (
-            <div>
-                <h1>Hoal prueba</h1>
-                <h1>Hoal prueba</h1>
-                <h1>Hoal prueba</h1>
-                <h1>Hoal prueba</h1>
-                <label>dsgafd</label>
-            </div>
-        )
+    handleMeritScore(e) {
+        this.setState({ addpercentage: false })
+        this.setState({addMeritPercentage: true })
+        e.preventDefault()
+        let send = new FormData()
+        send.append('id_announcement', this.state.found[0].id)
+        axios({
+            method: 'post',
+            url: 'api/meritSearch',
+            data: send,
+            headers: { 'Content-Type': 'multipart/form-data' }
+        }).then(res => {
+            let meritArray = []
+            
+            this.setState({ merit: res.data })
+            console.log(this.state.merit)
+            for (var i = 0; i < this.state.merit.length; i++) {
+                var object = {}
+                object.value = this.state.merit[i].id
+                object.label = this.state.merit[i].name
+                meritArray[i] = object
+            }
+            this.setState({ meritSelect:meritArray})
+        })
+            .catch(error => {
+                console.log(error)
+
+            })
+    }
+    handleAddMeritPercentage(){
+        this.setState({
+          })
+       
+          
+            let merit = this.state.selectedOptionMerit.label
+            let type = this.state.type
+            let number = this.state.number
+            let send = new FormData()
+            send.append('id_announcement', this.state.found[0].id)
+            send.append('name_announcement', this.state.found[0].name)
+            send.append('name', merit)
+            send.append('type', type)
+            send.append('number', number)
+        
+            axios({
+                method: 'post',
+                url: 'api/meritUpdate',
+                data: send,
+                headers: { 'Content-Type': 'multipart/form-data' }
+            }).then(response => {
+                console.log(response)
+            })
+                .catch(error => {
+                    console.log(error)
+                 
+                })
+       
+         
     }
     validAnnouncement() {
 
@@ -448,7 +458,8 @@ export class ScoreSetup extends Component {
         
     }
     render() {
-        const { selectedOptionConv, selectedOptionAux, selectedOptionTheme, porcentage ,conv , auxSelect , themeSelect} = this.state
+        const { selectedOptionConv, selectedOptionAux, selectedOptionTheme, porcentage ,conv , auxSelect ,
+             themeSelect , meritSelect , selectedOptionMerit ,type, number} = this.state
         return (
 
             <div className="justify-content-center">
@@ -491,8 +502,9 @@ export class ScoreSetup extends Component {
                         )}
                     </div>
                     <div className="col-md-12">
-                        {/* <button className="btn btn-outline-info" variant="warning" onClick ={(AuxEvent) => this.handleMeritScore(AuxEvent)} >CONFIGURAR MERITO</button> */}
-
+                    {this.state.announcementFound ?
+                        <button className="btn btn-outline-info" variant="warning" onClick ={(AuxEvent) => this.handleMeritScore(AuxEvent)} >CONFIGURAR MERITO</button>
+                        : null}
                         {this.state.announcementlab ?
                             <button className="btn btn-outline-info mx-3" variant="warning" onClick={(AuxEvent) => this.handleKnowledge(AuxEvent)} >CONFIGURAR CONOCIMIENTO</button>
                             : null}
@@ -555,6 +567,69 @@ export class ScoreSetup extends Component {
                             </div>
 
                             : null}
+
+{this.state.addMeritPercentage ?
+
+
+
+<div className="row">
+    <br></br>
+    <div className="form-group col-md-6">
+        <br></br>
+        <label htmlFor="aux">Seleccione un Merito</label>
+        <Select
+            name="merit"
+            options={meritSelect}
+            className="basic-multi-select "
+            classNamePrefix="select"
+            placeholder=""
+            value={selectedOptionMerit}
+            onChange={this.selectMeritSelectChange}
+        />
+        <p style={{ color: "red" }}>{this.state.selectedAuxOption_error}</p>
+    </div>
+    <div className="form-group col-md-3">
+        <br></br>
+                        <label htmlFor="Tipo">Tipo</label>
+                        
+                        <select  
+                                className="form-control" 
+                                
+                                name="type" 
+                               // placeholder=""
+                                 value={type}
+                                 onChange = {this.onChange}>
+                            <option>Porcentaje</option>
+                            <option>Nro Max</option>
+                           
+
+
+                        </select>
+                        </div>
+    <div className="form-group col-md-3">
+        <br></br>
+        <label htmlFor="porcentaje">Valor</label>
+
+        <input
+            className="form-control"
+            placeholder="Ejemplo:1-100"
+            type="number"
+            name="number"
+            value={number}
+            onChange={this.onChange}
+        />
+        
+        <p style={{ color: "red" }}>{this.state.percentage_error}</p>
+    </div>
+
+    <div className="form-group col-md-12 ">
+        <button className="btn btn-outline-info" variant="warning" onClick={(e) => this.handleAddMeritPercentage(e)} >Agregar Cambio</button>
+        <p style={{ color: "red" }}>{this.state.deleteWarning}</p>
+          <p style={{ color: "green" }}>{this.state.modifyWarning}</p>
+    </div>
+</div>
+
+: null}
                         {this.state.auxiliarylist ?
                             <div>
 

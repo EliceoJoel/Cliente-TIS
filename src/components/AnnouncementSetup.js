@@ -15,7 +15,9 @@ export class AnnouncementSetup extends Component {
             item:'',
             auxiliary:'',
             tematica:'',
-            showData:false
+            showData:false  ,
+            nameMerit:'',
+            descriptionMerit:''
         }
     }
     onChangeAux =  (e) =>{
@@ -121,9 +123,30 @@ export class AnnouncementSetup extends Component {
                  console.log(error)
              })
     }
+    handleMerit(e){
+        e.preventDefault()
+        let name= this.state.nameMerit
+        let description= this.state.descriptionMerit
+            let send = new FormData()
+            send.append('id_announcement', this.state.found[0].id)
+            send.append('name_announcement', this.state.found[0].name)
+            send.append('name',name)
+            send.append('description',description)
+            axios({
+                method: 'post',
+                url: 'api/merit',
+                data: send,
+                headers: {'Content-Type': 'multipart/form-data' }
+                }).then(response =>{
+                 console.log(response)
+             }) 
+             .catch(error => {
+                 console.log(error)
+             })
+    }
     
     render() {
-        const { selectedOptionConv,requirement,item,auxiliary,tematica } = this.state
+        const { selectedOptionConv,requirement,item,auxiliary,tematica , nameMerit , descriptionMerit} = this.state
         return (
            
              <div className="justify-content-center">
@@ -239,6 +262,41 @@ export class AnnouncementSetup extends Component {
                       <div className="form-group col-md-12 ">    
                       <button className="btn btn-outline-info" variant="warning" onClick ={(e) => this.handleTheme(e)} >Agregar</button>
                  
+                    </div>
+                    <h3 className="h5 col-md-12 my-4 font-weight-normal text-center">
+                            Datos de Tematica</h3>
+                            
+                      <div className="form-group col-md-4">
+                        <label htmlFor="Nombre">Nombre</label>
+               
+                       <input    
+                           className="form-control"   
+                           placeholder="Ingrese un nombre"                   
+                             type = "text"
+                          name = "nameMerit"
+                          value = {nameMerit}  
+                           onChange = {this.onChangeAux}                     
+                       />
+                           <p style={{color:"red"}}>{this.state.item_error}</p>
+                        </div>
+                        <div className="form-group col-md-4">
+                        <label htmlFor="Nombre">Descripcion</label>
+                          <input    
+                           className="form-control" 
+                           placeholder="Ingrese un nombre"                     
+                            type = "text"
+                            name = "descriptionMerit"
+                            value = {descriptionMerit}  
+                            onChange = {this.onChangeAux}                     
+                      />
+                         <p style={{color:"red"}}>{this.state.auxiliary_error}</p>
+                      </div>
+                      
+                     
+                      <div className="form-group col-md-12 ">    
+                      <button className="btn btn-outline-info" variant="warning" onClick ={(AuxEvent) => this.handleMerit(AuxEvent)} >Agregar</button>
+                      {/* <button   className="btn btn-outline-info mx-3" variant="warning"onClick ={(AuxEvent) => this.handleRemove(AuxEvent)} >Remover Ultimo Ingresado</button> */}
+                     <p style={{color:"red"}}>{this.state.array_error}</p>
                     </div>
                             
                    </div>
