@@ -15,7 +15,7 @@ var ArrayAuxi = []
             year: '' ,
             year_error: '',
             type: 'Docencia', 
-            departament: 'Sistemas',
+            departament: 'Departamento de Sistemas-Informatica',
             selectedOption: null,
             selectedOption_error:'',
             array_error:'' ,

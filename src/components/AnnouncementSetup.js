@@ -129,6 +129,7 @@ export class AnnouncementSetup extends Component {
         let description= this.state.descriptionMerit
             let send = new FormData()
             send.append('id_announcement', this.state.found[0].id)
+            send.append('name_announcement', this.state.found[0].name)
             send.append('name',name)
             send.append('description',description)
             axios({
