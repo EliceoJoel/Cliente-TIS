@@ -369,3 +369,19 @@ export const getConfigMeritos = (announcement) => {
             console.log(err)
         })
 }
+
+export const  registrarNotaMerito = (data) =>{
+    return axios
+        .post(
+            'api/meritosRegister',data,
+            {
+                headers: { 'Content-Type': 'application/json' }
+            }
+        )
+        .then(response => {
+            return response.data
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}

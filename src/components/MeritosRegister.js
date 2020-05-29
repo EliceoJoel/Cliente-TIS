@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import {getQualifiedPostulants} from './UserFunctions'
 import {getConfigMeritos} from './UserFunctions'
+import {registrarNotaMerito} from './UserFunctions'
 
 let notasOne =[]
 let notasTwo = []
@@ -13,6 +14,7 @@ class MeritosRegister extends Component {
       this.state = {
         postulants:[],
         postulantsBackup:[],
+        idPostulant:'',
         textBuscar:'',
         auxiliary:'',
         announcement:'',
@@ -22,7 +24,8 @@ class MeritosRegister extends Component {
         aprob:0.0,
         gral:0.0,
         total:0.0,
-        errorNota:''
+        errorNota:'', 
+        success:''
       }
       this.onSubmit = this.onSubmit.bind(this)      
   }
@@ -40,7 +43,8 @@ class MeritosRegister extends Component {
         showPostulants:true, 
         showPostulantData:false,
         showTable:false,
-        errorNota:''
+        errorNota:'',
+        success:''
     })
     let text = event.target.value
     const data = this.state.postulantsBackup
@@ -60,6 +64,7 @@ class MeritosRegister extends Component {
     configsOne=[]
     configsTwo=[]
     this.setState({
+      idPostulant:postulant.id,
       textBuscar:postulant.name,
       auxiliary:postulant.auxiliary,
       announcement:postulant.announcement,
@@ -92,6 +97,7 @@ class MeritosRegister extends Component {
   }
 
   changeNota1(n, event){
+    this.setState({errorNota:''})
     let nota = 0.0
     if(event.target.value !== ''){
       nota = parseFloat(event.target.value)
@@ -148,7 +154,6 @@ class MeritosRegister extends Component {
 
   onSubmit(e){
     e.preventDefault()
-    console.log("entra")
     let postulants = this.state.postulantsBackup
     for( let i=0 ; i<postulants.length ; i++){
       if(postulants[i].name === this.state.textBuscar){
@@ -156,6 +161,29 @@ class MeritosRegister extends Component {
         i = postulants.length
       }
     }
+    this.registrar()
+  }
+
+  async registrar(){
+    const notas = notasOne.concat(notasTwo);
+    for(let i=0 ; i<notas.length ; i++){
+      const newRegister ={
+        id_postulant : this.state.idPostulant,
+        id_merito : notas[i].id,
+        nota_merito: notas[i].nota
+      }
+
+      await registrarNotaMerito(newRegister).catch
+    }
+    this.setState({
+      showPostulants:false,
+      showPostulantData:false,
+      showTable:false,
+      success:"Registro de notas exitoso",
+      textBuscar:"",
+      aprob:0.0,
+      gral:0.0
+    })
   }
 
   render() {
@@ -172,6 +200,7 @@ class MeritosRegister extends Component {
                 placeholder="Ingrese el nombre del postulante"
                 onChange={(text) => this.filter(text)}
               />
+              <p style={{color:"green"}} className="text-center mt-4"><b>{this.state.success}</b></p>
             </div>
             {this.state.showPostulants?
               <div className="container mt-3 mb-4">
