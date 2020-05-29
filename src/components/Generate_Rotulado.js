@@ -200,12 +200,12 @@ class Register extends Component {
                 phone: this.state.phone,
                 ci: this.state.ci,
                 sis_code: this.state.sis_code,
-                announcement: this.state.selectedConvOption.label,
+                announcement: this.state.selectedConvOption.value,
                 auxiliary:this.getAuxs()
             }
 
             registerP(newPostulant).then(res => {
-               this.props.history.push(`/Generate_Rotulado`)
+               this.props.history.push(`/Generar.rotulado`)
             })
 
             //clear selected

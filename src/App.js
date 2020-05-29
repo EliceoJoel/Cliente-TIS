@@ -19,6 +19,7 @@ import ScoreSetup from './components/ScoreSetup'
 import AnnouncementSetup from './components/AnnouncementSetup'
 import Laboratory_scores from './components/laboratory_scores'
 import Roles_permission from './components/Roles_permission'
+import MeritosRegister from './components/MeritosRegister'
 
 class App extends Component {
   render() { 
@@ -44,6 +45,7 @@ class App extends Component {
             <Route exact path="/Configuracion.convocatoria" component={AnnouncementSetup} />
             <Route exact path="/Registro.de.rol" component={Roles_permission} />
             <Route exact path="/Registro.de.notas.laboratorio" component={Laboratory_scores} />
+            <Route exact path="/Registro.de.notas.de.merito" component={MeritosRegister} />
           </div>
         
         </div>
