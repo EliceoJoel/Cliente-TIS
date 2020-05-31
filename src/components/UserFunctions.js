@@ -385,3 +385,33 @@ export const  registrarNotaMerito = (data) =>{
             console.log(err)
         })
 }
+
+export const  notaMerito = (data) =>{
+    return axios
+        .post(
+            'api/notaMeritos',data,
+            {
+                headers: { 'Content-Type': 'application/json' }
+            }
+        )
+        .then(response => {
+            return response.data
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+export const getNotasMerito = () => {
+    return axios
+        .get('api/obtenerNotasMerito', {
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => {
+            //console.log(response.data)
+            return response.data
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}

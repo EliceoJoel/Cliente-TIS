@@ -10,10 +10,9 @@ class Landing extends Component {
       this.state = {
           items:[]
       }
-      this.loadLinks()
   }
 
-  loadLinks() {
+  componentDidMount() {
     if(localStorage.usertoken){
       getProfile().then(res => {
         getPermissions(res.user.idRol).then(permissions =>{

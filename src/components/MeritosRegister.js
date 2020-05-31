@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import {getQualifiedPostulants} from './UserFunctions'
 import {getConfigMeritos} from './UserFunctions'
 import {registrarNotaMerito} from './UserFunctions'
+import {notaMerito} from './UserFunctions'
 
 let notasOne =[]
 let notasTwo = []
@@ -173,8 +174,13 @@ class MeritosRegister extends Component {
         nota_merito: notas[i].nota
       }
 
-      await registrarNotaMerito(newRegister).catch
+      await registrarNotaMerito(newRegister)
     }
+    const data = {
+      notaMerito: this.state.total,
+      idPostulant: this.state.idPostulant
+    }
+    notaMerito(data)
     this.setState({
       showPostulants:false,
       showPostulantData:false,
