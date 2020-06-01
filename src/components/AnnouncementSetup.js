@@ -132,6 +132,7 @@ export class AnnouncementSetup extends Component {
             send.append('name_announcement', this.state.found[0].name)
             send.append('name',name)
             send.append('description',description)
+            send.append('number', 0)
             axios({
                 method: 'post',
                 url: 'api/merit',
