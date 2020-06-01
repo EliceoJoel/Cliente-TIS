@@ -34,7 +34,7 @@ export class PostulantEnable extends Component {
              selectedConvOption_error:'',
              codSis_error:'',
              notfound_error:'' ,
-             conv: [] , 
+             //conv: [] , 
             
              
              
