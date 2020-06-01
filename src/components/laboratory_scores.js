@@ -162,7 +162,7 @@ class Laboratory_scores extends Component{
             </div>
             <div className = "row">
                 <div className = "col"> 
-                    <label className="h2 font-weight-normal text-center p-1 bg-info text-white">postulante</label> 
+                    <label className="h2 font-weight-normal text-center p-1  text-primary">postulante</label> 
                     <div > {this.state.postulantes.map(postulant => (
                         <div > {postulant.name} <br/> </div> 
                     ))} 
@@ -170,7 +170,7 @@ class Laboratory_scores extends Component{
                 </div>
                 {this.state.tematics.map((temas,tema) => (
                     <div className = "col"> 
-                        <label className="h2 font-weight-normal text-center p-1 bg-info text-white">{temas.theme} </label>
+                        <label className="h2 font-weight-normal text-center p-1 text-primary">{temas.theme} </label>
                         <div > {this.state.postulantes.map((postulants,postulant) => (
                             <div > 
                                 <input 
