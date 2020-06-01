@@ -21,7 +21,7 @@ class NotasMerito extends Component {
     //fill announcement
     componentDidMount() {
         getAnnouncement().then(res => {
-            for (var i=0; i < res.length; i++) {
+            for (var i=0; i < res.length; i++) { 
                 var object = {}
                 object.value = res[i].id
                 object.label = res[i].name
