@@ -24,6 +24,7 @@ class Register extends Component {
         }
 
         this.onChange = this.onChange.bind(this)
+        this.register = this.register.bind(this)
     }
 
     componentDidMount() {
@@ -49,7 +50,12 @@ class Register extends Component {
     onChange (e) {
         this.setState({ [e.target.name]: e.target.value })
     }
-    register() {
+    register(e) {
+        e.preventDefault()
+        console.log(this.state.first_name + ' ' + this.state.last_name)
+        console.log(this.state.user)
+        console.log(this.state.password)
+        console.log(this.state.rol.id)
         var newUser = {
             fullname: this.state.first_name + ' ' + this.state.last_name,
             user: this.state.user,
@@ -77,7 +83,7 @@ class Register extends Component {
             <h1 className="h3 mb-3 font-weight-normal text-center">
                         Registro de usuarios
             </h1>
-                <form>
+                <form onSubmit={this.register}>
                     <div className="row">
                         <div className="form-group col-md-6">
                             <label htmlFor="name">Nombres</label>
@@ -127,52 +133,52 @@ class Register extends Component {
                             />
                         </div>
                     </div>
-                <div className="row">
-                    <div className="form-group col-md-6 text-center">
-                        <label htmlFor="Nombre">Selecciona una convocatoria</label>
-                        <Select
-                        name="conv"
-                        options={conv}
-                        onChange={(e) => this.setState({convocatoria_temp:e})}
-                        placeholder=""
-                        className="basic-select"
-                        classNamePrefix="select"
-                        />
-                        <br/>
-                        {this.state.convocatoria.map( convocatoria => (
-                            <h5 htmlFor="Nombre">{convocatoria.label}</h5>
-                    ))}
+                    <div className="row">
+                        <div className="form-group col-md-6 text-center">
+                            <label htmlFor="Nombre">Selecciona una convocatoria</label>
+                            <Select
+                            name="conv"
+                            options={conv}
+                            onChange={(e) => this.setState({convocatoria_temp:e})}
+                            placeholder=""
+                            className="basic-select"
+                            classNamePrefix="select"
+                            />
+                            <br/>
+                            {this.state.convocatoria.map( convocatoria => (
+                                <h5 htmlFor="Nombre">{convocatoria.label}</h5>
+                        ))}
+                        </div>
+    
+                        <div className="form-group col-md-6 text-center">
+                            <label htmlFor="Nombre">Selecciona un rol</label>
+                            <Select
+                            name="rol"
+                            options={rol}
+                            onChange={(e) => this.setState({rol_temp:e})}
+                            placeholder=""
+                            className="basic-select"
+                            classNamePrefix="select"
+                            />
+                            
+                            <h5 htmlFor="Nombre">{this.state.rol.label}</h5>
+                        </div>
                     </div>
-
-                    <div className="form-group col-md-6 text-center">
-                        <label htmlFor="Nombre">Selecciona un rol</label>
-                        <Select
-                        name="rol"
-                        options={rol}
-                        onChange={(e) => this.setState({rol_temp:e})}
-                        placeholder=""
-                        className="basic-select"
-                        classNamePrefix="select"
-                        />
-                        
-                        <h5 htmlFor="Nombre">{this.state.rol.label}</h5>
+    
+                    <div className="row">
+                        <div className="form-group col-md-6">
+                            <button type="button" className="col btn btn-info mt-2" onClick={() => this.selectConv()}>seleccionar convocatoria</button>
+                        </div>
+                        <div className="form-group col-md-6">
+                            <button type="button" className="col btn btn-info mt-2" onClick={() => this.selectRol()}>seleccionar rol</button>
+                        </div>
                     </div>
-                </div>
-
-                <div className="row">
-                    <div className="form-group col-md-6">
-                        <button type="button" class="col btn btn-info mt-2" onClick={() => this.selectConv()}>seleccionar convocatoria</button>
-                    </div>
-                    <div className="form-group col-md-6">
-                        <button type="button" class="col btn btn-info mt-2" onClick={() => this.selectRol()}>seleccionar rol</button>
-                    </div>
-                </div>
-                <button
-                        className="btn btn-lg btn-info btn-block"
-                        onClick = {() => this.register()}
-                    >
-                        Registrar
-                </button>
+                    <button
+                            className="btn btn-lg btn-info btn-block"
+                            type= "submit"
+                        >
+                            Registrar
+                    </button>
                 </form>
             </div>
         )
