@@ -36,8 +36,8 @@ class configure_user extends Component{
     }
     componentDidMount() {
       getAllUsers().then(res => {
-        let user = {};
         for(let i=0; i<res.length; i++){
+          let user = {};
           user.id = res[i].id
           user.label = res[i].fullname
           users[i]= user
