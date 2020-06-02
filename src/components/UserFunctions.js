@@ -415,3 +415,58 @@ export const getNotasMerito = () => {
             console.log(err)
         })
 }
+
+export const getAllUsers = () =>{
+    //console.log(id);
+    return axios
+       
+        
+        .get('api/AllUsers', {
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => {
+            return response.data
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+export const getAux = id => {
+    return axios
+        .get('api/getAux/' + id, {
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => {
+            return response
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+export const getTheme = aux => {
+    return axios
+        .post('api/getTheme', aux, {
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => {
+            return response
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+export const getFinalScores = (data) => {
+    return axios
+        .post('api/finalScores', data, {
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => {
+            return response
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
