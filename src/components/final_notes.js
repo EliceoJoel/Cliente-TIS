@@ -2,18 +2,22 @@ import React, { Component } from 'react'
 import Select from 'react-select'
 import {getAnnouncement} from './UserFunctions'
 import {getAux} from './UserFunctions'
+import {getFinalScores} from './UserFunctions'
 
-
+ var conv = []
+ var aux = []
 class final_notes extends Component {
     constructor() {
         super()
-        this.conv = [];
-        this.aux =[];
+        this.student = [];
+        this.conv = null;
         this.state = {
             selectConv:null,
             selectConvError:"",
             showList:false,
             selectedAux:null,
+            aux:[],
+            students:(<div></div>),
         }
 
         this.selectConvChange = this.selectConvChange.bind(this)
@@ -23,31 +27,17 @@ class final_notes extends Component {
     componentDidMount() {
         this.conv = []
         getAnnouncement().then(res => {
+            console.log(res)
             for (var i=0; i < res.length; i++) {
                 var object = {}
-                object.value = res[i].id
+                object.id = res[i].id
                 object.label = res[i].name
-                this.conv[i] = object
+                conv[i] = object
               }
+              console.log(this.conv)
         })
     }
 
-    fillAux(){
-        this.aux =[]
-        getAux(this.state.selectConv.id).then(res =>{
-          let a = res.data
-          for(let i=0; i<a.length;i++){
-            let object ={}
-            object.id = a[i].id
-            object.label = a[i].name
-            object.conv = a[i].id_announcement
-            this.aux[i] = object
-          }
-          console.log(this.aux)
-        }).catch(err => {
-          console.log(err)
-      })
-      }
 
 
     selectConvChange = selectConv =>{
@@ -55,9 +45,37 @@ class final_notes extends Component {
         this.setState({selectConv}, ()=>this.fillPostulant())
     }
 
+    setup(e){
+        let data = {"announcement":e.label}
+        console.log(data)
+        getFinalScores(data).then(res =>{
+          let a = res.data
+          console.log(a)
+          for(let i=0; i<a.length;i++){
+            let object ={}
+            object.id = a[i].idPostulant
+            object.name = a[i].name
+            object.sum = a[i].sum
+            this.student[i] = object
+        }
+          console.log(this.student) 
+        }).catch(err => {
+          console.log(err)
+      })
+      }
+
+      scores(){
+        this.setState({students:this.student.map(student =>(
+            <div key={student.id.toString()} className="row">
+                <div className="col">{student.name}</div>
+                <div className="col">{student.id}</div>
+                <div className="col">{student.sum}</div>
+            </div>
+        ))})
+      }
+
 
     render() {
-
         return(<div>
             <h3>calificacion de conocimientos final</h3>
             <div className="row">
@@ -65,8 +83,8 @@ class final_notes extends Component {
                     <label htmlFor="Nombre">Selecciona una convocatoria</label>
                     <Select
                       name="conv"
-                      options={this.conv}
-                      onChange={(e) => this.setState({selectedConv:e})}
+                      options={conv}
+                      onChange={(e) => this.setup(e)}
                       placeholder=""
                       className="basic-select"
                       classNamePrefix="select"
@@ -74,28 +92,20 @@ class final_notes extends Component {
                     <p style={{color:"red"}}>{this.state.selectConvError}</p>
                     
                 </div>
-
                 <div className="form-group col-3 mt-5">
-                    <button type="button" class="col btn btn-info mt-2" onClick={() => this.fillAuxi()} >seleccionar convocatoria</button>
+                    <button type="button" class="col btn btn-info mt-2" onClick={() => this.scores()} >Generar lista</button>
                 </div>
-
-                <div className="form-group col-8 my-4">
-                    <label htmlFor="Nombre">Selecciona una auxiliatura</label>
-                    <Select
-                      name="conv"
-                      options={this.aux}
-                      onChange={(e) => this.setState({selectedAux:e.label})}
-                      placeholder=""
-                      className="basic-select"
-                      classNamePrefix="select"
-                    />
-                    <p style={{color:"red"}}>{this.state.selectAuxError}</p>
-                </div>
-
-                <div className="form-group col-3 mt-5">
-                    <button type="button" class="col btn btn-info mt-2" onClick={() => this.getStudents()} >Generar lista</button>
-                </div>            
+                <br/>
+                <br/>        
             </div>
+            <div className="row">
+                <div className="col">nombre</div>
+                <div className="col">id</div>
+                <div className="col">nota promedio</div>
+            </div>
+            <div>
+                {this.state.students}
+            </div>  
         </div>)
     }
 }

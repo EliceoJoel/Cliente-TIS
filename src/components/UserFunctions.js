@@ -457,3 +457,16 @@ export const getTheme = aux => {
             console.log(err)
         })
 }
+
+export const getFinalScores = (data) => {
+    return axios
+        .post('api/finalScores', data, {
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => {
+            return response
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}

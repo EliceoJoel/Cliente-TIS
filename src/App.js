@@ -22,6 +22,8 @@ import Roles_permission from './components/roles_permission'
 import MeritosRegister from './components/MeritosRegister'
 import NotasMerito from './components/NotasMerito'
 import Configure_user from './components/configure_user'
+import Final_notes from './components/final_notes'
+
 
 class App extends Component {
   render() { 
@@ -50,6 +52,8 @@ class App extends Component {
             <Route exact path="/Registro.de.notas.de.merito" component={MeritosRegister} />
             <Route exact path="/Notas.de.merito" component={NotasMerito} />
             <Route exact path="/Configuracion.usuario" component={Configure_user} />
+            <Route exact path="/Notas.finales.conocmimiento" component={Final_notes} />
+
           </div>
         
         </div>

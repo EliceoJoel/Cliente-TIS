@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import React, {Component} from 'react';
 import Select from 'react-select'
 import {getAllUsers} from './UserFunctions'
@@ -134,9 +135,50 @@ class configure_user extends Component{
     }
 
     visualizar(){
-      // eslint-disable-next-line eqeqeq
-      let validar = this.state.rol.label == "administrador" || this.state.rol.label == "comision conocimientos" ||this.state.rol.label == "comision meritos"
-      if(validar){
+      if(this.state.rol.label == "comision conocimintos laboratorio"){
+        return(
+          <div>
+          <label htmlFor="Nombre">Selecciona una convocatoria</label>
+          <Select
+                name="conv"
+                options={conv}
+                onChange={(e) => this.fillAux(e)}
+                placeholder=""
+                className="basic-select"
+                classNamePrefix="select"
+          />
+          <br/>
+          <br/>
+          <label htmlFor="Nombre">Selecciona una auxiliatura</label>
+          <Select
+                name="auxiliary"
+                options={this.aux}
+                onChange={(e) => this.fillTheme(e)}
+                placeholder= ""
+                className="basic-select"
+                classNamePrefix="select"
+          />
+          <br/>
+          <br/>
+          <label htmlFor="Nombre">Selecciona un tema</label>
+          <Select
+                name="theme"
+                options={this.theme}
+                onChange={(e) => this.setState({temp_theme:e})}
+                placeholder=""
+                className="basic-select"
+                classNamePrefix="select"
+          />
+          <div> {this.state.themeList} </div>
+          <button  type="button" className="col btn btn-info mt-2" onClick ={() => this.addTheme()}> agregar </button>
+          <br/>
+          <br/>
+          <button  type="button" className="col btn btn-info mt-2"> guardar </button>
+        </div>)
+
+
+      }
+      if(this.state.rol.label == "comision meritos"){
         return(
           <div>
             <label htmlFor="Nombre">Selecciona una convocatoria</label>
@@ -151,6 +193,23 @@ class configure_user extends Component{
             <div> {this.state.convsList} </div>
             <button  type="button" className="col btn btn-info mt-2" onClick ={() => this.addAnnouncement()}> agregar convocatoria </button>
             <br/>
+            <button  type="button" className="col btn btn-info mt-2"> guardar </button>
+          </div>
+          )
+      }
+      if(this.state.rol.label == "comision conocimientos" ){
+        return(
+          <div>
+            <label htmlFor="Nombre">Selecciona una convocatoria</label>
+            <Select
+                  name="conv"
+                  options={conv}
+                  onChange={(e) => this.fillAux(e)}
+                  placeholder=""
+                  className="basic-select"
+                  classNamePrefix="select"
+            />
+            <br/>
             <br/>
             <label htmlFor="Nombre">Selecciona una auxiliatura</label>
             <Select
@@ -164,24 +223,10 @@ class configure_user extends Component{
             <div> {this.state.auxList} </div>
             <button  type="button" className="col btn btn-info mt-2" onClick ={() => this.addAuxiliary()}> agregar </button>
             <br/>
-            <br/>
-            <label htmlFor="Nombre">Selecciona un tema</label>
-            <Select
-                  name="theme"
-                  options={this.theme}
-                  onChange={(e) => this.setState({temp_theme:e})}
-                  placeholder=""
-                  className="basic-select"
-                  classNamePrefix="select"
-            />
-            <div> {this.state.themeList} </div>
-            <button  type="button" className="col btn btn-info mt-2" onClick ={() => this.addTheme()}> agregar </button>
-            <br/>
-            <br/>
             <button  type="button" className="col btn btn-info mt-2"> guardar </button>
-          </div>
-          )
-      }else if(this.state.rol.label != null) 
+        </div>)
+      }
+      else if(this.state.rol.label != null) 
       return(
         <button  type="button" className="col btn btn-info mt-2"> guardar </button>
       )
