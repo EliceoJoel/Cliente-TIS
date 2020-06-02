@@ -72,7 +72,7 @@ class MeritosRegister extends Component {
       showPostulantData:true,
       showPostulants:false,
     })
-    getConfigMeritos(postulant.announcement).then(res =>{  
+    getConfigMeritos(postulant.announcement).then(res =>{
       for(let i=0 ; i<res.length ; i++){
         if(res[i].number>=30){
           res[i].promedio = 0
