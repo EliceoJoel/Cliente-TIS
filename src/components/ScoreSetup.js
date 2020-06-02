@@ -1,12 +1,7 @@
 import React, { Component } from 'react'
 import Select from 'react-select'
 import { getProfile, getUserAnnouncements } from './UserFunctions'
-//getAnnouncement ,
 import axios from 'axios'
-//var conv = []
-//var auxSelect = []
-//var themeSelect = []
-
 export class ScoreSetup extends Component {
 
     constructor(props) {
@@ -56,34 +51,23 @@ export class ScoreSetup extends Component {
         this.setState({ [e.target.name]: e.target.value })
     }
     selectConvChange = selectedConvOption => {
-
         this.setState({ selectedOptionConv: selectedConvOption })
-
     }
     selectAuxSelectChange = selectedAuxOption => {
-
         this.setState({ selectedOptionAux: selectedAuxOption })
-
     }
     selectMeritSelectChange = selectedMeritOption => {
-
         this.setState({ selectedOptionMerit: selectedMeritOption })
-
     }
     selectThemeSelectChange = selectedThemeOption => {
-
         this.setState({ selectedOptionTheme: selectedThemeOption })
-
     }
     componentDidMount() {
 
         getProfile().then(res => {
             console.log(res);
-
             this.setState({
                 idUser: res.user.id
-
-
             })
             console.log(this.state.idUser);
             getUserAnnouncements(this.state.idUser).then(res => {
@@ -97,20 +81,15 @@ export class ScoreSetup extends Component {
                 }
                 this.setState({ conv: announcement })
             })
-
         })
-
-
     }
 
     handleSearchAnnouncement() {
         this.setState({
             selectedConvOption_error: '',
             deleteWarning: ''
-
         })
         if (this.validAnnouncement()) {
-
             this.setState({ auxiliarylist: false })
             this.setState({ addpercentagelab: false })
             this.setState({ addpercentagedoc: false })
@@ -138,12 +117,9 @@ export class ScoreSetup extends Component {
                 } else {
                     this.setState({ announcementdoc: true })
                 }
-
-
             })
                 .catch(error => {
                     console.log(error)
-
                 })
 
             let idconv = this.state.selectedOptionConv.value
@@ -156,33 +132,17 @@ export class ScoreSetup extends Component {
                 headers: { 'Content-Type': 'multipart/form-data' }
             }).then(response => {
                 this.setState({ tabla: response.data });
-                //console.log(this.state.tabla);
                 this.state.tabla.sort(function (a, b) {
-                    if (a.auxiliary > b.auxiliary) {
-                        return 1;
-                    }
-                    if (a.auxiliary < b.auxiliary) {
-                        return -1;
-                    }
+                    if (a.auxiliary > b.auxiliary) {return 1; }
+                    if (a.auxiliary < b.auxiliary) {  return -1;}
                     return 0;
-                });
-
-                //console.log(this.state.tabla);
+                });      
                 this.setState({ tablaOrdenada: this.state.tabla });
-
-
             })
                 .catch(error => {
                     console.log(error)
-
                 })
-
-
         }
-
-
-
-
     }
     handleKnowledgelab(e) {
         this.setState({
@@ -190,10 +150,28 @@ export class ScoreSetup extends Component {
             selectedOptionTheme: null,
             porcentage: '',
             deleteWarning: '',
-            modifyWarning: ''
-
-
+            modifyWarning: '' ,
+            
         })
+        let idconv = this.state.selectedOptionConv.value
+        let sendfalse = new FormData()
+        sendfalse.append('id_announcement', idconv)
+        axios({
+            method: 'post',
+            url: 'api/setKnowledgeConfiguratedFalse',
+            data: sendfalse,
+            headers: { 'Content-Type': 'multipart/form-data' }
+        }).then(response => {
+          console.log(response);
+          
+        })
+            .catch(error => {
+                console.log(error)
+
+            })
+       
+        this.setState({ MeritConfigDone: false })
+        this.setState({ knowledgeLabConfigDone: false })
         this.setState({ addpercentagelab: true })
         this.setState({ addMeritPercentage: false })
         e.preventDefault()
@@ -208,7 +186,6 @@ export class ScoreSetup extends Component {
             headers: { 'Content-Type': 'multipart/form-data' }
         }).then(res => {
             let AuxArray = []
-            // this.found = response.data
             this.setState({ themeaux: res.data })
             console.log(this.state.themeaux)
             for (var i = 0; i < this.state.themeaux.length; i++) {
@@ -221,7 +198,6 @@ export class ScoreSetup extends Component {
         })
             .catch(error => {
                 console.log(error)
-
             })
         axios({
             method: 'post',
@@ -240,11 +216,9 @@ export class ScoreSetup extends Component {
                 ThemeArray[i] = object
             }
             this.setState({ themeSelect: ThemeArray })
-
         })
             .catch(error => {
                 console.log(error)
-
             })
 
     }
@@ -255,9 +229,6 @@ export class ScoreSetup extends Component {
             percentage_error: '',
             modifyWarning: '',
             deleteWarning: '',
-            //porcentage: ''
-
-
         })
         if (this.validPercentage()) {
             this.setState({ auxiliarylist: true })
@@ -281,12 +252,10 @@ export class ScoreSetup extends Component {
                 } else {
                     this.setState({ modifyWarning: 'Elemento Modificado con exito' })
                     this.setState({ porcentage: '' })
-
                 }
             })
                 .catch(error => {
                     console.log(error)
-
                 })
 
             let idconv = this.state.selectedOptionConv.value
@@ -301,23 +270,15 @@ export class ScoreSetup extends Component {
                 this.setState({ tabla: response.data });
                 console.log(this.state.tabla);
                 this.state.tabla.sort(function (a, b) {
-                    if (a.auxiliary > b.auxiliary) {
-                        return 1;
-                    }
-                    if (a.auxiliary < b.auxiliary) {
-                        return -1;
-                    }
+                    if (a.auxiliary > b.auxiliary) {  return 1;  }                         
+                    if (a.auxiliary < b.auxiliary) {return -1;}
                     return 0;
                 });
-
                 console.log(this.state.tabla);
                 this.setState({ tablaOrdenada: this.state.tabla });
-
-
             })
                 .catch(error => {
                     console.log(error)
-
                 })
 
         }
@@ -327,6 +288,9 @@ export class ScoreSetup extends Component {
         this.setState({ addpercentagelab: false })
         this.setState({ addpercentagedoc: false })
         this.setState({ addMeritPercentage: true })
+        this.setState({ MeritConfigDone: false })
+        this.setState({ knowledgeDocConfigDone: false })
+        this.setState({ knowledgeLabConfigDone: false })
         e.preventDefault()
         let send = new FormData()
         send.append('id_announcement', this.state.found[0].id)
@@ -337,7 +301,6 @@ export class ScoreSetup extends Component {
             headers: { 'Content-Type': 'multipart/form-data' }
         }).then(res => {
             let meritArray = []
-
             this.setState({ merit: res.data })
             console.log(this.state.merit)
             for (var i = 0; i < this.state.merit.length; i++) {
@@ -350,7 +313,6 @@ export class ScoreSetup extends Component {
         })
             .catch(error => {
                 console.log(error)
-
             })
             let idconv = this.state.selectedOptionConv.value
             let sendIdAnnouncement = new FormData()
@@ -364,31 +326,37 @@ export class ScoreSetup extends Component {
                 this.setState({ tableMerit: response.data });
                 console.log(this.state.tableMerit);
                 this.state.tableMerit.sort(function (a, b) {
-                    if (a.name > b.name) {
-                        return 1;
-                    }
-                    if (a.name < b.name) {
-                        return -1;
-                    }
+                    if (a.name > b.name) {  return 1;}
+                    if (a.name < b.name) { return -1;}
                     return 0;
                 });
-    
                 console.log(this.state.tableMerit);
                 this.setState({ tableMeritOrder: this.state.tableMerit });
-    
-    
             })
                 .catch(error => {
                     console.log(error)
-    
                 })
 
     }
     handleAddMeritPercentage() {
+        let idconv = this.state.selectedOptionConv.value
+        let sendfalse = new FormData()
+        sendfalse.append('id_announcement', idconv)
+        axios({
+            method: 'post',
+            url: 'api/setMeritConfiguratedFalse',
+            data: sendfalse,
+            headers: { 'Content-Type': 'multipart/form-data' }
+        }).then(response => {
+          console.log(response);
+          
+        })
+            .catch(error => {
+                console.log(error)
+
+            })
         this.setState({
         })
-
-
         let merit = this.state.selectedOptionMerit.label
         let type = this.state.type
         let number = this.state.number
@@ -398,7 +366,6 @@ export class ScoreSetup extends Component {
         send.append('name', merit)
         send.append('type', type)
         send.append('number', number)
-
         axios({
             method: 'post',
             url: 'api/meritUpdate',
@@ -412,17 +379,15 @@ export class ScoreSetup extends Component {
             } else {
                 // this.setState({ modifyWarning: 'Elemento Modificado con exito' })
                 // this.setState({ porcentage: '' })
-                console.log('funciono se hizo la insercion');
-                
+                console.log('funciono se hizo la insercion');               
             }
         })
             .catch(error => {
                 console.log(error)
-
             })
-            let idconv = this.state.selectedOptionConv.value
+            let idconvoca = this.state.selectedOptionConv.value
             let sendIdAnnouncement = new FormData()
-            sendIdAnnouncement.append('id_announcement', idconv)
+            sendIdAnnouncement.append('id_announcement', idconvoca)
             axios({
                 method: 'post',
                 url: 'api/meritByAnnouncement',
@@ -432,23 +397,15 @@ export class ScoreSetup extends Component {
                 this.setState({ tableMerit: response.data });
                 console.log(this.state.tableMerit);
                 this.state.tableMerit.sort(function (a, b) {
-                    if (a.name > b.name) {
-                        return 1;
-                    }
-                    if (a.name < b.name) {
-                        return -1;
-                    }
+                    if (a.name > b.name) { return 1;}
+                    if (a.name < b.name) {return -1;}
                     return 0;
                 });
-    
-                console.log(this.state.tableMerit);
-                this.setState({ tableMeritOrder: this.state.tableMerit });
-    
-    
+                 console.log(this.state.tableMerit);
+                this.setState({ tableMeritOrder: this.state.tableMerit });  
             })
                 .catch(error => {
-                    console.log(error)
-    
+                    console.log(error)  
                 })
 
 
@@ -457,11 +414,8 @@ export class ScoreSetup extends Component {
         this.setState({
             deleteWarning: '',
             modifyWarning: ''
-
         })
-
         console.log(e.id);
-
         let idpercentage = e.id
         let send = new FormData()
         send.append('id_percentage', idpercentage)
@@ -472,11 +426,9 @@ export class ScoreSetup extends Component {
             headers: { 'Content-Type': 'multipart/form-data' }
         }).then(res => {
             console.log(res);
-
         })
             .catch(error => {
                 console.log(error)
-
             })
         this.setState({ deleteWarning: 'se elimino el elemento con exito' })
         let idconv = this.state.selectedOptionConv.value
@@ -491,34 +443,23 @@ export class ScoreSetup extends Component {
             this.setState({ tableMerit: response.data });
             console.log(this.state.tableMerit);
             this.state.tableMerit.sort(function (a, b) {
-                if (a.name > b.name) {
-                    return 1;
-                }
-                if (a.name < b.name) {
-                    return -1;
-                }
+                if (a.name > b.name) {return 1;}
+                if (a.name < b.name) {return -1; }
                 return 0;
             });
-
             console.log(this.state.tableMerit);
             this.setState({ tableMeritOrder: this.state.tableMerit });
-
-
         })
             .catch(error => {
                 console.log(error)
-
             })
-
-
     }
     validAnnouncement() {
-
         if (this.state.selectedOptionConv === null) {
             this.setState({ selectedConvOption_error: 'Seleccione una convocatoria' })
         }
-        else {
-            return true;
+        else { 
+           return true;
         }
 
     }
@@ -546,9 +487,7 @@ export class ScoreSetup extends Component {
             modifyWarning: ''
 
         })
-
-        console.log(e.id);
-
+        //console.log(e.id);
         let idpercentage = e.id
         let send = new FormData()
         send.append('id_percentage', idpercentage)
@@ -559,11 +498,9 @@ export class ScoreSetup extends Component {
             headers: { 'Content-Type': 'multipart/form-data' }
         }).then(res => {
             console.log(res);
-
         })
             .catch(error => {
                 console.log(error)
-
             })
         this.setState({ deleteWarning: 'se elimino el elemento con exito' })
         let idconv = this.state.selectedOptionConv.value
@@ -578,35 +515,42 @@ export class ScoreSetup extends Component {
             this.setState({ tabla: response.data });
             console.log(this.state.tabla);
             this.state.tabla.sort(function (a, b) {
-                if (a.auxiliary > b.auxiliary) {
-                    return 1;
-                }
-                if (a.auxiliary < b.auxiliary) {
-                    return -1;
-                }
+                if (a.auxiliary > b.auxiliary) {return 1;}
+                if (a.auxiliary < b.auxiliary) { return -1;}
                 return 0;
             });
-
             console.log(this.state.tabla);
             this.setState({ tablaOrdenada: this.state.tabla });
-
-
+        })
+            .catch(error => {
+                console.log(error)
+            })
+    }
+    handleKnowledgedoc(e) {
+        let idconv = this.state.selectedOptionConv.value
+        let send = new FormData()
+        send.append('id_announcement', idconv)
+        axios({
+            method: 'post',
+            url: 'api/setKnowledgeConfiguratedFalse',
+            data: send,
+            headers: { 'Content-Type': 'multipart/form-data' }
+        }).then(response => {
+          console.log(response);
+          
         })
             .catch(error => {
                 console.log(error)
 
             })
-
-
-
-    }
-    handleKnowledgedoc(e) {
+        this.setState({ knowledgeDocConfigDone: false })
+        this.setState({ MeritConfigDone: false })
         this.setState({ addpercentagelab: false })
         this.setState({ addpercentagedoc: true })
         this.setState({ addMeritPercentage: false })
-        let idconv = this.state.selectedOptionConv.value
+        let idconvocato = this.state.selectedOptionConv.value
         let sendIdAnnouncement = new FormData()
-        sendIdAnnouncement.append('id_announcement', idconv)
+        sendIdAnnouncement.append('id_announcement', idconvocato)
         axios({
             method: 'post',
             url: 'api/percentageKnowledgeDocAnn',
@@ -616,25 +560,16 @@ export class ScoreSetup extends Component {
             this.setState({ tableKnowledgeDoc: response.data });
             console.log(this.state.tableKnowledgeDoc);
             this.state.tableKnowledgeDoc.sort(function (a, b) {
-                if (a.type > b.type) {
-                    return 1;
-                }
-                if (a.type < b.type) {
-                    return -1;
-                }
+                if (a.type > b.type) {return 1;}
+                if (a.type < b.type) {return -1;}
                 return 0;
             });
-
             console.log(this.state.tableKnowledgeDoc);
             this.setState({ tableKnowledgeDocOrder: this.state.tableKnowledgeDoc });
-
-
         })
             .catch(error => {
                 console.log(error)
-
             })
-
     }
     handleAddPorcentageDoc() {
         this.setState({
@@ -682,26 +617,16 @@ export class ScoreSetup extends Component {
             this.setState({ tableKnowledgeDoc: response.data });
             console.log(this.state.tableKnowledgeDoc);
             this.state.tableKnowledgeDoc.sort(function (a, b) {
-                if (a.type > b.type) {
-                    return 1;
-                }
-                if (a.type < b.type) {
-                    return -1;
-                }
+                if (a.type > b.type) {return 1;}
+                if (a.type < b.type) {return -1;}
                 return 0;
             });
-
             console.log(this.state.tableKnowledgeDoc);
             this.setState({ tableKnowledgeDocOrder: this.state.tableKnowledgeDoc });
-
-
         })
             .catch(error => {
                 console.log(error)
-
             })
-
-        // }
     }
     handleRemoveElementDoc(e) {
         this.setState({
@@ -709,9 +634,7 @@ export class ScoreSetup extends Component {
             modifyWarning: ''
 
         })
-
         console.log(e.id);
-
         let idpercentage = e.id
         let send = new FormData()
         send.append('id_percentage', idpercentage)
@@ -788,7 +711,7 @@ export class ScoreSetup extends Component {
                     headers: { 'Content-Type': 'multipart/form-data' }
                 }).then(response => {
                    console.log(response);
-                   
+                   this.setState({ addpercentagedoc: false })
                 })
                     .catch(error => {
                         console.log(error)
@@ -830,7 +753,7 @@ export class ScoreSetup extends Component {
                     headers: { 'Content-Type': 'multipart/form-data' }
                 }).then(response => {
                    console.log(response);
-                   
+                   this.setState({ addpercentagelab: false })
                 })
                     .catch(error => {
                         console.log(error)
@@ -872,7 +795,7 @@ export class ScoreSetup extends Component {
                     headers: { 'Content-Type': 'multipart/form-data' }
                 }).then(response => {
                    console.log(response);
-                   
+                   this.setState({ addMeritPercentage: false })
                 })
                     .catch(error => {
                         console.log(error)
@@ -890,6 +813,105 @@ export class ScoreSetup extends Component {
 
             })
     }
+    handleMeritConfiguration(e){
+        this.setState({ addpercentagelab: false })
+        this.setState({ addpercentagedoc: false })
+        this.setState({ addMeritPercentage: false })
+        this.setState({ knowledgeDocConfigDone: false })
+        this.setState({ knowledgeLabConfigDone: false })
+        e.preventDefault()
+        let idconv = this.state.selectedOptionConv.value
+        let send = new FormData()
+        send.append('id_announcement', idconv)
+        axios({
+            method: 'post',
+            url: 'api/isMeritConfigurated',
+            data: send,
+            headers: { 'Content-Type': 'multipart/form-data' }
+        }).then(response => {
+           console.log(response);
+           if (response.data === true) {
+            this.setState({ addMeritPercentage: false })
+            this.setState({ MeritConfigDone: true })
+          
+           
+           }else{
+                 this.handleMeritScore(e)
+           }
+           
+        })
+            .catch(error => {
+                console.log(error)
+
+            })
+       
+    }
+    handleKnowledgeDocConfiguration(e){
+        this.setState({ addpercentagelab: false })
+        this.setState({ addpercentagedoc: false })
+        this.setState({ addMeritPercentage: false })
+      
+        this.setState({ MeritConfigDone: false })
+        e.preventDefault()
+        let idconv = this.state.selectedOptionConv.value
+        let send = new FormData()
+        send.append('id_announcement', idconv)
+        axios({
+            method: 'post',
+            url: 'api/isKnowledgeConfigurated',
+            data: send,
+            headers: { 'Content-Type': 'multipart/form-data' }
+        }).then(response => {
+           console.log(response);
+           if (response.data === true) {
+            this.setState({ addpercentagedoc: false })
+            this.setState({ knowledgeDocConfigDone: true })
+          
+           
+           }else{
+                 this.handleKnowledgedoc(e)
+           }
+           
+        })
+            .catch(error => {
+                console.log(error)
+
+            })
+       
+    }
+    handleKnowledgeLabConfiguration(e){
+        this.setState({ addpercentagelab: false })
+        this.setState({ addpercentagedoc: false })
+        this.setState({ addMeritPercentage: false })
+        
+        this.setState({ MeritConfigDone: false })
+        e.preventDefault()
+        let idconv = this.state.selectedOptionConv.value
+        let send = new FormData()
+        send.append('id_announcement', idconv)
+        axios({
+            method: 'post',
+            url: 'api/isKnowledgeConfigurated',
+            data: send,
+            headers: { 'Content-Type': 'multipart/form-data' }
+        }).then(response => {
+           console.log(response);
+           if (response.data === true) {
+            this.setState({ addpercentagelab: false })
+            this.setState({ knowledgeLabConfigDone: true })
+           
+           }else{
+                 this.handleKnowledgelab(e)
+           }
+           
+        })
+            .catch(error => {
+                console.log(error)
+
+            })
+       
+    }
+
     render() {
         const { selectedOptionConv, selectedOptionAux, selectedOptionTheme, porcentage, conv, auxSelect,
             themeSelect, meritSelect, selectedOptionMerit, type, number, typeDoc, porcentageDoc } = this.state
@@ -936,13 +958,13 @@ export class ScoreSetup extends Component {
                     </div>
                     <div className="col-md-12">
                         {this.state.announcementFound ?
-                            <button className="btn btn-outline-info" variant="warning" onClick={(AuxEvent) => this.handleMeritScore(AuxEvent)} >CONFIGURAR MERITO</button>
+                            <button className="btn btn-outline-info" variant="warning" onClick={(AuxEvent) => this.handleMeritConfiguration(AuxEvent)} >CONFIGURAR MERITO</button>
                             : null}
                         {this.state.announcementlab ?
-                            <button className="btn btn-outline-info mx-3" variant="warning" onClick={(AuxEvent) => this.handleKnowledgelab(AuxEvent)} >CONFIGURAR CONOCIMIENTO</button>
+                            <button className="btn btn-outline-info mx-3" variant="warning" onClick={(AuxEvent) => this.handleKnowledgeLabConfiguration(AuxEvent)} >CONFIGURAR CONOCIMIENTO</button>
                             : null}
                         {this.state.announcementdoc ?
-                            <button className="btn btn-outline-info mx-3" variant="warning" onClick={(AuxEvent) => this.handleKnowledgedoc(AuxEvent)} >CONFIGURAR CONOCIMIENTO</button>
+                            <button className="btn btn-outline-info mx-3" variant="warning" onClick={(AuxEvent) => this.handleKnowledgeDocConfiguration(AuxEvent)} >CONFIGURAR CONOCIMIENTO</button>
                             : null}
 
                         <br></br>
@@ -1255,6 +1277,34 @@ export class ScoreSetup extends Component {
                          </div>
                          </div>
                             : null}
+                            {this.state.MeritConfigDone ?
+                                    <div>
+                                          <div style={{color:'red'}} className=" h5 col-md-12 mt-4 text-center">
+                                              <p>Ya se realizo la Configuracion de Meritos, Si desea editarla presione continuar</p>
+                                              </div>
+                                              <button className="btn btn-outline-info mx-3" variant="warning" onClick={(AuxEvent) => this.handleMeritScore(AuxEvent)} >
+                                                  CONTINUAR</button>
+                                                  </div>
+                                :null}
+                                    {this.state.knowledgeDocConfigDone ?
+                                    <div>
+                                          <div style={{color:'red'}} className=" h5 col-md-12 mt-4 text-center">
+                                              <p>Ya se realizo la Configuracion de Conocimiento Doc, Si desea editarla presione continuar</p>
+                                              </div>
+                                              <button className="btn btn-outline-info mx-3" variant="warning" onClick={(AuxEvent) => this.handleKnowledgedoc(AuxEvent)} >
+                                                  CONTINUAR</button>
+                                                  </div>
+                                :null}
+
+                                    {this.state.knowledgeLabConfigDone ?
+                                    <div>
+                                          <div style={{color:'red'}} className=" h5 col-md-12 mt-4 text-center">
+                                              <p>Ya se realizo la Configuracion de Conocimiento Lab, Si desea editarla presione continuar</p>
+                                              </div>
+                                              <button className="btn btn-outline-info mx-3" variant="warning" onClick={(AuxEvent) => this.handleKnowledgelab(AuxEvent)} >
+                                                  CONTINUAR</button>
+                                                  </div>
+                                :null}
                     </div>
                 </div>
                 <div>
