@@ -75,6 +75,7 @@ class MeritosRegister extends Component {
     getConfigMeritos(postulant.announcement).then(res =>{  
       for(let i=0 ; i<res.length ; i++){
         if(res[i].number>=30){
+          res[i].promedio = 0
           configsOne.push(res[i])
         }else{
           configsTwo.push(res[i])
@@ -97,22 +98,18 @@ class MeritosRegister extends Component {
     }
   }
 
-  changeNota1(n, event){
+  changeNota1(event, config){
     this.setState({errorNota:''})
-    let nota = 0.0
+    let promedio = 0.0
     if(event.target.value !== ''){
-      nota = parseFloat(event.target.value)
+      promedio = parseFloat(event.target.value)
     }else{
-      nota = 0.0
+      promedio = 0.0
     }
-    nota = nota * (configsOne[n].number/100)
-    nota = 	this.redondear(nota,2)
-    if(n===0){
-      this.setState({aprob:nota})
-    }else{
-      this.setState({gral:nota})
-    }
-    notasOne[n].nota = nota
+    let posicion = notasOne.map(function(e) { return e.id; }).indexOf(config.id);
+    promedio = promedio * (configsOne[posicion].number/100)
+    promedio = 	this.redondear(promedio,2)
+    configsOne[posicion].promedio = promedio
     this.updateTotal()
   }
 
@@ -130,8 +127,10 @@ class MeritosRegister extends Component {
   }
 
   updateTotal(){
-    let suma = 0.0
-    suma = suma + notasOne[0].nota + notasOne[1].nota 
+    let suma = 0.0 
+    for(let i=0 ; i< configsOne.length ; i++){
+      suma = suma + configsOne[i].promedio
+    }
     for(let i=0 ; i< notasTwo.length ; i++){
       suma = suma + notasTwo[i].nota
     }
@@ -233,13 +232,14 @@ class MeritosRegister extends Component {
                   <thead>
                     <tr className="d-flex table-info">
                       <th className="col-md-10">Descripción</th>
-                      <th className="col-md-1">Promedio</th>
+                      <th className="col-md-1">Promedio (100pts)</th>
                       <th className="col-md-1">Nota</th>
                     </tr>
                   </thead>
                   <tbody>
-                  <tr className="d-flex">
-                      <td className="col-md-10">{configsOne[0].name} <b>{"  ("+configsOne[0].number+" puntos max.)" }</b>
+                  {configsOne.map(con =>(
+                  <tr className="d-flex" key={con.id}>
+                      <td className="col-md-10">{con.name} <b>{"  ("+con.number+" puntos max.)" }</b>
                       </td>
                       <td className="col-md-1">
                         <input
@@ -249,27 +249,12 @@ class MeritosRegister extends Component {
                           min="0"
                           max="100"
                           required
-                          onChange={(event)=>this.changeNota1(0, event)}
+                          onChange={(event)=>this.changeNota1(event, con)}
                         />
                       </td>
-                      <td className="col-md-1">{this.state.aprob}</td>
+                      <td className="col-md-1 text-center">{con.promedio}</td>
                     </tr>
-                    <tr className="d-flex">
-                      <td className="col-md-10">{configsOne[1].name} <b>{"  ("+configsOne[1].number+" puntos max.)" }</b>
-                      </td>
-                      <td className="col-md-1">
-                        <input
-                          className="form-control"
-                          type="number"
-                          step="0.01"
-                          min="0"
-                          max="100"
-                          required
-                          onChange={(event)=>this.changeNota1(1, event)}
-                        />
-                      </td>
-                      <td className="col-md-1">{this.state.gral}</td>
-                    </tr>
+                  ))}
                   {configsTwo.map(con =>(
                     <tr className="d-flex" key={con.id}>
                       <td className="col-md-10">
