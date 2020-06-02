@@ -1392,6 +1392,7 @@ export class ScoreSetup extends Component {
 
 
 
+
         )
     }
 }
