@@ -177,7 +177,8 @@ class MeritosRegister extends Component {
     }
     const data = {
       notaMerito: this.state.total,
-      idPostulant: this.state.idPostulant
+      idPostulant: this.state.idPostulant,
+      announcement: this.state.announcement
     }
     notaMerito(data)
     this.setState({

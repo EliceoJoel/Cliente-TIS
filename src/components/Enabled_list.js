@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Select from 'react-select'
-import {getAnnouncement} from './UserFunctions'
+import {getProfile , getUserAnnouncements} from './UserFunctions'
 import {getPostulantsEnabled} from './UserFunctions'
 
 var conv = []
@@ -10,6 +10,7 @@ class Enabled_list extends Component {
     constructor() {
         super()
         this.state = {
+            idUser:0,
             selectConv:null,
             selectConvError:"",
             showList:false,
@@ -20,13 +21,18 @@ class Enabled_list extends Component {
 
     //fill announcement
     componentDidMount() {
-        getAnnouncement().then(res => {
-            for (var i=0; i < res.length; i++) {
-                var object = {}
-                object.value = res[i].id
-                object.label = res[i].name
-                conv[i] = object
-              }
+        getProfile().then(res => {
+            this.setState({
+                idUser: res.user.id        
+            }) 
+            getUserAnnouncements(this.state.idUser).then(res=>{
+                for (var i = 0; i < res.length; i++) {
+                    var object = {}
+                    object.value = res[i].id
+                    object.label = res[i].name
+                    conv[i] = object
+                }
+            })
         })
     }
 

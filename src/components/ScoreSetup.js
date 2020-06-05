@@ -983,7 +983,7 @@ export class ScoreSetup extends Component {
                 <div className="row">
                     <h3 className="h5 col-md-12 my-4 font-weight-normal text-center">
                         Datos de Convocatoria</h3>
-                    <div className="form-group col-md-4">
+                    <div className="form-group col-md-8">
                         <label htmlFor="conv">Selecciona una convocatoria</label>
                         <Select
                             name="conv"

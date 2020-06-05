@@ -153,12 +153,12 @@ export class AnnouncementSetup extends Component {
              <div className="justify-content-center">
            
                   <h1 className="h3 font-weight-normal text-center mt-3 p-3 bg-info text-white">
-                     Configuracion de Notas </h1>    
+                     Configuracion de Convocatoria </h1>    
                  
                    <div className="row">
                     <h3 className="h5 col-md-12 my-4 font-weight-normal text-center">
                             Datos de Convocatoria</h3>
-                            <div className="form-group col-md-4">
+                            <div className="form-group col-md-8">
                             <label htmlFor="conv">Selecciona una convocatoria</label>
                                  <Select
                                       name="conv"
@@ -172,7 +172,7 @@ export class AnnouncementSetup extends Component {
                              <p style={{color:"red"}}>{this.state.selectedConvOption_error}</p>
                          </div>
                          <div className="form-group col-4 mt-3">
-                           <button type="button" class="col btn btn-info mt-3" variant="warning" onClick={(e) => this.handleSearchAnnouncement(e)} >Buscar Convocatoria</button>
+                           <button type="button" className="col btn btn-info mt-3" variant="warning" onClick={(e) => this.handleSearchAnnouncement(e)} >Buscar Convocatoria</button>
                         </div>
                         <div  className="col-md-12">
                               {this.state.found.map(enable =>
