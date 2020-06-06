@@ -46,6 +46,7 @@ class final_notes extends Component {
     }
 
     setup(e){
+        this.student = [];
         let data = {"announcement":e.label}
         console.log(data)
         getFinalScores(data).then(res =>{
@@ -67,9 +68,9 @@ class final_notes extends Component {
       scores(){
         this.setState({students:this.student.map(student =>(
             <div key={student.id.toString()} className="row">
-                <div className="col">{student.name}</div>
-                <div className="col">{student.id}</div>
-                <div className="col">{student.sum}</div>
+                <div className="col text-center">{student.name}</div>
+                <div className="col text-center">{student.id}</div>
+                <div className="col text-center">{student.sum}</div>
             </div>
         ))})
       }
@@ -77,7 +78,7 @@ class final_notes extends Component {
 
     render() {
         return(<div>
-            <h3>calificacion de conocimientos final</h3>
+            <h3 className="h3 mb-3 font-weight-normal text-center" >calificacion de conocimientos final</h3>
             <div className="row">
                 <div className="form-group col-8 my-4">
                     <label htmlFor="Nombre">Selecciona una convocatoria</label>
@@ -99,9 +100,9 @@ class final_notes extends Component {
                 <br/>        
             </div>
             <div className="row">
-                <div className="col">nombre</div>
-                <div className="col">id</div>
-                <div className="col">nota promedio</div>
+                <div className="h5 col mb-3 font-weight-normal text-center">NOMBRE</div>
+                <div className="h5 col mb-3 font-weight-normal text-center">ID</div>
+                <div className="h5 col mb-3 font-weight-normal text-center">NOTA PROMEDIO</div>
             </div>
             <div>
                 {this.state.students}
