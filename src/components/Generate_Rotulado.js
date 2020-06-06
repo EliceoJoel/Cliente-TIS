@@ -261,7 +261,7 @@ class Register extends Component {
         return (
                 <form noValidate onSubmit={this.onSubmit}>
                     <div className="row">
-                        <div className="col-md-12 my-3 p-3 bg-info text-white">
+                        <div className="col-md-12 my-3 p-3 bg-info text-white rounded">
                             <h1 className="h3 font-weight-normal text-center">
                                 Generado de rotulado
                             </h1>
@@ -398,10 +398,10 @@ class Register extends Component {
                         </div>
                         :null
                         }
-                        <div style={{color:'red'}} className=" h5 col-md-12 mt-4 text-center">
+                        <div style={{color:'red'}} className=" h5 col-md-12 mt-4">
                             <p>¡Antes de confirmar verifica tus datos!</p>
                         </div>
-                        <button type="submit" className="col btn btn-lg btn-info mt-2 mb-5">
+                        <button type="submit" className="btn btn-info mt-2 mb-5 ml-3">
                             Confirmar registro e imprimir Rotulado
                         </button>
                     </div>

@@ -82,7 +82,7 @@ class NotasMerito extends Component {
 
         return (
             <div className="justify-content-center">
-                <h1 className="h3 font-weight-normal text-center mt-3 p-3 bg-info text-white">
+                <h1 className="h3 font-weight-normal text-center mt-3 p-3 bg-info text-white rounded">
                    Lista de notas de mérito
                 </h1>
                 <div className="row">

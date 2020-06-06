@@ -44,11 +44,11 @@ class Register extends Component {
     render () {
         return (
             <div>
-            <h1 className="h3 mb-3 font-weight-normal text-center">
+            <h1 className="h3 font-weight-normal text-center mt-3 p-3 bg-info text-white rounded">
                         Registro de usuarios
             </h1>
                 <form onSubmit={this.register}>
-                    <div className="row">
+                    <div className="row mt-5">
                         <div className="form-group col-md-6">
                             <label htmlFor="name">Nombres</label>
                             <input
@@ -98,7 +98,7 @@ class Register extends Component {
                         </div>
                     </div>
                     <button
-                            className="btn btn-lg btn-info btn-block"
+                            className="btn btn-info mt-2 mb-5"
                             type= "submit"
                         >
                             Registrar
