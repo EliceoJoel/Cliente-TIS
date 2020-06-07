@@ -18,11 +18,12 @@ import RegisterDate from './components/RegisterDate'
 import ScoreSetup from './components/ScoreSetup'
 import AnnouncementSetup from './components/AnnouncementSetup'
 import Laboratory_scores from './components/laboratory_scores'
-import Roles_permission from './components/roles_permission'
+import Roles_permission from './components/Roles_permission'
 import MeritosRegister from './components/MeritosRegister'
 import NotasMerito from './components/NotasMerito'
 import Configure_user from './components/configure_user'
 import Final_notes from './components/final_notes'
+import Note_final_list from './components/Note_final_list'
 
 
 class App extends Component {
@@ -53,7 +54,7 @@ class App extends Component {
             <Route exact path="/Notas.de.merito" component={NotasMerito} />
             <Route exact path="/Configuracion.usuario" component={Configure_user} />
             <Route exact path="/Notas.finales.conocmimiento" component={Final_notes} />
-
+            <Route exact path="/Lista.de.notas.finales" component={Note_final_list} />
           </div>
         
         </div>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Select from 'react-select'
-import {getAnnouncement} from './UserFunctions'
+import {getProfile , getUserAnnouncements} from './UserFunctions'
 import {getNotasMerito} from './UserFunctions'
 
 var conv = []
@@ -20,13 +20,18 @@ class NotasMerito extends Component {
 
     //fill announcement
     componentDidMount() {
-        getAnnouncement().then(res => {
-            for (var i=0; i < res.length; i++) { 
-                var object = {}
-                object.value = res[i].id
-                object.label = res[i].name
-                conv[i] = object
-              }
+        getProfile().then(res => {
+            this.setState({
+                idUser: res.user.id        
+            }) 
+            getUserAnnouncements(this.state.idUser).then(res=>{
+                for (var i = 0; i < res.length; i++) {
+                    var object = {}
+                    object.value = res[i].id
+                    object.label = res[i].name
+                    conv[i] = object
+                }
+            })
         })
     }
 
@@ -77,7 +82,7 @@ class NotasMerito extends Component {
 
         return (
             <div className="justify-content-center">
-                <h1 className="h3 font-weight-normal text-center mt-3 p-3 bg-info text-white">
+                <h1 className="h3 font-weight-normal text-center mt-3 p-3 bg-info text-white rounded">
                    Lista de notas de mérito
                 </h1>
                 <div className="row">

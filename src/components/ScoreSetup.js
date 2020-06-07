@@ -977,13 +977,13 @@ export class ScoreSetup extends Component {
 
             <div className="justify-content-center">
 
-                <h1 className="h3 font-weight-normal text-center mt-3 p-3 bg-info text-white">
+                <h1 className="h3 font-weight-normal text-center mt-3 p-3 bg-info text-white rounded">
                     Configuracion de Notas </h1>
 
                 <div className="row">
                     <h3 className="h5 col-md-12 my-4 font-weight-normal text-center">
                         Datos de Convocatoria</h3>
-                    <div className="form-group col-md-4">
+                    <div className="form-group col-md-8">
                         <label htmlFor="conv">Selecciona una convocatoria</label>
                         <Select
                             name="conv"

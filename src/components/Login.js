@@ -82,7 +82,7 @@ class Login extends Component {
                                 <label htmlFor="user">Nombre de usuario</label>
                                 <input
                                     type="text"
-                                    className="form-control"
+                                    className="form-control shadow"
                                     name="user"
                                     placeholder="Ingrese su nombre de usuario"
                                     maxLength="50"
@@ -95,7 +95,7 @@ class Login extends Component {
                                 <label htmlFor="password">Contraseña</label>
                                 <input
                                     type="password"
-                                    className="form-control"
+                                    className="form-control shadow"
                                     name="password"
                                     placeholder="Ingrese su contraseña"
                                     autoComplete="on"
@@ -107,7 +107,7 @@ class Login extends Component {
                             </div>
                             <button
                                 type="submit"
-                                className="btn btn-lg btn-info btn-block mt-4"
+                                className="shadow btn btn-info btn-block mt-5"
                             >
                                 Iniciar sesión
                             </button>

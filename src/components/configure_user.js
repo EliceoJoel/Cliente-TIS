@@ -70,7 +70,7 @@ class configure_user extends Component{
     render(){
       return(
             <div> 
-                <h1 className="h3 mb-3 font-weight-normal text-center">
+                <h1 className="h3 mb-3 font-weight-normal text-center rounded">
                         Configuracion de usuarios
                 </h1>
 

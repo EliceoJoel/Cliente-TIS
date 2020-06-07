@@ -86,7 +86,7 @@ export class RegisterDate extends Component {
             
                  <div className="row">
                         <div className="col-md-12 my-3 p-3 bg-info text-white">
-                            <h1 className="h3 font-weight-normal text-center">
+                            <h1 className="h3 font-weight-normal text-center rounded">
                                 Registro de Fechas Importantes
                             </h1>
                         </div>

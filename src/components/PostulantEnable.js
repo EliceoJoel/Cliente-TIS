@@ -327,7 +327,7 @@ export class PostulantEnable extends Component {
            
             <div className="justify-content-center">
            
-            <h1 className="h3 font-weight-normal text-center mt-3 p-3 bg-info text-white">
+            <h1 className="h3 font-weight-normal text-center mt-3 p-3 bg-info text-white rounded">
                  Habilitacion de Postulante </h1>
                  <div className="row">
                     <h3 className="h5 col-md-12 my-4 font-weight-normal text-center">

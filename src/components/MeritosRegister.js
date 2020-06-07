@@ -73,8 +73,9 @@ class MeritosRegister extends Component {
       showPostulants:false,
     })
     getConfigMeritos(postulant.announcement).then(res =>{
+      console.log(res)
       for(let i=0 ; i<res.length ; i++){
-        if(res[i].number>=30){
+        if(res[i].type === 'Porcentaje'){
           res[i].promedio = 0
           configsOne.push(res[i])
         }else{
@@ -177,7 +178,8 @@ class MeritosRegister extends Component {
     }
     const data = {
       notaMerito: this.state.total,
-      idPostulant: this.state.idPostulant
+      idPostulant: this.state.idPostulant,
+      announcement: this.state.announcement
     }
     notaMerito(data)
     this.setState({
