@@ -624,7 +624,8 @@ export class ScoreSetup extends Component {
         this.setState({
             percentageKnowledgeDoc_error:'',
             modifyWarning: '' ,
-            deleteWarning:''
+            deleteWarning:'' ,
+            
         })
          if (this.validConocimientoDoc()) {
 
