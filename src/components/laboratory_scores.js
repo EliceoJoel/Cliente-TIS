@@ -74,7 +74,7 @@ class Laboratory_scores extends Component{
             }
             this.setState({auxiliaturas:aux})
         })
-        var aux =[]
+        
         // getAnnouncementIDGenerateRotulate(this.state.selectedConv.id).then(res => {
         //     console.log(res);
         //       var auxiliary = res

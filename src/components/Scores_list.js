@@ -93,7 +93,7 @@ fillAuxi(){
         console.log(aux)
         this.setState({auxiliaturas:aux})
     })
-    var aux =[]
+    // var aux =[]
     // getAnnouncementIDGenerateRotulate(this.state.selectedConv.id).then(res => {
     //     console.log(res);
     //       var auxiliary = res
