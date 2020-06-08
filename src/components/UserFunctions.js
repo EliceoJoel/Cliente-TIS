@@ -155,6 +155,19 @@ export const getAnnouncementID = (id) => {
             console.log(err)
         })
 }
+export const getAnnouncementIDGenerateRotulate = (id) => {
+    return axios
+        .get('api/announcementGenerate/'+id, {
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => {
+            console.log(response)
+            return response.data
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
 
 export const registerAnnouncement = newAnnouncement => {
     return axios
@@ -340,6 +353,19 @@ export const getUserAnnouncements = (id) => {
             console.log(err)
         })
 }
+// export const getUserAnnouncements = (id) => {
+//     //console.log(id);
+//     return axios
+//         .get('api/userAnnouncementUser/'+id, {
+//             headers: { 'Content-Type': 'application/json' }
+//         })
+//         .then(response => {
+//             return response.data
+//         })
+//         .catch(err => {
+//             console.log(err)
+//         })
+// }
 
 export const getQualifiedPostulants = () => {
     return axios
