@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
-import {getAnnouncement} from './UserFunctions'
+//import {getAnnouncement} from './UserFunctions'
 import Select from 'react-select'
 import {getStudentData} from './UserFunctions' 
 import { getProfile } from './UserFunctions'
 import {percentageData} from './UserFunctions' 
 import {getUserAnnouncements} from './UserFunctions'
-
+import {getAnnouncementIDGenerateRotulate} from './UserFunctions'
 //import {getStudents} from './UserFunctions' 
 import axios from 'axios'
 
@@ -41,20 +41,37 @@ class Laboratory_scores extends Component{
         })
     }
 
+    // fillAuxi(){
+    //     var aux =[]
+    //     getAnnouncement().then(conv =>{
+    //         for(var i=0;i<conv.length;i++){
+    //             if(conv[i].id === this.state.selectedConv.id){
+    //                 var auxi = JSON.parse(conv[i].auxiliary)
+    //                 for(var j=0;j<auxi.length;j++){
+    //                     var object = {}
+    //                     object.label = auxi[j].name
+    //                     aux[j]=object
+    //                 }
+    //             }
+    //         }
+    //     })
+    //     this.setState({auxiliaturas:aux})
+    // }
     fillAuxi(){
         var aux =[]
-        getAnnouncement().then(conv =>{
-            for(var i=0;i<conv.length;i++){
-                if(conv[i].id === this.state.selectedConv.id){
-                    var auxi = JSON.parse(conv[i].auxiliary)
-                    for(var j=0;j<auxi.length;j++){
+        getAnnouncementIDGenerateRotulate(this.state.selectedConv.id).then(res => {
+            console.log(res);
+              var auxiliary = res
+          
+                    for(var j=0;j<auxiliary.length;j++){
                         var object = {}
-                        object.label = auxi[j].name
+                        object.label = auxiliary[j].name
                         aux[j]=object
                     }
-                }
-            }
         })
+                
+            
+        
         this.setState({auxiliaturas:aux})
     }
 

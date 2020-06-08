@@ -3,7 +3,7 @@ import Select from 'react-select'
 import {getAnnouncement} from './UserFunctions'
 import {getStudents} from './UserFunctions' 
 import {updateScore} from './UserFunctions'
-
+import {getAnnouncementIDGenerateRotulate} from './UserFunctions'
 var conv = []
 class Scores_list extends Component{
   constructor() {
@@ -52,20 +52,37 @@ getStudents(){
     })
 }
 
+// fillAuxi(){
+//     var aux =[]
+//     getAnnouncement().then(conv =>{
+//         for(var i=0;i<conv.length;i++){
+//             if(conv[i].id === this.state.selectedConv.id){
+//                 var auxi = JSON.parse(conv[i].auxiliary)
+//                 for(var j=0;j<auxi.length;j++){
+//                     var object = {}
+//                     object.label = auxi[j].name
+//                     aux[j]=object
+//                 }
+//             }
+//         }
+//     })
+//     this.setState({auxiliaturas:aux})
+// }
 fillAuxi(){
     var aux =[]
-    getAnnouncement().then(conv =>{
-        for(var i=0;i<conv.length;i++){
-            if(conv[i].id === this.state.selectedConv.id){
-                var auxi = JSON.parse(conv[i].auxiliary)
-                for(var j=0;j<auxi.length;j++){
+    getAnnouncementIDGenerateRotulate(this.state.selectedConv.id).then(res => {
+        console.log(res);
+          var auxiliary = res
+      
+                for(var j=0;j<auxiliary.length;j++){
                     var object = {}
-                    object.label = auxi[j].name
+                    object.label = auxiliary[j].name
                     aux[j]=object
                 }
-            }
-        }
     })
+            
+        
+    
     this.setState({auxiliaturas:aux})
 }
 
