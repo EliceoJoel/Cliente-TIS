@@ -7,6 +7,7 @@ import {getAnnouncement} from './UserFunctions'
 import {getAux} from './UserFunctions'
 import {getTheme} from './UserFunctions'
 import {saveAnnouncement} from './UserFunctions'
+import axios from 'axios'
 
 
 let users =[]
@@ -185,7 +186,7 @@ class configure_user extends Component{
 
       else if(this.state.rol.label != null) 
       return(
-        <button  type="button" className="col btn btn-info mt-2"> guardar </button>
+        <button  type="button" className="col btn btn-info mt-2" onClick ={() => this.save()}> guardar </button>
       )
     }
 
@@ -227,6 +228,13 @@ class configure_user extends Component{
           console.log(data)
         saveAnnouncement(data)
       }
+
+      console.log(this.state.user.id, this.state.rol.id)
+      axios.get('api/updateRol/'+this.state.user.id+'/'+this.state.rol.id ,{
+        headers: { 'Content-Type': 'application/json' }
+      }).catch(err => {
+          console.log(err)
+      })
     }
 
     generar(){
