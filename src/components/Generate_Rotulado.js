@@ -214,7 +214,7 @@ class Register extends Component {
                 phone: this.state.phone,
                 ci: this.state.ci,
                 sis_code: this.state.sis_code,
-                announcement: this.state.selectedConvOption.value,
+                announcement: this.state.selectedConvOption.label,
                 auxiliary:this.getAuxs()
             }
 
