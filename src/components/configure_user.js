@@ -6,6 +6,8 @@ import {getRol} from './UserFunctions'
 import {getAnnouncement} from './UserFunctions'
 import {getAux} from './UserFunctions'
 import {getTheme} from './UserFunctions'
+import {saveAnnouncement} from './UserFunctions'
+
 
 let users =[]
 let rol =[]
@@ -18,9 +20,7 @@ class configure_user extends Component{
 
       this.aux = []
       this.theme = []
-      this.convocatorias=[]
-      this.auxiliary=[]
-      this.themes=[]
+      this.items=[]
       this.state = {
         user:null,
         rol:{id:-1,label:null},
@@ -58,6 +58,10 @@ class configure_user extends Component{
             var object = {}
             object.id = res[i].id
             object.label = res[i].name
+            object.type = res[i].type
+            object.idConv = res[i].id
+            object.idAux = -1
+            object.idTheme = -1
             conv[i] = object
         }
       })
@@ -102,14 +106,16 @@ class configure_user extends Component{
       this.setState({temp_conv : announcement})
       getAux(announcement.id).then(res =>{
         let a = res.data
+        console.log(a)
         for(let i=0; i<a.length;i++){
           let object ={}
           object.id = a[i].id
           object.label = a[i].name
-          object.conv = a[i].id_announcement
+          object.idConv = announcement.id
+          object.idAux = a[i].id
+          object.idTheme = -1
           this.aux[i] = object
         }
-        console.log(this.aux)
       }).catch(err => {
         console.log(err)
     })
@@ -119,14 +125,15 @@ class configure_user extends Component{
       this.setState({temp_aux : e})
       let data = {auxiliary:e.label}
       getTheme(data).then(res =>{
-        console.log(res)
         let a = res.data
         for(let i=0; i<a.length;i++){
           let object ={}
           object.id = a[i].id
           object.label = a[i].theme
-          object.aux = a[i].auxiliary
-          object.conv = a[i].id_announcement
+          object.aux = e.id
+          object.idConv = e.idConv
+          object.idAux = e.idAux
+          object.idTheme = a[i].id
           this.theme[i] = object
         }
       }).catch(err => {
@@ -135,7 +142,7 @@ class configure_user extends Component{
     }
 
     visualizar(){
-      if(this.state.rol.label == "comision conocimintos laboratorio"){
+      if(this.state.rol.label == "Comisión de evaluación de conocimientos"){
         return(
           <div>
           <label htmlFor="Nombre">Selecciona una convocatoria</label>
@@ -149,6 +156,83 @@ class configure_user extends Component{
           />
           <br/>
           <br/>
+          {this.generar()}
+        </div>)
+      }
+
+      if(this.state.rol.label == "Comisión de evaluación de méritos"){
+        return(
+          <div>
+            <label htmlFor="Nombre">Selecciona una convocatoria</label>
+            <Select
+                  name="conv"
+                  options={conv}
+                  onChange={(e) => this.fillAux(e)}
+                  placeholder=""
+                  className="basic-select"
+                  classNamePrefix="select"
+            />
+            <br/>
+            <div> {this.state.itemsList} </div>
+            <br/>
+            <button  type="button" className="col btn btn-info mt-2" onClick ={() => this.addAnnouncement()}> agregar convocatoria </button>
+            <br/>
+            <button  type="button" className="col btn btn-info mt-2" onClick ={() => this.save()}> guardar </button>
+          </div>
+          )
+      }
+
+
+      else if(this.state.rol.label != null) 
+      return(
+        <button  type="button" className="col btn btn-info mt-2"> guardar </button>
+      )
+    }
+
+    addAnnouncement(){
+      this.items[this.items.length] = this.state.temp_conv
+      console.log(this.items)
+      this.setState({itemsList:this.items.map(conv =>(
+        <h6 className="mb-3 font-weight-normal text-center">{conv.label}</h6>
+      ))})
+    }
+
+    addAuxiliary(){
+      this.items[this.items.length] = this.state.temp_aux
+      console.log(this.items)
+      console.log(this.state.temp_aux)
+      this.setState({itemsList:this.items.map(aux =>(
+        <h6 className="mb-3 font-weight-normal text-center">{aux.label}</h6>
+      ))})
+    }
+
+    addTheme(){
+      this.items[this.items.length] = this.state.temp_theme
+      console.log(this.items)
+      this.setState({itemsList:this.items.map(theme =>(
+        <h6 className="mb-3 font-weight-normal text-center">{theme.label}</h6>
+      ))})
+    }
+
+    save(){
+      console.log(this.items)
+      console.log(this.state.user.id)
+      for(let i = 0; i<this.items.length;i++){
+        let data = {
+          "idAnnouncement": this.items[i].idConv,
+          "idAuxiliary": this.items[i].idAux,
+          "idTheme": this.items[i].idTheme,
+          "idUser":this.state.user.id
+          }
+          console.log(data)
+        saveAnnouncement(data)
+      }
+    }
+
+    generar(){
+      if(this.state.temp_conv.type == "Laboratorio")
+      return(
+        <div>
           <label htmlFor="Nombre">Selecciona una auxiliatura</label>
           <Select
                 name="auxiliary"
@@ -169,89 +253,36 @@ class configure_user extends Component{
                 className="basic-select"
                 classNamePrefix="select"
           />
-          <div> {this.state.themeList} </div>
+          <br/>
+          <div> {this.state.itemsList} </div>
+          <br/>
           <button  type="button" className="col btn btn-info mt-2" onClick ={() => this.addTheme()}> agregar </button>
           <br/>
           <br/>
-          <button  type="button" className="col btn btn-info mt-2"> guardar </button>
-        </div>)
-
-
-      }
-      if(this.state.rol.label == "comision meritos"){
-        return(
-          <div>
-            <label htmlFor="Nombre">Selecciona una convocatoria</label>
-            <Select
-                  name="conv"
-                  options={conv}
-                  onChange={(e) => this.fillAux(e)}
-                  placeholder=""
-                  className="basic-select"
-                  classNamePrefix="select"
-            />
-            <div> {this.state.convsList} </div>
-            <button  type="button" className="col btn btn-info mt-2" onClick ={() => this.addAnnouncement()}> agregar convocatoria </button>
-            <br/>
-            <button  type="button" className="col btn btn-info mt-2"> guardar </button>
-          </div>
-          )
-      }
-      if(this.state.rol.label == "comision conocimientos" ){
-        return(
-          <div>
-            <label htmlFor="Nombre">Selecciona una convocatoria</label>
-            <Select
-                  name="conv"
-                  options={conv}
-                  onChange={(e) => this.fillAux(e)}
-                  placeholder=""
-                  className="basic-select"
-                  classNamePrefix="select"
-            />
-            <br/>
-            <br/>
-            <label htmlFor="Nombre">Selecciona una auxiliatura</label>
-            <Select
-                  name="auxiliary"
-                  options={this.aux}
-                  onChange={(e) => this.fillTheme(e)}
-                  placeholder= ""
-                  className="basic-select"
-                  classNamePrefix="select"
-            />
-            <div> {this.state.auxList} </div>
-            <button  type="button" className="col btn btn-info mt-2" onClick ={() => this.addAuxiliary()}> agregar </button>
-            <br/>
-            <button  type="button" className="col btn btn-info mt-2"> guardar </button>
-        </div>)
-      }
-      else if(this.state.rol.label != null) 
-      return(
-        <button  type="button" className="col btn btn-info mt-2"> guardar </button>
+          <button  type="button" className="col btn btn-info mt-2" onClick ={() => this.save()}> guardar </button>
+        </div>
       )
-    }
-
-    addAnnouncement(){
-      this.convocatorias[this.convocatorias.length] = this.state.temp_conv
-      this.setState({convsList:this.convocatorias.map(conv =>(
-        <h6 className="mb-3 font-weight-normal text-center">{conv.label}</h6>
-      ))})
-    }
-
-    addAuxiliary(){
-      this.auxiliary[this.auxiliary.length] = this.state.temp_aux
-      console.log(this.state.temp_aux)
-      this.setState({auxList:this.auxiliary.map(aux =>(
-        <h6 className="mb-3 font-weight-normal text-center">{aux.label}</h6>
-      ))})
-    }
-
-    addTheme(){
-      this.themes[this.themes.length] = this.state.temp_theme
-      this.setState({themeList:this.themes.map(theme =>(
-        <h6 className="mb-3 font-weight-normal text-center">{theme.label}</h6>
-      ))})
+      if(this.state.temp_conv.type == "Docencia")
+      return(
+        <div>
+          <label htmlFor="Nombre">Selecciona una auxiliatura</label>
+          <Select
+                name="auxiliary"
+                options={this.aux}
+                onChange={(e) => this.fillTheme(e)}
+                placeholder= ""
+                className="basic-select"
+                classNamePrefix="select"
+          />
+          <br/>
+          <div> {this.state.itemsList} </div>
+          <br/>
+          <button  type="button" className="col btn btn-info mt-2" onClick ={() => this.addAuxiliary()}> agregar </button>
+          <br/>
+          <br/>
+          <button  type="button" className="col btn btn-info mt-2" onClick ={() => this.save()}> guardar </button>
+        </div>
+      )
     }
 
   }
