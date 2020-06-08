@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Select from 'react-select'
 import {getAnnouncement} from './UserFunctions'
 import {getAverage} from './UserFunctions'
-
+//
  var conv = []
 class final_notes extends Component {
     constructor() {
