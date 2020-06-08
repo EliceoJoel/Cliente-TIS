@@ -66,6 +66,7 @@ export class PostulantEnable extends Component {
             }) 
             console.log(this.state.idUser);
             getUserAnnouncements(this.state.idUser).then(res=>{
+
                 let announcementArray = []
                 console.log(res);
                 for (var i = 0; i < res.length; i++) {

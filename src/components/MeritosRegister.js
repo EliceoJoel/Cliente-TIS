@@ -78,10 +78,14 @@ class MeritosRegister extends Component {
         if(res[i].type === 'Porcentaje'){
           res[i].promedio = 0
           configsOne.push(res[i])
+          
+          
         }else{
           configsTwo.push(res[i])
+          
         }
-      }
+      }console.log(configsOne);
+      console.log(configsTwo);
       this.setState({showTable:true}, this.llenarNotasCero(res))
     })
   }
@@ -91,7 +95,7 @@ class MeritosRegister extends Component {
       let object = {}
       object.id = res[i].id
       object.nota = 0
-      if(res[i].number>=30){
+      if(res[i].type === 'Porcentaje'){
        notasOne.push(object)
       }else{
         notasTwo.push(object)
@@ -108,9 +112,12 @@ class MeritosRegister extends Component {
       promedio = 0.0
     }
     let posicion = notasOne.map(function(e) { return e.id; }).indexOf(config.id);
+    console.log(posicion);
+    
     promedio = promedio * (configsOne[posicion].number/100)
     promedio = 	this.redondear(promedio,2)
     configsOne[posicion].promedio = promedio
+    notasOne [posicion].nota = promedio
     this.updateTotal()
   }
 
@@ -167,6 +174,8 @@ class MeritosRegister extends Component {
 
   async registrar(){
     const notas = notasOne.concat(notasTwo);
+    console.log(notas);
+    
     for(let i=0 ; i<notas.length ; i++){
       const newRegister ={
         id_postulant : this.state.idPostulant,
