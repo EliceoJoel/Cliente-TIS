@@ -1,22 +1,21 @@
 import React, {Component} from 'react';
-import axios from 'axios'
+import {getAnn} from './UserFunctions'
 
+
+var data = []
 class List extends Component{
 
   constructor(props) {
       super(props);
+      this.data = []
       this.state = {
-        convocatorias: [],
+        convocatoria:[],
       };  
     }
-    componentDidMount() {
-      axios.get('/api/announcement')
-      .then(response => {
-          this.setState({convocatorias : response.data});
-      })
-      .catch(e => {
-          console.log(e);
-      })
+    async componentDidMount() {
+      this.data = await getAnn()
+      await this.setState({convocatoria:data})
+      console.log(this.state.convocatoria)
     }
 
     render(){
@@ -25,8 +24,8 @@ class List extends Component{
           <div className="container">
                   <div className="justify-content-center">
                       <h1 className="h3 font-weight-normal text-center mt-3 p-3 bg-info text-white rounded"> Lista de convocatorias </h1>
-                      {this.state.convocatorias.map( convocatoria => (
-                      <div className="text-center mt-3" key={convocatoria.id}>
+                      {this.state.convocatoria.map( convocatoria => (
+                        <div className="text-center mt-3" key={convocatoria.id}>
                           <a href = {url + convocatoria.file}> 
                           <div><h5>{convocatoria.name} </h5> </div>
                           </a>

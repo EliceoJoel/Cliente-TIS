@@ -582,3 +582,17 @@ export const getAverage  = (id) => {
             console.log(err)
         })
 }
+
+export const getAnn  = () => {
+    //console.log(id);
+    return axios
+        .get('/api/announcement', {
+        headers: { 'Content-Type': 'application/json'}
+        })
+        .then(response => {
+            return response.data
+        })
+        .catch(e => {
+            console.log(e);
+        })
+}
