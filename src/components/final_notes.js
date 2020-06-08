@@ -1,11 +1,9 @@
 import React, { Component } from 'react'
 import Select from 'react-select'
 import {getAnnouncement} from './UserFunctions'
-import {getAux} from './UserFunctions'
-import {getFinalScores} from './UserFunctions'
+import {getAverage} from './UserFunctions'
 
  var conv = []
- var aux = []
 class final_notes extends Component {
     constructor() {
         super()
@@ -20,7 +18,6 @@ class final_notes extends Component {
             students:(<div></div>),
         }
 
-        this.selectConvChange = this.selectConvChange.bind(this)
     }
 
     //fill announcement
@@ -39,23 +36,16 @@ class final_notes extends Component {
     }
 
 
-
-    selectConvChange = selectConv =>{
-        this.setState({selectConvError:"", showList:false})
-        this.setState({selectConv}, ()=>this.fillPostulant())
-    }
-
     setup(e){
-        let data = {"announcement":e.label}
-        console.log(data)
-        getFinalScores(data).then(res =>{
-          let a = res.data
+        console.log(e.id)
+        getAverage(e.id).then(res =>{
+          let a = res
           console.log(a)
           for(let i=0; i<a.length;i++){
             let object ={}
-            object.id = a[i].idPostulant
+            object.auxiliary = a[i].auxiliary
             object.name = a[i].name
-            object.sum = a[i].sum
+            object.nota_final = a[i].nota_final
             this.student[i] = object
         }
           console.log(this.student) 
@@ -66,10 +56,10 @@ class final_notes extends Component {
 
       scores(){
         this.setState({students:this.student.map(student =>(
-            <div key={student.id.toString()} className="row">
+            <div key={student.id} className="row">
                 <div className="col">{student.name}</div>
-                <div className="col">{student.id}</div>
-                <div className="col">{student.sum}</div>
+                <div className="col">{student.auxiliary}</div>
+                <div className="col">{student.nota_final}</div>
             </div>
         ))})
       }
@@ -99,10 +89,11 @@ class final_notes extends Component {
                 <br/>        
             </div>
             <div className="row">
-                <div className="col">nombre</div>
-                <div className="col">id</div>
-                <div className="col">nota promedio</div>
+                <div className="col text-info font-weight-bold">nombre</div>
+                <div className="col text-info font-weight-bold">auxiliatura</div>
+                <div className="col text-info font-weight-bold">nota promedio</div>
             </div>
+            <div className="my-1" style={{border:"0.5px solid silver", width: "100%"}}></div>
             <div>
                 {this.state.students}
             </div>  

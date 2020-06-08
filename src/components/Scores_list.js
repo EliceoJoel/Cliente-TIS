@@ -1,8 +1,12 @@
+/* eslint-disable eqeqeq */
 import React, { Component } from 'react'
 import Select from 'react-select'
-import {getAnnouncement} from './UserFunctions'
+import {getUserAnnouncements, getTheoryScore} from './UserFunctions'
+import {getProfile} from './UserFunctions'
 import {getStudents} from './UserFunctions' 
+import {getUserAuxiliary} from './UserFunctions' 
 import {updateScore} from './UserFunctions'
+import {finalTheoryScore} from './UserFunctions'
 
 var conv = []
 class Scores_list extends Component{
@@ -16,16 +20,22 @@ class Scores_list extends Component{
         postulantes:[],
         score:[],
         warningMesage:"",
+        idUser:"",
     }
 }
 componentDidMount() {
-    getAnnouncement().then(res => {
-        for (var i=0; i < res.length; i++) {
-            var object = {}
-            object.id = res[i].id
-            object.label = res[i].name
-            conv[i] = object
-          }
+    getProfile().then(res => {
+        this.setState({
+            idUser: res.user.id        
+        }) 
+        getUserAnnouncements(res.user.id).then(res => {
+            for (var i=0; i < res.length; i++) {
+                var object = {}
+                object.id = res[i].id
+                object.label = res[i].name
+                conv[i] = object
+            }
+        })
     })
 }
 getStudents(){
@@ -48,25 +58,24 @@ getStudents(){
                 postulants.push(object)
             }
         }
+        console.log(postulant)
         this.setState({postulantes:postulants, score:scores})
     })
 }
 
 fillAuxi(){
-    var aux =[]
-    getAnnouncement().then(conv =>{
-        for(var i=0;i<conv.length;i++){
-            if(conv[i].id === this.state.selectedConv.id){
-                var auxi = JSON.parse(conv[i].auxiliary)
-                for(var j=0;j<auxi.length;j++){
-                    var object = {}
-                    object.label = auxi[j].name
-                    aux[j]=object
-                }
-            }
+    let aux = []
+    console.log(this.state.idUser,this.state.selectedConv.id)
+    getUserAuxiliary(this.state.idUser,this.state.selectedConv.id).then(auxi =>{
+        for(var i=0; i<auxi.length;i++){
+            var object = {}
+            object.id = auxi[i].id
+            object.label = auxi[i].name
+            aux[i] = object
         }
+        console.log(aux)
+        this.setState({auxiliaturas:aux})
     })
-    this.setState({auxiliaturas:aux})
 }
 
 
@@ -75,7 +84,7 @@ render() {
     return (
         <div className="justify-content-center">
             <h1 className="h3 font-weight-normal text-center mt-3 p-3 bg-info text-white rounded">
-               Lista de puntos
+               Registrar notas docencia
             </h1>
             <div className="row">
                 <div className="form-group col-8 my-4">
@@ -93,7 +102,7 @@ render() {
                 </div>
 
                 <div className="form-group col-3 mt-5">
-                    <button type="button" class="col btn btn-info mt-2" onClick={() => this.fillAuxi()} >seleccionar convocatoria</button>
+                    <button type="button" className="col btn btn-info mt-2" onClick={() => this.fillAuxi()} >seleccionar convocatoria</button>
                 </div>
 
                 <div className="form-group col-8 my-4">
@@ -118,14 +127,15 @@ render() {
             <br/>
             <br/>  
             <div className="row">
-                    <div class="col">nombre</div>
-                    <div class="col">auxiliatura</div>
-                    <div class="col">nota</div>
-                    <div class="col">nota Oral</div>
+                    <div class="col text-info font-weight-bold">nombre</div>
+                    <div class="col text-info font-weight-bold">auxiliatura</div>
+                    <div class="col text-info font-weight-bold">nota</div>
+                    <div class="col text-info font-weight-bold">nota Oral</div>
                     <div class="col"></div>
                     <div class="col"></div>
                     <div class="col"></div>
             </div>
+            <div className="my-1" style={{border:"0.5px solid silver", width: "100%"}}></div>
             <form>
                 {this.renderTableData()}
                 <button type="button" class="col btn btn-info " onClick={() =>this.update()} >subir notas</button>
@@ -139,44 +149,64 @@ render() {
 
 renderTableData() {
     return this.state.postulantes.map(postulant =>(
-        <div className="row">
-                <div class="col">{postulant.name}</div>
-                <div class="col">{postulant.auxiliary}</div>
-                <div class="col">{this.fillScore(postulant.score)}</div>
-                <div class="col">{this.fillScore(postulant.score_oral)}</div>
-                <input 
-                    type = "number"
-                    id = {postulant.id} 
-                    name = "score"
-                    min="0"
-                    max="100"
-                    className="col"  
-                    placeholder= "ingrese notas de conocimineto"
-                    onChange = {this.onChange}                     
-                />
+        <div>    
+            <div className="row">
+                    <div class="col">{postulant.name}</div>
+                    <div class="col">{postulant.auxiliary}</div>
+                    <div class="col">{this.fillScore(postulant.score)}</div>
+                    <div class="col">{this.fillScore(postulant.score_oral)}</div>
+                    <input 
+                        type = "number"
+                        id = {postulant.id} 
+                        name = "score"
+                        min="0"
+                        max="100"
+                        className="col"  
+                        placeholder= "ingrese notas de conocimineto"
+                        onChange = {this.onChange}                     
+                    />
 
-                <input 
-                    type = "number"
-                    id = {postulant.id} 
-                    name = "score"
-                    min="0"
-                    max="100"
-                    className="col"  
-                    placeholder= "ingrese notas de examen oral"
-                    onChange = {this.onChangeOral}                     
-                />
-                <div class="col">{this.state.warningMesage}</div>
+                    <input 
+                        type = "number"
+                        id = {postulant.id} 
+                        name = "score"
+                        min="0"
+                        max="100"
+                        className="col"  
+                        placeholder= "ingrese notas de examen oral"
+                        onChange = {this.onChangeOral}                     
+                    />
+                    <div class="col">{this.state.warningMesage}</div>
             </div>
+            <div className="my-1" style={{border:"0.5px solid silver", width: "100%"}}></div>
+        </div>
     ))
  }
 update(){
     var post = this.state.score
     console.log(post)
     for(var i=0;i<this.state.postulantes.length;i++){
+        let finalScore = 0
         console.log(this.state.score[i])
         updateScore(this.state.score[i])
+        var id = this.state.score[i].id
+        // eslint-disable-next-line no-loop-func
+        getTheoryScore(this.state.selectedConv.id, this.state.score[i].id).then(data=>{
+            let message = {}
+            if(data[0].type == "Examen Escrito"){
+                finalScore =  (data[0].percentage * data[0].score + data[1].percentage * data[1].score_oral)/100
+            }
+            else{
+                finalScore = (data[0].percentage * data[0].score_oral + data[1].percentage * data[1].score)/100
+            }
+            message.notaConocimiento = finalScore
+            message.idPostulant = id
+            message.announcement = this.state.selectedConv.label
+            finalTheoryScore(message)
+        })
     }
     this.getStudents()
+
 }
 
  onChangeOral = (event) => {

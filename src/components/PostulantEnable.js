@@ -235,27 +235,25 @@ export class PostulantEnable extends Component {
                         data: send,
                         headers: {'Content-Type': 'multipart/form-data' }
                         }).then(response =>{
-           
-                        // this.setState({req: response.data})
-                         //console.log(this.req)
+                            console.log(response.data)
+                            let score = new FormData()
+                            score.append('id_postulant', response.data.id)
+                            score.append('score', 0)
+                            score.append('score_oral', 0)
+                            axios({
+                                method: 'post',
+                                url: 'api/add',
+                                data: score,
+                                headers: {'Content-Type': 'multipart/form-data' }
+                                }).then(response =>{
+                            }) 
+                            .catch(error => {
+                                console.log(error)
+                            })
                      }) 
                      .catch(error => {
                          console.log(error)
-                     })   
-                     let score = new FormData()
-                     score.append('id_postulant', idRegisterBook)
-                     score.append('score', 0)
-                     score.append('score_oral', 0)
-                     axios({
-                        method: 'post',
-                        url: 'api/add',
-                        data: score,
-                        headers: {'Content-Type': 'multipart/form-data' }
-                        }).then(response =>{
-                     }) 
-                     .catch(error => {
-                         console.log(error)
-                     })
+                     })  
                     
                     
 

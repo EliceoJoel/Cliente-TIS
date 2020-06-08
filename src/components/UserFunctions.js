@@ -330,8 +330,6 @@ export const  percentageData = (data) =>{
 export const getUserAnnouncements = (id) => {
     //console.log(id);
     return axios
-       
-        
         .get('api/userAnnouncement/'+id, {
             headers: { 'Content-Type': 'application/json' }
         })
@@ -478,6 +476,106 @@ export const getAllNotes = () => {
         })
         .then(response => {
             //console.log(response.data)
+            return response.data
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+export const getUserAnnouncementsLab = (id) => {
+    //console.log(id);
+    return axios
+        .get('api/userAnnouncementLab/'+id, {
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => {
+            return response.data
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+export const getUserAuxiliary = (id,conv) => {
+    //console.log(id);
+    return axios
+        .get('api/userAuxiliary/'+id + '/' + conv, {
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => {
+            return response.data
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+export const getUserTheme = (id,conv,aux) => {
+    //console.log(id);
+    return axios
+        .get('api/userTheme/'+id + '/' + conv + '/' + aux ,{
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => {
+            console.log(response)
+            return response.data
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+export const getTheoryScore  = (id, postulant) => {
+    //console.log(id);
+    return axios
+        .get('api/theoryScore/'+id +'/' + postulant ,{
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => {
+            console.log(response)
+            return response.data
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+export const getLabScore  = (id) => {
+    //console.log(id);
+    return axios
+        .get('api/finalScores/'+id ,{
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => {
+            return response.data
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+export const finalTheoryScore  = (data) => {
+    //console.log(id);
+    return axios
+        .post('api/notaConocimiento', data ,{
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => {
+            return response.data
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+export const getAverage  = (id) => {
+    //console.log(id);
+    return axios
+        .get('api/getAverage/'+id ,{
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => {
             return response.data
         })
         .catch(err => {
