@@ -155,6 +155,19 @@ export const getAnnouncementID = (id) => {
             console.log(err)
         })
 }
+export const getAnnouncementIDGenerateRotulate = (id) => {
+    return axios
+        .get('api/announcementGenerate/'+id, {
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => {
+            console.log(response)
+            return response.data
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
 
 export const registerAnnouncement = newAnnouncement => {
     return axios

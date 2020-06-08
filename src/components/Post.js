@@ -24,7 +24,8 @@ var ArrayAuxi = []
             auxiliary:'',
             auxiliary_error:'',
             requirement:'',
-            tematica:''
+            tematica:'' ,
+            post_announcement_acomplish:''
 
 
          }
@@ -99,7 +100,7 @@ var ArrayAuxi = []
         if(this.state.name === ''){
             this.setState({name_error:'Campo vacio'})
         }
-        else if(this.state.name.length > 30){
+        else if(this.state.name.length > 50){
             this.setState({name_error:'Dato ingresado demasiado largo'})
         }
         else if(this.state.year === ''){
@@ -112,9 +113,9 @@ var ArrayAuxi = []
         else if(this.state.file === null){
             this.setState({file_error:'Seleccione un documento .pdf'})
         }
-        else if(ArrayAuxi.length === 0){
-            this.setState({array_error:'Seleccione al menos una auxiliatura'})
-        }
+        // else if(ArrayAuxi.length === 0){
+        //     this.setState({array_error:'Seleccione al menos una auxiliatura'})
+        // }
         else{
             return true;
         }
@@ -172,7 +173,48 @@ var ArrayAuxi = []
                 data: send,
                 headers: {'Content-Type': 'multipart/form-data' }
                 }).then(response =>{
-                 console.log(response)
+                    this.setState({ file:null})
+                 this.setState({post_announcement_acomplish:'Convocatoria Publicada con Exito'})
+                 this.setState({name:''})
+                 this.setState({year:''})
+                 this.setState({type: 'Docencia'})
+                 this.setState({ departament: 'Departamento de Sistemas-Informatica'})
+              
+                let dataAnnouncement = response.data
+                let idAnnouncement = dataAnnouncement.id    
+                let sendConfigMerit = new FormData()
+                sendConfigMerit.append('id_announcement' , idAnnouncement)
+                sendConfigMerit.append('type' , 'merit')
+                sendConfigMerit.append('configuration' , 'false')
+                axios({
+                    method: 'post',
+                    url: 'api/configAnnouncement',
+                    data: sendConfigMerit,
+                    headers: {'Content-Type': 'multipart/form-data' }
+                    }).then(response =>{
+                     console.log(response)
+                 }) 
+                 .catch(error => {
+                     console.log(error)
+                 })
+                 let sendConfigKnnowledge = new FormData()
+                sendConfigKnnowledge.append('id_announcement' , idAnnouncement)
+                sendConfigKnnowledge.append('type' , 'knowledge')
+                sendConfigKnnowledge.append('configuration' , 'false')
+                axios({
+                    method: 'post',
+                    url: 'api/configAnnouncement',
+                    data: sendConfigKnnowledge,
+                    headers: {'Content-Type': 'multipart/form-data' }
+                    }).then(response =>{
+                     console.log(response)
+                 }) 
+                 .catch(error => {
+                     console.log(error)
+                 })
+
+                console.log(idAnnouncement);
+                
              }) 
              .catch(error => {
                  console.log(error)
@@ -202,8 +244,8 @@ var ArrayAuxi = []
 
 
     render() {
-         const {name ,year, type, departament,item,auxiliary, requirement, tematica} =this.state
-         
+        //  const {name ,year, type, departament,item,auxiliary, requirement, tematica} =this.state
+        const {name ,year, type, departament} =this.state
 
         
         return (
@@ -270,11 +312,11 @@ var ArrayAuxi = []
                             <option>Departamento de Sistemas-Informatica</option>
                             <option>Departamento de Biologia</option>
                             <option>Departamento de Matematicas</option>
-
-
+                            <option>Departamento de Fisica</option>
+                            <option>Departamento de Quimica</option>
                         </select>
                         </div>
-
+{/* 
                         <h3 className="h5 col-md-12 my-4 font-weight-normal text-center">
                             Requisitos de Convocatoria</h3>
                       <div className="form-group col-md-12">
@@ -292,8 +334,8 @@ var ArrayAuxi = []
                          </div>
                          <div className="form-group col-md-12 ">  
                          <button className="btn btn-outline-info" variant="warning" onClick ={(reqevent) => this.handleReq(reqevent)} >Agregar</button>
-                         </div>
-                        <h3 className="h5 col-md-12 my-4 font-weight-normal text-center">
+                         </div> */}
+                        {/* <h3 className="h5 col-md-12 my-4 font-weight-normal text-center">
                             Datos de Auxiliatura</h3>
                       <div className="form-group col-md-6">
                         <label htmlFor="Nombre">Item</label>
@@ -307,8 +349,8 @@ var ArrayAuxi = []
                            onChange = {this.onChangeAux}                     
                        />
                            <p style={{color:"red"}}>{this.state.item_error}</p>
-                        </div>
-                        <div className="form-group col-md-6">
+                        </div> */}
+                        {/* <div className="form-group col-md-6">
                         <label htmlFor="Nombre">Auxiliatura</label>
                           <input    
                            className="form-control" 
@@ -354,7 +396,7 @@ var ArrayAuxi = []
                                      <label htmlFor="item">item : {arreglo.item},</label>
                                      <label htmlFor="auxiliary">auxiliatura : {arreglo.name}</label>
                                  </div>   )}
-                    </div>
+                    </div> */}
                         <p></p>
                         <div className="form-group col-md-12 ">
                         <h3 className="h5 col-md-12 my-4 font-weight-normal text-center">
@@ -373,10 +415,16 @@ var ArrayAuxi = []
                      </div>  
                   <div>
                      
-                <button className="col btn btn-lg btn-info mt-10 "onClick ={(e) => this.handleUpload(e)} >Subir Convocatoria</button>
-                
+                <button className=" btn btn-info mt-2 mb-5"onClick ={(e) => this.handleUpload(e)} >Publicar Convocatoria</button>
+                <div style={{color:'green'}} className=" h5 col-md-12 mt-4">
+                <p>{this.state.post_announcement_acomplish}</p>
+                        </div>
                
                 </div>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
             </div>
             </form>
         )
