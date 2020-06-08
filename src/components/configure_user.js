@@ -123,6 +123,7 @@ class configure_user extends Component{
     }
 
     fillTheme(e){
+      this.theme = [] 
       this.setState({temp_aux : e})
       let data = {auxiliary:e.label}
       getTheme(data).then(res =>{
