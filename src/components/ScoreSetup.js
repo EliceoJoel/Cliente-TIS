@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import Select from 'react-select'
 import { getProfile, getUserAnnouncements } from './UserFunctions'
 import axios from 'axios'
+
+//import AnnouncementConfigPercentage from './AnnouncementConfigPercentage'
 export class ScoreSetup extends Component {
 
     constructor(props) {
@@ -114,6 +116,7 @@ export class ScoreSetup extends Component {
             }).then(response => {
                 this.setState({ announcementFound: true })
                 this.setState({ announcementFound: true })
+              
                 // this.found = response.data
                 this.setState({ found: response.data })
                 console.log(this.state.found)
@@ -1016,14 +1019,21 @@ export class ScoreSetup extends Component {
                         )}
                     </div>
                     <div className="col-md-12">
+                       
                         {this.state.announcementFound ?
-                            <button className="btn btn-outline-info" variant="warning" onClick={(AuxEvent) => this.handleMeritConfiguration(AuxEvent)} >CONFIGURAR MERITO</button>
-                            : null}
+                            <div>
+                                
+                           
+                            <button className="btn btn-outline-info mx" variant="warning" onClick={(AuxEvent) => this.handleMeritConfiguration(AuxEvent)} >MERITO</button>
+                            </div>
+                         
+                         : null}
+                       
                         {this.state.announcementlab ?
-                            <button className="btn btn-outline-info mx-3" variant="warning" onClick={(AuxEvent) => this.handleKnowledgeLabConfiguration(AuxEvent)} >CONFIGURAR CONOCIMIENTO</button>
+                            <button className="btn btn-outline-info mx-2" variant="warning" onClick={(AuxEvent) => this.handleKnowledgeLabConfiguration(AuxEvent)} >CONOCIMIENTO</button>
                             : null}
                         {this.state.announcementdoc ?
-                            <button className="btn btn-outline-info mx-3" variant="warning" onClick={(AuxEvent) => this.handleKnowledgeDocConfiguration(AuxEvent)} >CONFIGURAR CONOCIMIENTO</button>
+                            <button className="btn btn-outline-info mx-2" variant="warning" onClick={(AuxEvent) => this.handleKnowledgeDocConfiguration(AuxEvent)} >CONOCIMIENTO</button>
                             : null}
 
                         <br></br>

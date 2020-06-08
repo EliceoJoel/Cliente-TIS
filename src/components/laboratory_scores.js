@@ -7,7 +7,7 @@ import {getUserTheme} from './UserFunctions'
 import {getUserAuxiliary} from './UserFunctions'
 import {getLabScore} from './UserFunctions'
 import {finalTheoryScore} from './UserFunctions'
-
+//import {getAnnouncementIDGenerateRotulate} from './UserFunctions'
 //import {getStudents} from './UserFunctions' 
 import axios from 'axios'
 
@@ -47,6 +47,22 @@ class Laboratory_scores extends Component{
         })
     }
 
+    // fillAuxi(){
+    //     var aux =[]
+    //     getAnnouncement().then(conv =>{
+    //         for(var i=0;i<conv.length;i++){
+    //             if(conv[i].id === this.state.selectedConv.id){
+    //                 var auxi = JSON.parse(conv[i].auxiliary)
+    //                 for(var j=0;j<auxi.length;j++){
+    //                     var object = {}
+    //                     object.label = auxi[j].name
+    //                     aux[j]=object
+    //                 }
+    //             }
+    //         }
+    //     })
+    //     this.setState({auxiliaturas:aux})
+    // }
     fillAuxi(){
         let aux = []
         getUserAuxiliary(this.state.idUser,this.state.selectedConv.id).then(auxi =>{
@@ -58,6 +74,21 @@ class Laboratory_scores extends Component{
             }
             this.setState({auxiliaturas:aux})
         })
+        var aux =[]
+        // getAnnouncementIDGenerateRotulate(this.state.selectedConv.id).then(res => {
+        //     console.log(res);
+        //       var auxiliary = res
+          
+        //             for(var j=0;j<auxiliary.length;j++){
+        //                 var object = {}
+        //                 object.label = auxiliary[j].name
+        //                 aux[j]=object
+        //             }
+        // })
+                
+            
+        
+        // this.setState({auxiliaturas:aux})
     }
 
     getStudents(){

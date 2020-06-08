@@ -4,7 +4,8 @@ import Select from 'react-select'
 //import axios from 'axios'
 import {registerP} from './UserFunctions'
 import {getAnnouncement} from './UserFunctions'
-import {getAnnouncementID} from './UserFunctions'
+//import {getAnnouncementID} from './UserFunctions'
+import {getAnnouncementIDGenerateRotulate} from './UserFunctions'
 
 //format of valid email
 var validMail = /\w+@\w+\.+[a-z]/;
@@ -89,11 +90,24 @@ class Register extends Component {
         var array = []
         aux = array
     }
-
+    // fillAuxiliary(){
+        
+    //     getAnnouncementID(this.state.selectedConvOption.value).then(res => {
+    //         var auxiliary = JSON.parse(res.auxiliary)
+    //         for(var i=0 ; i<auxiliary.length ; i++){
+    //             var object = {}
+    //             object.value = auxiliary[i].item
+    //             object.label = auxiliary[i].name
+    //             aux[i] = object
+    //         }
+    //     })
+    // }
     fillAuxiliary(){
         
-        getAnnouncementID(this.state.selectedConvOption.value).then(res => {
-            var auxiliary = JSON.parse(res.auxiliary)
+        getAnnouncementIDGenerateRotulate(this.state.selectedConvOption.value).then(res => {
+            console.log(res);
+              var auxiliary = res
+           // var auxiliary = JSON.parse(res)
             for(var i=0 ; i<auxiliary.length ; i++){
                 var object = {}
                 object.value = auxiliary[i].item
@@ -401,9 +415,6 @@ class Register extends Component {
                         <div style={{color:'red'}} className=" h5 col-md-12 mt-4">
                             <p>¡Antes de confirmar verifica tus datos!</p>
                         </div>
-<<<<<<< HEAD
-                        <button type="submit" className="btn btn-info mt-2 mb-5 ml-3">
-=======
 
                         {/* <div className = "col md 4">   </div>  
                         <div  className = "col md 4">
@@ -413,7 +424,6 @@ class Register extends Component {
                         </div>
                         <div className = "col md 4">   </div>   */}
   <button type="submit" className=" btn btn-info mt-2 mb-5">
->>>>>>> 5c04714... arreglos en scoreSetup
                             Confirmar registro e imprimir Rotulado
                         </button>
                     </div>
