@@ -34,9 +34,9 @@ class List extends Component{
                           <div className="gestion"> <a href = {url + convocatoria.file}> { "gestion " + convocatoria.year +", "  + convocatoria.departament} </a></div>
                           <div>{convocatoria.type} </div>
                           <div>{"publicado en " + convocatoria.created_at} </div>
-                          <div> {JSON.parse(convocatoria.auxiliary).map( items => (
+                          {/* <div> {JSON.parse(convocatoria.auxiliary).map( items => (
                               <i key={items.name}>{items.name + " - "}</i> 
-                          ))}</div>
+                          ))}</div> */}
 
                           <br/>
                           </div>
