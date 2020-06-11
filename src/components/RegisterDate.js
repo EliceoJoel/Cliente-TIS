@@ -96,7 +96,7 @@ export class RegisterDate extends Component {
                         <div className="form-group col-md-6">
                             <label htmlFor="date">Fecha</label>
                             <input
-                                type="text"
+                                type="date"
                                 className="form-control"
                                 name="date"
                                 placeholder="DD/MM/AA"
