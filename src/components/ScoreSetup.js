@@ -1021,11 +1021,11 @@ export class ScoreSetup extends Component {
                     <div className="col-md-12">
                        
                         {this.state.announcementFound ?
-                            <div>
+                          
                                 
                            
                             <button className="btn btn-outline-info mx" variant="warning" onClick={(AuxEvent) => this.handleMeritConfiguration(AuxEvent)} >MERITO</button>
-                            </div>
+                          
                          
                          : null}
                        
