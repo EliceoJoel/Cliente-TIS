@@ -34,7 +34,9 @@ export class AnnouncementSetup extends Component {
             tableAuxiliary:[],
             tableAuxiliaryOrder:[],
             tableTheme:[],
-            tableThemeOrder:[]
+            tableThemeOrder:[] ,
+            requirement_error:'' ,
+            themeAction: false
         }
     }
     onChangeAux =  (e) =>{
@@ -65,8 +67,8 @@ export class AnnouncementSetup extends Component {
              showRequirement:false,
              showMerit:false,
              showTheme:false,
-             showPercentage: false
- 
+             showPercentage: false,
+            themeAction: false
           } )
         let conv =  this.state.selectedOptionConv.label
         console.log(conv);
@@ -83,7 +85,10 @@ export class AnnouncementSetup extends Component {
              this.setState({found: response.data})
              console.log(this.state.found)
              this.setState({showData: true})
-            
+            if(  this.state.found[0].type === 'Laboratorio' ) {
+                this.setState({ themeAction: true })
+            }
+           
            
          }) 
          .catch(error => {
@@ -95,7 +100,16 @@ export class AnnouncementSetup extends Component {
     }
     handleReq(e){
         e.preventDefault()
-        this.setState({requirement:''})
+        this.setState({
+           requirement_error:'',
+            modifyRequirementWarning: '' ,
+            deleteRequirementWarning:'' ,
+            
+        })
+        console.log(this.state.requirement);
+        
+        if (this.validAnnouncementRequirement()){
+           
         let req= this.state.requirement
             let send = new FormData()
             send.append('name_announcement', this.state.found[0].name)
@@ -111,36 +125,9 @@ export class AnnouncementSetup extends Component {
              .catch(error => {
                  console.log(error)
              })
-             let conv = this.state.found[0].name
-             let sendIdAnnouncement = new FormData()
-             sendIdAnnouncement.append('conv', conv)
-             axios({
-                 method: 'post',
-                 url: 'api/requirementList',
-                 data: sendIdAnnouncement,
-                 headers: { 'Content-Type': 'multipart/form-data' }
-             }).then(response => {
-                 this.setState({ tableRequirement: response.data });
-                 console.log(this.state.tableRequirement);
-                 this.state.tableRequirement.sort(function (a, b) {
-                     if (a.requirement > b.requirement) {
-                         return 1;
-                     }
-                     if (a.requirement < b.requirement) {
-                         return -1;
-                     }
-                     return 0;
-                 });
-     
-                 console.log(this.state.tableRequirement);
-                 this.setState({ tableRequirementOrder: this.state.tableRequirement });
-     
-     
-             })
-                 .catch(error => {
-                     console.log(error)
-     
-                 })
+         this.handleTableRequirement()
+        }
+        
     }
     handleAux(e){
         e.preventDefault()
@@ -307,39 +294,10 @@ export class AnnouncementSetup extends Component {
             showRequirement:true,
             showMerit:false,
             showTheme:false,
-            showPercentage: false
-            
+            showPercentage: false,
+            requirement_error:''
          } )
-        let conv = this.state.found[0].name
-        let sendIdAnnouncement = new FormData()
-        sendIdAnnouncement.append('conv', conv)
-        axios({
-            method: 'post',
-            url: 'api/requirementList',
-            data: sendIdAnnouncement,
-            headers: { 'Content-Type': 'multipart/form-data' }
-        }).then(response => {
-            this.setState({ tableRequirement: response.data });
-            console.log(this.state.tableRequirement);
-            this.state.tableRequirement.sort(function (a, b) {
-                if (a.requirement > b.requirement) {
-                    return 1;
-                }
-                if (a.requirement < b.requirement) {
-                    return -1;
-                }
-                return 0;
-            });
-
-            console.log(this.state.tableRequirement);
-            this.setState({ tableRequirementOrder: this.state.tableRequirement });
-
-
-        })
-            .catch(error => {
-                console.log(error)
-
-            })
+     this.handleTableRequirement()
 
     }
     handleAuxConfiguration(e){
@@ -486,28 +444,8 @@ export class AnnouncementSetup extends Component {
             deleteWarning:'' ,
  
           } )
-        let idconvocato = this.state.selectedOptionConv.value
-        let sendIdAnnouncement = new FormData()
-        sendIdAnnouncement.append('id_announcement', idconvocato)
-        axios({
-            method: 'post',
-            url: 'api/percentageAnnouncementByAnnouncement',
-            data: sendIdAnnouncement,
-            headers: { 'Content-Type': 'multipart/form-data' }
-        }).then(response => {
-            this.setState({ tablePercentageAnnouncement: response.data });
-            console.log(this.state.tablePercentageAnnouncement);
-            this.state.tablePercentageAnnouncement.sort(function (a, b) {
-                if (a.type > b.type) {return 1;}
-                if (a.type < b.type) {return -1;}
-                return 0;
-            });
-            console.log(this.state.tablePercentageAnnouncement);
-            this.setState({ tablePercentageAnnouncementOrder: this.state.tablePercentageAnnouncement });
-        })
-            .catch(error => {
-                console.log(error)
-            })
+    
+        this.handleTablePercentage()
     }
     handleAddPorcentageAnnouncement() {
         this.setState({
@@ -545,28 +483,7 @@ export class AnnouncementSetup extends Component {
 
             })
 
-            let idconvocato = this.state.selectedOptionConv.value
-            let sendIdAnnouncement = new FormData()
-            sendIdAnnouncement.append('id_announcement', idconvocato)
-            axios({
-                method: 'post',
-                url: 'api/percentageAnnouncementByAnnouncement',
-                data: sendIdAnnouncement,
-                headers: { 'Content-Type': 'multipart/form-data' }
-            }).then(response => {
-                this.setState({ tablePercentageAnnouncement: response.data });
-                console.log(this.state.tablePercentageAnnouncement);
-                this.state.tablePercentageAnnouncement.sort(function (a, b) {
-                    if (a.type > b.type) {return 1;}
-                    if (a.type < b.type) {return -1;}
-                    return 0;
-                });
-                console.log(this.state.tablePercentageAnnouncement);
-                this.setState({ tablePercentageAnnouncementOrder: this.state.tablePercentageAnnouncement });
-            })
-                .catch(error => {
-                    console.log(error)
-                })
+            this.handleTablePercentage()
         }
     }
     validAnnouncementPercentage(){
@@ -580,6 +497,20 @@ export class AnnouncementSetup extends Component {
             return true; 
         }
     }
+    validAnnouncementRequirement(){
+        if (this.state.requirement === '') {
+            console.log('a' ,this.state.requirement);
+            
+            this.setState({ requirement_error: 'Campo Vacio' })
+        }
+        else if (this.state.requirement.length > 250) {
+            this.setState({ requirement_error: 'Requisito Demasiado Largo' })
+        }
+        else {
+            return true; 
+        }
+    }
+
     handleRemoveElementAnnouncement(e) {
         this.setState({
             deleteWarning: '',
@@ -603,7 +534,10 @@ export class AnnouncementSetup extends Component {
                 console.log(error)
 
             })
-       
+     
+            this.handleTablePercentage()
+    }
+    handleTablePercentage(){
         let idconvocato = this.state.selectedOptionConv.value
         let sendIdAnnouncement = new FormData()
         sendIdAnnouncement.append('id_announcement', idconvocato)
@@ -627,26 +561,8 @@ export class AnnouncementSetup extends Component {
                 console.log(error)
             })
 
-
-
     }
-    handleRemoveRequirement(e){
-        let idRequirement = e.id
-        let send = new FormData()
-        send.append('id_requirement', idRequirement)
-        axios({
-            method: 'post',
-            url: 'api/requirementDelete',
-            data: send,
-            headers: { 'Content-Type': 'multipart/form-data' }
-        }).then(res => {
-            console.log(res);
- this.setState({ deleteWarning: 'se elimino el elemento con exito' })
-        })
-            .catch(error => {
-                console.log(error)
-
-            })
+    handleTableRequirement(){
         let conv = this.state.found[0].name
         let sendIdAnnouncement = new FormData()
         sendIdAnnouncement.append('conv', conv)
@@ -677,6 +593,25 @@ export class AnnouncementSetup extends Component {
                 console.log(error)
 
             })
+    }
+    handleRemoveRequirement(e){
+        let idRequirement = e.id
+        let send = new FormData()
+        send.append('id_requirement', idRequirement)
+        axios({
+            method: 'post',
+            url: 'api/requirementDelete',
+            data: send,
+            headers: { 'Content-Type': 'multipart/form-data' }
+        }).then(res => {
+            console.log(res);
+ this.setState({ deleteWarning: 'se elimino el elemento con exito' })
+        })
+            .catch(error => {
+                console.log(error)
+
+            })
+       this.handleTableRequirement()
     }
     handleRemoveAuxiliary(e){
         let idAuxiliary = e.id
@@ -887,12 +822,15 @@ export class AnnouncementSetup extends Component {
                         
                           <button className="btn btn-outline-info  mx-2" variant="warning" onClick={(e) => this.handleMeritConfiguration(e)} >MERITOS</button>
                        
-                          <button className="btn btn-outline-info  mx-2" variant="warning" onClick={(e) => this.handleThemeConfiguration(e)} >TEMATICAS</button>
+                        
                      
                          </div>
                           :null}
-                          {this.state.showRequirement?
-                          
+                             {this.state.themeAction?
+                            <button className="btn btn-outline-info  mx-2" variant="warning" onClick={(e) => this.handleThemeConfiguration(e)} >TEMATICAS</button>
+                            :null}
+                            {this.state.showRequirement?
+                            <div className="col-md-12">
                             <div className="row">
                         <div  className="col-md-12">
                         <h3 className="h5 col-md-12 my-4 font-weight-normal text-center">
@@ -908,7 +846,7 @@ export class AnnouncementSetup extends Component {
                           value = {requirement}  
                            onChange = {this.onChangeAux}                     
                        />
-                        
+                         <p style={{ color: "red" }}>{this.state.requirement_error}</p>
                          </div>
                          <div className="form-group col-md-12 ">  
                          <button className="btn btn-outline-info" variant="warning" onClick ={(reqevent) => this.handleReq(reqevent)} >Agregar</button>
@@ -926,8 +864,8 @@ export class AnnouncementSetup extends Component {
                          {this.state.tableRequirementOrder.map(data =>
                                  <div key={data.id}>
                                      <div className="container">
-                                         <div className="row row-cols-4">
-                                             <div className="col-md-10">
+                                     <div className="row row-cols-12">
+                                             <div className="col-md-8">
                                                  {data.requirement}
                                              </div>
                                              <br></br>
@@ -944,6 +882,7 @@ export class AnnouncementSetup extends Component {
                                      </div>
                                  </div>
                              )}
+                         </div>
                          </div>
                          </div>
                          :null}
@@ -981,7 +920,7 @@ export class AnnouncementSetup extends Component {
                      
                       <div className="form-group col-md-12 ">    
                       <button className="btn btn-outline-info" variant="warning" onClick ={(AuxEvent) => this.handleAux(AuxEvent)} >Agregar</button>
-                      {/* <button   className="btn btn-outline-info mx-3" variant="warning"onClick ={(AuxEvent) => this.handleRemove(AuxEvent)} >Remover Ultimo Ingresado</button> */}
+                    
                      <p style={{color:"red"}}>{this.state.array_error}</p>
                     </div>
                     <div className="col-md-12">
@@ -1021,11 +960,12 @@ export class AnnouncementSetup extends Component {
                     
                     :null}
                     {this.state.showTheme?
+                     <div className="col-md-12">
                      <div className="row">
                     <h3 className="h5 col-md-12 my-4 font-weight-normal text-center">
                             Datos de Tematica</h3>
-                      <div className="form-group col-md-6">
-                        <label htmlFor="Nombre">Item</label>
+                      <div className="form-group col-md-12">
+                        <label htmlFor="Nombre">Tematica</label>
                
                        <input    
                            className="form-control"   
@@ -1074,7 +1014,7 @@ export class AnnouncementSetup extends Component {
                              </div>
                   
                     </div>
-                     
+                     </div>
                     :null}
                     {this.state.showMerit?
                     <div className="row">
@@ -1151,8 +1091,11 @@ export class AnnouncementSetup extends Component {
                          <div>
                          <div className="row">
                              <br></br>
-
-                             <div className="form-group col-md-4">
+                             <h3 className="h5 col-md-12 my-4 font-weight-normal text-center">
+                            Datos de Porcentaje</h3>
+                            <label className= "h5 col-md-12 my-4 font-weight-normal text-center" > 
+                            Configurar los porcentajes de la convocatoria seleccionando un tipo y asignandole un porcentaje</label>
+                             <div className="form-group col-md-6">
                                  <br></br>
                                  <label htmlFor="theme">Seleccione un Tipo</label>
                                  <select
@@ -1170,7 +1113,7 @@ export class AnnouncementSetup extends Component {
                                  </select>
                                  <p style={{ color: "red" }}>{this.state.selectedThemeOption_error}</p>
                              </div>
-                             <div className="form-group col-md-3">
+                             <div className="form-group col-md-4">
                                  <br></br>
                                  <label htmlFor="porcentaje">Porcentaje</label>
 
@@ -1234,18 +1177,17 @@ export class AnnouncementSetup extends Component {
                                  <br></br>
                                       {/* <button className="btn btn-outline-info mx-3" variant="warning" onClick={(AuxEvent) => this.handleEndConfigurationAnnouncement(AuxEvent)} >TERMINAR CONFIGURACION DOC</button>
                                       <p style={{ color: "red" }}>{this.state.knowledgeDocWarningFinish}</p> */}
-                            <br></br><br></br><br></br>
+                           
                          </div>
                      </div> 
                     
                     :null}
-                           <br></br>
-                        <br></br>
-                        <br></br>
-                        <br></br>
-                        <br></br>
+                      
                    </div>
-                     
+                          <br></br>
+                        <br></br>
+                        <br></br>
+                       
                    </div>
 
              
