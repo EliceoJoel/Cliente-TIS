@@ -117,7 +117,7 @@ class MeritosRegister extends Component {
     promedio = promedio * (configsOne[posicion].number/100)
     promedio = 	this.redondear(promedio,2)
     configsOne[posicion].promedio = promedio
-    notasOne [posicion].nota = promedio
+    notasOne[posicion].nota = promedio
     this.updateTotal()
   }
 

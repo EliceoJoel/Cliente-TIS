@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Select from 'react-select'
-import {getAnnouncement} from './UserFunctions'
+import {getProfile , getUserAnnouncements} from './UserFunctions'
 import {getAllNotes} from './UserFunctions'
 
 var conv = []
@@ -13,6 +13,7 @@ class Note_final_list extends Component {
             selectConv:null,
             selectConvError:"",
             showList:false,
+            conv:[]
         }
 
         this.selectConvChange = this.selectConvChange.bind(this)
@@ -20,15 +21,21 @@ class Note_final_list extends Component {
 
     //fill announcement
     componentDidMount() {
-        getAnnouncement().then(res => {
-            for (var i=0; i < res.length; i++) { 
-                var object = {}
-                object.value = res[i].id
-                object.label = res[i].name
-                conv[i] = object
-              }
-        })
-    }
+      getProfile().then(res => {
+          this.setState({
+              idUser: res.user.id        
+          }) 
+          getUserAnnouncements(this.state.idUser).then(res=>{
+              let announcementArray = []
+              for (var i = 0; i < res.length; i++) {
+                  var object = {}
+                  object.value = res[i].id
+                  object.label = res[i].name
+                  announcementArray[i] = object
+              } this.setState({conv: announcementArray})
+          })
+      })
+  }
 
 
     selectConvChange = selectConv =>{
@@ -76,7 +83,7 @@ class Note_final_list extends Component {
 
     render() {
         const { selectConv } = this.state
-
+        const { conv } = this.state
         return (
             <div className="container">
               <div className="justify-content-center">

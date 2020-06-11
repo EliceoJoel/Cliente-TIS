@@ -35,6 +35,7 @@ export class PostulantEnable extends Component {
              codSis_error:'',
              notfound_error:'' ,
              //conv: [] , 
+             reason :''
             
              
              
@@ -150,9 +151,13 @@ export class PostulantEnable extends Component {
     }
     
     handleReq(e ){
+     
         this.setState({req:[]})
-       
-
+        this.setState({reason:''})
+        this.setState({CorrectlySendChanges:''})
+        this.setState({reason_error:''})
+        
+              
         this.setState({ enableMessageState:'INHABILITADO'})
         //this.listaDeChecks()
        // this.gil(true)
@@ -194,6 +199,8 @@ export class PostulantEnable extends Component {
               
               console.log(error)
           }) 
+          
+
     }
     valid(){        
         if(this.state.codSis.length > 9 || this.state.codSis.length < 8 || isNaN(this.state.codSis)){
@@ -210,10 +217,22 @@ export class PostulantEnable extends Component {
         }
 //
     }
+    validEnable(){        
+        if(this.state.reason === ''){
+            this.setState({reason_error:'Por Favor Ingrese un Motivo de Inhabilitacion'})
+        }
+        else{
+        
+            return true;
+        }
+//
+    }
     handleEnable(e){
+        e.preventDefault()
+        if (this.validEnable()){
 
                  this.setState({showList:false})
-                 this.setState({CorrectlySendChanges: "SE GUARDARON LOS CAMBIOS EN LA AUXILIATURA:" + this.state.auxilisturaSeleccionada})
+                 this.setState({CorrectlySendChanges: "Se guardaron los cambios en la auxliatura: " + this.state.auxilisturaSeleccionada})
                 // this.setState({allRequirementsCheckList:[]})
                 // this.setState({enableButton:false})
                  console.log("probando",this.state.req.length)
@@ -257,7 +276,7 @@ export class PostulantEnable extends Component {
                      })  
                     
                     
-
+                    }
 
     }
 
@@ -381,7 +400,7 @@ export class PostulantEnable extends Component {
                                         <button className="col-md-2 btn btn-outline-info mt-4 mx-3" variant="warning" value={enable.axiliatura} onClick ={(e) => this.handleReq(enable)}htmlFor="cod_sys">{enable.axiliatura}</button>
                                    
                                  )}</div>
-                                  <p style={{color:"green"}}>{this.state.CorrectlySendChanges}</p>
+                                  <p style={{color:"green"}} className="my-4"><b>{this.state.CorrectlySendChanges}</b></p>
                         </div>
                         
                         <br></br>
@@ -438,9 +457,11 @@ export class PostulantEnable extends Component {
                                  
                                   onChange = {this.onChangeReason}                     
                                 />
-                        
+                        <p style={{color:"red"}}>{this.state.reason_error}</p>
                          </div>  
-                         <button className="col btn btn-lg btn-info mt-2" variant="warning" onClick ={(AuxEvent) => this.handleEnable(AuxEvent)} >Guardar Cambios</button>
+                         <div className="col-md-12">
+                         <button  className=" btn btn-info mt-2 mb-5" onClick ={(AuxEvent) => this.handleEnable(AuxEvent)} >Guardar Cambios</button>
+                            </div>
                        </div>             
                         :null}
                     </div>  

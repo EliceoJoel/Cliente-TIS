@@ -15,15 +15,24 @@ class Landing extends Component {
   componentDidMount() {
     if(localStorage.usertoken){
       getProfile().then(res => {
-        getPermissions(res.user.idRol).then(permissions =>{
-          this.setState({
-            items: permissions
-          })
-        })
+        console.log(res)
+        this.log(res)
       })
     }
   }
 
+  log(res){
+    if(res === void 0){
+      localStorage.removeItem('usertoken')
+      this.props.history.push(`/`)
+    }else{
+      getPermissions(res.user.idRol).then(permissions =>{
+        this.setState({
+          items: permissions
+        })
+      })
+    }
+  }
   
   logOut(e) {
     e.preventDefault()
