@@ -95,6 +95,7 @@ export class AnnouncementSetup extends Component {
     }
     handleReq(e){
         e.preventDefault()
+        this.setState({requirement:''})
         let req= this.state.requirement
             let send = new FormData()
             send.append('name_announcement', this.state.found[0].name)
@@ -143,6 +144,7 @@ export class AnnouncementSetup extends Component {
     }
     handleAux(e){
         e.preventDefault()
+        this.setState({item:'', auxiliary:''})
         let item= this.state.item
         let auxiliary= this.state.auxiliary
             let send = new FormData()
@@ -193,6 +195,7 @@ export class AnnouncementSetup extends Component {
     }
     handleTheme(e){
         e.preventDefault()
+        this.setState({tematica:''})
         let tematica= this.state.tematica
             let send = new FormData()
             send.append('id_announcement', this.state.found[0].id)
@@ -243,6 +246,7 @@ export class AnnouncementSetup extends Component {
     }
     handleMerit(e){
         e.preventDefault()
+        this.setState({nameMerit:'', descriptionMerit:''})
         let name= this.state.nameMerit
         let description= this.state.descriptionMerit
             let send = new FormData()
@@ -875,7 +879,7 @@ export class AnnouncementSetup extends Component {
                        
                          <div>
                          <button className="btn btn-outline-info  mx-2" variant="warning" onClick={(e) => this.handlePercentageAnnouncement(e)} >PORCENTAJE</button>
-                          <button className="btn btn-outline-info  mx" variant="warning" onClick={(e) => this.handleRequirementConfiguration(e)} >REQUISITOS</button>
+                          <button className="btn btn-outline-info  mx" variant="warning" onClick={(e) => this.handleRequirementConfiguration(e)} >DOCUMENTOS A PRESENTAR</button>
                         
                           
                               
@@ -892,7 +896,7 @@ export class AnnouncementSetup extends Component {
                             <div className="row">
                         <div  className="col-md-12">
                         <h3 className="h5 col-md-12 my-4 font-weight-normal text-center">
-                            Requisitos de Convocatoria</h3>
+                            Documentos a presentar en esta convocatoria</h3>
                       <div className="form-group col-md-12">
                         <label htmlFor="Nombre">Requisito</label>
                

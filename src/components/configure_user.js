@@ -68,6 +68,7 @@ class configure_user extends Component{
     }
 
     render(){
+      
       return(
             <div> 
                 <h1 className="h3 mb-3 font-weight-normal text-center rounded">
@@ -175,9 +176,9 @@ class configure_user extends Component{
             <br/>
             <div> {this.state.itemsList} </div>
             <br/>
-            <button  type="button" className="col btn btn-info mt-2" onClick ={() => this.addAnnouncement()}> agregar convocatoria </button>
+            <button  type="button" className="btn btn-info mt-2" onClick ={() => this.addAnnouncement()}> agregar convocatoria </button>
             <br/>
-            <button  type="button" className="col btn btn-info mt-2" onClick ={() => this.save()}> guardar </button>
+            <button  type="button" className="btn btn-info mt-2" onClick ={() => this.save()}> guardar </button>
           </div>
           )
       }
@@ -256,10 +257,10 @@ class configure_user extends Component{
           <br/>
           <div> {this.state.itemsList} </div>
           <br/>
-          <button  type="button" className="col btn btn-info mt-2" onClick ={() => this.addTheme()}> agregar </button>
+          <button  type="button" className="btn btn-info mt-2" onClick ={() => this.addTheme()}> agregar </button>
           <br/>
           <br/>
-          <button  type="button" className="col btn btn-info mt-2" onClick ={() => this.save()}> guardar </button>
+          <button  type="button" className="btn btn-info mt-2" onClick ={() => this.save()}> guardar </button>
         </div>
       )
       if(this.state.temp_conv.type == "Docencia")
@@ -277,10 +278,10 @@ class configure_user extends Component{
           <br/>
           <div> {this.state.itemsList} </div>
           <br/>
-          <button  type="button" className="col btn btn-info mt-2" onClick ={() => this.addAuxiliary()}> agregar </button>
+          <button  type="button" className="btn btn-info mt-2" onClick ={() => this.addAuxiliary()}> agregar </button>
           <br/>
           <br/>
-          <button  type="button" className="col btn btn-info mt-2" onClick ={() => this.save()}> guardar </button>
+          <button  type="button" className="btn btn-info mt-2" onClick ={() => this.save()}> guardar </button>
         </div>
       )
     }

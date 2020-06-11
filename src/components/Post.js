@@ -33,6 +33,7 @@ var ArrayAuxi = []
 
     onChange =  (e) =>{
         this.setState({[e.target.name]: e.target.value })
+        this.setState({post_announcement_acomplish:''})
     }
     onChangeAux =  (e) =>{
         this.setState({[e.target.name]: e.target.value })

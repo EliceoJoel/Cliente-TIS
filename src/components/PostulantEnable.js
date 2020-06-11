@@ -213,7 +213,7 @@ export class PostulantEnable extends Component {
     handleEnable(e){
 
                  this.setState({showList:false})
-                 this.setState({CorrectlySendChanges: "SE GUARDARON LOS CAMBIOS EN LA AUXILIATURA:" + this.state.auxilisturaSeleccionada})
+                 this.setState({CorrectlySendChanges: "Se guardaron los cambios en la auxliatura: " + this.state.auxilisturaSeleccionada})
                 // this.setState({allRequirementsCheckList:[]})
                 // this.setState({enableButton:false})
                  console.log("probando",this.state.req.length)
@@ -381,7 +381,7 @@ export class PostulantEnable extends Component {
                                         <button className="col-md-2 btn btn-outline-info mt-4 mx-3" variant="warning" value={enable.axiliatura} onClick ={(e) => this.handleReq(enable)}htmlFor="cod_sys">{enable.axiliatura}</button>
                                    
                                  )}</div>
-                                  <p style={{color:"green"}}>{this.state.CorrectlySendChanges}</p>
+                                  <p style={{color:"green"}} className="my-4"><b>{this.state.CorrectlySendChanges}</b></p>
                         </div>
                         
                         <br></br>

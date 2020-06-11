@@ -21,7 +21,8 @@ class PostulantRegister extends Component {
             showList:false,
             showData:false,
             showSubmit:false,
-            notFoundPostulant:""
+            notFoundPostulant:"",
+            success:'',
 
         }
         this.onChange = this.onChange.bind(this)
@@ -110,13 +111,15 @@ class PostulantRegister extends Component {
                 date: this.state.date
             }
                registerInBook(newRegister).then(res => {
-               this.props.history.push(`/postulant_register`)
+               //this.props.history.push(`/postulant_register`)
             })
 
             this.setState({ 
                 showData:false,
                 showSubmit:false,
-                documents:""
+                documents:"",
+                sis_code:'',
+                success:'Postulante registrado correctamente'
             })
 
             for(var i=0 ; i<postulantions.length ; i++){
@@ -137,7 +140,8 @@ class PostulantRegister extends Component {
             sis_code_error: '', 
             documents_error: '',
             date_error: '',
-            notFoundPostulant:''
+            notFoundPostulant:'', 
+            success:''
         })
     }
 
@@ -170,7 +174,7 @@ class PostulantRegister extends Component {
                         </h3>
                         <div className="form-group col-md-8">
                             <input 
-                              type="text" 
+                              type="number" 
                               name="sis_code"
                               className="form-control"
                               placeholder="Introduzca el código sis del postulante"
@@ -182,7 +186,8 @@ class PostulantRegister extends Component {
                         <div className="col-md-4">
                            <button type="button" className="col btn btn-info mb-2" onClick={()=>this.search()}>Buscar</button>
                         </div>
-                        <p className="col-md-12 text-center" style={{color:"red"}}>{this.state.notFoundPostulant}</p>
+                        <p className="col-md-12 text-center" style={{color:"green"}}><b>{this.state.success}</b></p>
+                        <p className="col-md-12 text-center" style={{color:"red"}}><b>{this.state.notFoundPostulant}</b></p>
                         {this.state.showList?  
                             <div className="form-row col-md-12">
                                 {postulantions.map( postulation =>( 
