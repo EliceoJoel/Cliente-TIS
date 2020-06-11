@@ -111,6 +111,7 @@ class MeritosRegister extends Component {
     promedio = promedio * (configsOne[posicion].number/100)
     promedio = 	this.redondear(promedio,2)
     configsOne[posicion].promedio = promedio
+    notasOne[posicion].nota = promedio
     this.updateTotal()
   }
 
@@ -167,6 +168,7 @@ class MeritosRegister extends Component {
 
   async registrar(){
     const notas = notasOne.concat(notasTwo);
+    console.log(notas)
     for(let i=0 ; i<notas.length ; i++){
       const newRegister ={
         id_postulant : this.state.idPostulant,
