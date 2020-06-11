@@ -35,7 +35,8 @@ export class AnnouncementSetup extends Component {
             tableAuxiliaryOrder:[],
             tableTheme:[],
             tableThemeOrder:[] ,
-            requirement_error:''
+            requirement_error:'' ,
+            themeAction: false
         }
     }
     onChangeAux =  (e) =>{
@@ -66,8 +67,8 @@ export class AnnouncementSetup extends Component {
              showRequirement:false,
              showMerit:false,
              showTheme:false,
-             showPercentage: false
- 
+             showPercentage: false,
+            themeAction: false
           } )
         let conv =  this.state.selectedOptionConv.label
         console.log(conv);
@@ -84,7 +85,10 @@ export class AnnouncementSetup extends Component {
              this.setState({found: response.data})
              console.log(this.state.found)
              this.setState({showData: true})
-            
+            if(  this.state.found[0].type === 'Laboratorio' ) {
+                this.setState({ themeAction: true })
+            }
+           
            
          }) 
          .catch(error => {
@@ -121,36 +125,7 @@ export class AnnouncementSetup extends Component {
              .catch(error => {
                  console.log(error)
              })
-             let conv = this.state.found[0].name
-             let sendIdAnnouncement = new FormData()
-             sendIdAnnouncement.append('conv', conv)
-             axios({
-                 method: 'post',
-                 url: 'api/requirementList',
-                 data: sendIdAnnouncement,
-                 headers: { 'Content-Type': 'multipart/form-data' }
-             }).then(response => {
-                 this.setState({ tableRequirement: response.data });
-                 console.log(this.state.tableRequirement);
-                 this.state.tableRequirement.sort(function (a, b) {
-                     if (a.requirement > b.requirement) {
-                         return 1;
-                     }
-                     if (a.requirement < b.requirement) {
-                         return -1;
-                     }
-                     return 0;
-                 });
-     
-                 console.log(this.state.tableRequirement);
-                 this.setState({ tableRequirementOrder: this.state.tableRequirement });
-     
-     
-             })
-                 .catch(error => {
-                     console.log(error)
-     
-                 })
+         this.handleTableRequirement()
         }
         
     }
@@ -322,36 +297,7 @@ export class AnnouncementSetup extends Component {
             showPercentage: false,
             requirement_error:''
          } )
-        let conv = this.state.found[0].name
-        let sendIdAnnouncement = new FormData()
-        sendIdAnnouncement.append('conv', conv)
-        axios({
-            method: 'post',
-            url: 'api/requirementList',
-            data: sendIdAnnouncement,
-            headers: { 'Content-Type': 'multipart/form-data' }
-        }).then(response => {
-            this.setState({ tableRequirement: response.data });
-            console.log(this.state.tableRequirement);
-            this.state.tableRequirement.sort(function (a, b) {
-                if (a.requirement > b.requirement) {
-                    return 1;
-                }
-                if (a.requirement < b.requirement) {
-                    return -1;
-                }
-                return 0;
-            });
-
-            console.log(this.state.tableRequirement);
-            this.setState({ tableRequirementOrder: this.state.tableRequirement });
-
-
-        })
-            .catch(error => {
-                console.log(error)
-
-            })
+     this.handleTableRequirement()
 
     }
     handleAuxConfiguration(e){
@@ -498,28 +444,8 @@ export class AnnouncementSetup extends Component {
             deleteWarning:'' ,
  
           } )
-        let idconvocato = this.state.selectedOptionConv.value
-        let sendIdAnnouncement = new FormData()
-        sendIdAnnouncement.append('id_announcement', idconvocato)
-        axios({
-            method: 'post',
-            url: 'api/percentageAnnouncementByAnnouncement',
-            data: sendIdAnnouncement,
-            headers: { 'Content-Type': 'multipart/form-data' }
-        }).then(response => {
-            this.setState({ tablePercentageAnnouncement: response.data });
-            console.log(this.state.tablePercentageAnnouncement);
-            this.state.tablePercentageAnnouncement.sort(function (a, b) {
-                if (a.type > b.type) {return 1;}
-                if (a.type < b.type) {return -1;}
-                return 0;
-            });
-            console.log(this.state.tablePercentageAnnouncement);
-            this.setState({ tablePercentageAnnouncementOrder: this.state.tablePercentageAnnouncement });
-        })
-            .catch(error => {
-                console.log(error)
-            })
+    
+        this.handleTablePercentage()
     }
     handleAddPorcentageAnnouncement() {
         this.setState({
@@ -557,28 +483,7 @@ export class AnnouncementSetup extends Component {
 
             })
 
-            let idconvocato = this.state.selectedOptionConv.value
-            let sendIdAnnouncement = new FormData()
-            sendIdAnnouncement.append('id_announcement', idconvocato)
-            axios({
-                method: 'post',
-                url: 'api/percentageAnnouncementByAnnouncement',
-                data: sendIdAnnouncement,
-                headers: { 'Content-Type': 'multipart/form-data' }
-            }).then(response => {
-                this.setState({ tablePercentageAnnouncement: response.data });
-                console.log(this.state.tablePercentageAnnouncement);
-                this.state.tablePercentageAnnouncement.sort(function (a, b) {
-                    if (a.type > b.type) {return 1;}
-                    if (a.type < b.type) {return -1;}
-                    return 0;
-                });
-                console.log(this.state.tablePercentageAnnouncement);
-                this.setState({ tablePercentageAnnouncementOrder: this.state.tablePercentageAnnouncement });
-            })
-                .catch(error => {
-                    console.log(error)
-                })
+            this.handleTablePercentage()
         }
     }
     validAnnouncementPercentage(){
@@ -629,7 +534,10 @@ export class AnnouncementSetup extends Component {
                 console.log(error)
 
             })
-       
+     
+            this.handleTablePercentage()
+    }
+    handleTablePercentage(){
         let idconvocato = this.state.selectedOptionConv.value
         let sendIdAnnouncement = new FormData()
         sendIdAnnouncement.append('id_announcement', idconvocato)
@@ -653,26 +561,8 @@ export class AnnouncementSetup extends Component {
                 console.log(error)
             })
 
-
-
     }
-    handleRemoveRequirement(e){
-        let idRequirement = e.id
-        let send = new FormData()
-        send.append('id_requirement', idRequirement)
-        axios({
-            method: 'post',
-            url: 'api/requirementDelete',
-            data: send,
-            headers: { 'Content-Type': 'multipart/form-data' }
-        }).then(res => {
-            console.log(res);
- this.setState({ deleteWarning: 'se elimino el elemento con exito' })
-        })
-            .catch(error => {
-                console.log(error)
-
-            })
+    handleTableRequirement(){
         let conv = this.state.found[0].name
         let sendIdAnnouncement = new FormData()
         sendIdAnnouncement.append('conv', conv)
@@ -703,6 +593,25 @@ export class AnnouncementSetup extends Component {
                 console.log(error)
 
             })
+    }
+    handleRemoveRequirement(e){
+        let idRequirement = e.id
+        let send = new FormData()
+        send.append('id_requirement', idRequirement)
+        axios({
+            method: 'post',
+            url: 'api/requirementDelete',
+            data: send,
+            headers: { 'Content-Type': 'multipart/form-data' }
+        }).then(res => {
+            console.log(res);
+ this.setState({ deleteWarning: 'se elimino el elemento con exito' })
+        })
+            .catch(error => {
+                console.log(error)
+
+            })
+       this.handleTableRequirement()
     }
     handleRemoveAuxiliary(e){
         let idAuxiliary = e.id
@@ -913,12 +822,15 @@ export class AnnouncementSetup extends Component {
                         
                           <button className="btn btn-outline-info  mx-2" variant="warning" onClick={(e) => this.handleMeritConfiguration(e)} >MERITOS</button>
                        
-                          <button className="btn btn-outline-info  mx-2" variant="warning" onClick={(e) => this.handleThemeConfiguration(e)} >TEMATICAS</button>
+                        
                      
                          </div>
                           :null}
-                          {this.state.showRequirement?
-                          
+                             {this.state.themeAction?
+                            <button className="btn btn-outline-info  mx-2" variant="warning" onClick={(e) => this.handleThemeConfiguration(e)} >TEMATICAS</button>
+                            :null}
+                            {this.state.showRequirement?
+                            <div className="col-md-12">
                             <div className="row">
                         <div  className="col-md-12">
                         <h3 className="h5 col-md-12 my-4 font-weight-normal text-center">
@@ -952,8 +864,8 @@ export class AnnouncementSetup extends Component {
                          {this.state.tableRequirementOrder.map(data =>
                                  <div key={data.id}>
                                      <div className="container">
-                                         <div className="row row-cols-4">
-                                             <div className="col-md-10">
+                                     <div className="row row-cols-12">
+                                             <div className="col-md-8">
                                                  {data.requirement}
                                              </div>
                                              <br></br>
@@ -970,6 +882,7 @@ export class AnnouncementSetup extends Component {
                                      </div>
                                  </div>
                              )}
+                         </div>
                          </div>
                          </div>
                          :null}
@@ -1007,7 +920,7 @@ export class AnnouncementSetup extends Component {
                      
                       <div className="form-group col-md-12 ">    
                       <button className="btn btn-outline-info" variant="warning" onClick ={(AuxEvent) => this.handleAux(AuxEvent)} >Agregar</button>
-                      {/* <button   className="btn btn-outline-info mx-3" variant="warning"onClick ={(AuxEvent) => this.handleRemove(AuxEvent)} >Remover Ultimo Ingresado</button> */}
+                    
                      <p style={{color:"red"}}>{this.state.array_error}</p>
                     </div>
                     <div className="col-md-12">
