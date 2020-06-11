@@ -7,6 +7,7 @@ import {getAnnouncement} from './UserFunctions'
 import {getAux} from './UserFunctions'
 import {getTheme} from './UserFunctions'
 import {saveAnnouncement} from './UserFunctions'
+import axios from 'axios'
 
 
 let users =[]
@@ -85,12 +86,12 @@ class configure_user extends Component{
                 classNamePrefix="select"
                 />
                 
-
+                <br/>
                 <label htmlFor="Nombre">Selecciona un rol</label>
                 <Select
                 name="rol"
                 options={rol}
-                onChange={(e) => this.setState({rol:e})}
+                onChange={(e) => this.change(e)}
                 placeholder=""
                 className="basic-select"
                 classNamePrefix="select"
@@ -101,6 +102,15 @@ class configure_user extends Component{
         )
     }
 
+    change(e){
+      console.log(e)
+      this.setState({rol:e,
+                    itemsList:[]})
+      this.items = []
+      this.theme = []
+      this.aux =[]
+      this.conv = []
+    }
     fillAux(e){
       let announcement = e;
       this.aux =[]
@@ -123,6 +133,7 @@ class configure_user extends Component{
     }
 
     fillTheme(e){
+      this.theme = [] 
       this.setState({temp_aux : e})
       let data = {auxiliary:e.label}
       getTheme(data).then(res =>{
@@ -161,7 +172,7 @@ class configure_user extends Component{
         </div>)
       }
 
-      if(this.state.rol.label == "Comisión de evaluación de méritos"){
+      else {
         return(
           <div>
             <label htmlFor="Nombre">Selecciona una convocatoria</label>
@@ -183,16 +194,14 @@ class configure_user extends Component{
           )
       }
 
-
-      else if(this.state.rol.label != null) 
-      return(
-        <button  type="button" className="col btn btn-info mt-2"> guardar </button>
-      )
     }
 
     addAnnouncement(){
       this.items[this.items.length] = this.state.temp_conv
       console.log(this.items)
+      this.items = this.items.filter(function(item, index, array) {
+        return array.indexOf(item) === index;
+      })
       this.setState({itemsList:this.items.map(conv =>(
         <h6 className="mb-3 font-weight-normal text-center">{conv.label}</h6>
       ))})
@@ -200,6 +209,9 @@ class configure_user extends Component{
 
     addAuxiliary(){
       this.items[this.items.length] = this.state.temp_aux
+      this.items = this.items.filter(function(item, index, array) {
+        return array.indexOf(item) === index;
+      })
       console.log(this.items)
       console.log(this.state.temp_aux)
       this.setState({itemsList:this.items.map(aux =>(
@@ -209,6 +221,9 @@ class configure_user extends Component{
 
     addTheme(){
       this.items[this.items.length] = this.state.temp_theme
+      this.items = this.items.filter(function(item, index, array) {
+        return array.indexOf(item) === index;
+      })
       console.log(this.items)
       this.setState({itemsList:this.items.map(theme =>(
         <h6 className="mb-3 font-weight-normal text-center">{theme.label}</h6>
@@ -228,6 +243,13 @@ class configure_user extends Component{
           console.log(data)
         saveAnnouncement(data)
       }
+
+      console.log(this.state.user.id, this.state.rol.id)
+      axios.get('api/updateRol/'+this.state.user.id+'/'+this.state.rol.id ,{
+        headers: { 'Content-Type': 'application/json' }
+      }).catch(err => {
+          console.log(err)
+      })
     }
 
     generar(){

@@ -126,7 +126,7 @@ class Laboratory_scores extends Component{
         this.notas[fila][col].score = e.target.value
     }
 
-    uploadScore(){
+    uploadScore(e){
         for(var i=0; i<this.state.postulantes.length; i++) {
             let message = {}
             for(var j=0; j<this.state.tematics.length; j++) {
@@ -159,6 +159,7 @@ class Laboratory_scores extends Component{
     render(){
       return(
         <div className="justify-content-center">
+        <form onSubmit={(e) => this.uploadScore(e)}>
             <h1 className="h3 font-weight-normal text-center mt-3 p-3 bg-info text-white rounded">
                Registrar notas laboratorio
             </h1>
@@ -210,7 +211,6 @@ class Laboratory_scores extends Component{
                 <div className="my-1" style={{border:"0.5px solid silver", width: "100%"}}></div>
 
             </div> 
-
             <div> {this.state.postulantes.map((postulant,postulante) => (
                 <div>
                     <div className ="row">
@@ -232,11 +232,11 @@ class Laboratory_scores extends Component{
                 ))}
             </div>
 
-            <button type="button" className="col btn btn-info mt-2" onClick ={(e) => this.uploadScore()}>
-                subir notas 
-            </button>
+            <input type="submit" className="col btn btn-info mt-2" value="subir notas "/>
+            </form>  
         </div>
-        )
+        )  
     }
+    
   }
   export default Laboratory_scores;
