@@ -222,7 +222,7 @@ class configure_user extends Component{
     addTheme(){
       this.items[this.items.length] = this.state.temp_theme
       this.items = this.items.filter(function(item, index, array) {
-        return array.indexOf(item) === index;
+      return array.indexOf(item) === index;
       })
       console.log(this.items)
       this.setState({itemsList:this.items.map(theme =>(
