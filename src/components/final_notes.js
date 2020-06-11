@@ -37,6 +37,7 @@ class final_notes extends Component {
 
 
     setup(e){
+        this.student = []
         console.log(e.id)
         getAverage(e.id).then(res =>{
           let a = res
