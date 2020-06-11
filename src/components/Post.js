@@ -163,7 +163,7 @@ var ArrayAuxi = []
              send.append('year', year )
              send.append('type', type)
              send.append('departament', departament)
-             send.append('auxiliary',JSON.stringify(ArrayAuxi))
+             //send.append('auxiliary',JSON.stringify(ArrayAuxi))
             
              send.append('filepdf', this.state.file, this.state.file.name)
              send.append('file' , this.state.file.name)

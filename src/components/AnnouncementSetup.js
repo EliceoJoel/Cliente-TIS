@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Select from 'react-select'
 import {getAnnouncement} from './UserFunctions'
 import axios from 'axios'
-
+//import {getAnnouncementIDGenerateRotulate} from './UserFunctions'
 var conv  = [] 
 
 export class AnnouncementSetup extends Component {
@@ -23,10 +23,18 @@ export class AnnouncementSetup extends Component {
             showRequirement:false,
             showMerit:false,
             showTheme:false ,
-            typeAnnouncement:'merit',
+            typeAnnouncement:'merito',
             porcentageAnnouncement:'' ,
             tablePercentageAnnouncement:[],
-            tablePercentageAnnouncementOrder:[]
+            tablePercentageAnnouncementOrder:[] ,
+            tableRequirement:[],
+            tableRequirementOrder:[],
+            tableMerit:[],
+            tableMeritOrder:[],
+            tableAuxiliary:[],
+            tableAuxiliaryOrder:[],
+            tableTheme:[],
+            tableThemeOrder:[]
         }
     }
     onChangeAux =  (e) =>{
@@ -52,6 +60,14 @@ export class AnnouncementSetup extends Component {
     }
 
     handleSearchAnnouncement (){
+        this.setState({
+            showAuxiliary:false ,
+             showRequirement:false,
+             showMerit:false,
+             showTheme:false,
+             showPercentage: false
+ 
+          } )
         let conv =  this.state.selectedOptionConv.label
         console.log(conv);
         let send = new FormData()
@@ -94,7 +110,36 @@ export class AnnouncementSetup extends Component {
              .catch(error => {
                  console.log(error)
              })
-
+             let conv = this.state.found[0].name
+             let sendIdAnnouncement = new FormData()
+             sendIdAnnouncement.append('conv', conv)
+             axios({
+                 method: 'post',
+                 url: 'api/requirementList',
+                 data: sendIdAnnouncement,
+                 headers: { 'Content-Type': 'multipart/form-data' }
+             }).then(response => {
+                 this.setState({ tableRequirement: response.data });
+                 console.log(this.state.tableRequirement);
+                 this.state.tableRequirement.sort(function (a, b) {
+                     if (a.requirement > b.requirement) {
+                         return 1;
+                     }
+                     if (a.requirement < b.requirement) {
+                         return -1;
+                     }
+                     return 0;
+                 });
+     
+                 console.log(this.state.tableRequirement);
+                 this.setState({ tableRequirementOrder: this.state.tableRequirement });
+     
+     
+             })
+                 .catch(error => {
+                     console.log(error)
+     
+                 })
     }
     handleAux(e){
         e.preventDefault()
@@ -115,6 +160,36 @@ export class AnnouncementSetup extends Component {
              .catch(error => {
                  console.log(error)
              })
+             let conv = this.state.found[0].id
+             let sendIdAnnouncement = new FormData()
+             sendIdAnnouncement.append('id_announcement', conv)
+             axios({
+                 method: 'post',
+                 url: 'api/auxiliarySearch',
+                 data: sendIdAnnouncement,
+                 headers: { 'Content-Type': 'multipart/form-data' }
+             }).then(response => {
+                 this.setState({ tableAuxiliary: response.data });
+                 console.log(this.state.tableAuxiliary);
+                 this.state.tableAuxiliary.sort(function (a, b) {
+                     if (a.item > b.item) {
+                         return 1;
+                     }
+                     if (a.item < b.item) {
+                         return -1;
+                     }
+                     return 0;
+                 });
+     
+                 console.log(this.state.tableAuxiliary);
+                 this.setState({ tableAuxiliaryOrder: this.state.tableAuxiliary });
+     
+     
+             })
+                 .catch(error => {
+                     console.log(error)
+     
+                 })
     }
     handleTheme(e){
         e.preventDefault()
@@ -133,6 +208,38 @@ export class AnnouncementSetup extends Component {
              .catch(error => {
                  console.log(error)
              })
+             let conv = this.state.found[0].id
+             console.log(conv);
+             
+             let sendIdAnnouncement = new FormData()
+             sendIdAnnouncement.append('id_announcement', conv)
+             axios({
+                 method: 'post',
+                 url: 'api/themeAuxiliarySearch',
+                 data: sendIdAnnouncement,
+                 headers: { 'Content-Type': 'multipart/form-data' }
+             }).then(response => {
+                 this.setState({ tableTheme: response.data });
+                 console.log(this.state.tableTheme);
+                 this.state.tableTheme.sort(function (a, b) {
+                     if (a.name > b.name) {
+                         return 1;
+                     }
+                     if (a.name < b.name) {
+                         return -1;
+                     }
+                     return 0;
+                 });
+     
+                 console.log(this.state.tableTheme);
+                 this.setState({ tableThemeOrder: this.state.tableTheme });
+     
+     
+             })
+                 .catch(error => {
+                     console.log(error)
+     
+                 })
     }
     handleMerit(e){
         e.preventDefault()
@@ -155,6 +262,39 @@ export class AnnouncementSetup extends Component {
              .catch(error => {
                  console.log(error)
              })
+              
+          let conv = this.state.found[0].id
+          console.log(conv);
+          
+          let sendIdAnnouncement = new FormData()
+          sendIdAnnouncement.append('id_announcement', conv)
+          axios({
+              method: 'post',
+              url: 'api/meritByAnnouncementConfig',
+              data: sendIdAnnouncement,
+              headers: { 'Content-Type': 'multipart/form-data' }
+          }).then(response => {
+              this.setState({ tableMerit: response.data });
+              console.log(this.state.tableMerit);
+              this.state.tableMerit.sort(function (a, b) {
+                  if (a.name > b.name) {
+                      return 1;
+                  }
+                  if (a.name < b.name) {
+                      return -1;
+                  }
+                  return 0;
+              });
+  
+              console.log(this.state.tableMerit);
+              this.setState({ tableMeritOrder: this.state.tableMerit });
+  
+  
+          })
+              .catch(error => {
+                  console.log(error)
+  
+              })
     }
     handleRequirementConfiguration(e){
         e.preventDefault()
@@ -164,8 +304,39 @@ export class AnnouncementSetup extends Component {
             showMerit:false,
             showTheme:false,
             showPercentage: false
-
+            
          } )
+        let conv = this.state.found[0].name
+        let sendIdAnnouncement = new FormData()
+        sendIdAnnouncement.append('conv', conv)
+        axios({
+            method: 'post',
+            url: 'api/requirementList',
+            data: sendIdAnnouncement,
+            headers: { 'Content-Type': 'multipart/form-data' }
+        }).then(response => {
+            this.setState({ tableRequirement: response.data });
+            console.log(this.state.tableRequirement);
+            this.state.tableRequirement.sort(function (a, b) {
+                if (a.requirement > b.requirement) {
+                    return 1;
+                }
+                if (a.requirement < b.requirement) {
+                    return -1;
+                }
+                return 0;
+            });
+
+            console.log(this.state.tableRequirement);
+            this.setState({ tableRequirementOrder: this.state.tableRequirement });
+
+
+        })
+            .catch(error => {
+                console.log(error)
+
+            })
+
     }
     handleAuxConfiguration(e){
         e.preventDefault()
@@ -177,6 +348,38 @@ export class AnnouncementSetup extends Component {
              showPercentage: false
  
           } )
+          let conv = this.state.found[0].id
+          let sendIdAnnouncement = new FormData()
+          sendIdAnnouncement.append('id_announcement', conv)
+          axios({
+              method: 'post',
+              url: 'api/auxiliarySearch',
+              data: sendIdAnnouncement,
+              headers: { 'Content-Type': 'multipart/form-data' }
+          }).then(response => {
+              this.setState({ tableAuxiliary: response.data });
+              console.log(this.state.tableAuxiliary);
+              this.state.tableAuxiliary.sort(function (a, b) {
+                  if (a.item > b.item) {
+                      return 1;
+                  }
+                  if (a.item < b.item) {
+                      return -1;
+                  }
+                  return 0;
+              });
+  
+              console.log(this.state.tableAuxiliary);
+              this.setState({ tableAuxiliaryOrder: this.state.tableAuxiliary });
+  
+  
+          })
+              .catch(error => {
+                  console.log(error)
+  
+              })
+          
+      
     }
     handleMeritConfiguration(e){
         e.preventDefault()
@@ -186,8 +389,41 @@ export class AnnouncementSetup extends Component {
              showMerit:true,
              showTheme:false,
              showPercentage: false
- 
+             
           } )
+        
+          let conv = this.state.found[0].id
+          console.log(conv);
+          
+          let sendIdAnnouncement = new FormData()
+          sendIdAnnouncement.append('id_announcement', conv)
+          axios({
+              method: 'post',
+              url: 'api/meritByAnnouncementConfig',
+              data: sendIdAnnouncement,
+              headers: { 'Content-Type': 'multipart/form-data' }
+          }).then(response => {
+              this.setState({ tableMerit: response.data });
+              console.log(this.state.tableMerit);
+              this.state.tableMerit.sort(function (a, b) {
+                  if (a.name > b.name) {
+                      return 1;
+                  }
+                  if (a.name < b.name) {
+                      return -1;
+                  }
+                  return 0;
+              });
+  
+              console.log(this.state.tableMerit);
+              this.setState({ tableMeritOrder: this.state.tableMerit });
+  
+  
+          })
+              .catch(error => {
+                  console.log(error)
+  
+              })
     }
     handleThemeConfiguration(e){
         e.preventDefault()
@@ -199,18 +435,40 @@ export class AnnouncementSetup extends Component {
              showPercentage: false
  
           } )
+          let conv = this.state.found[0].id
+          console.log(conv);
+          
+          let sendIdAnnouncement = new FormData()
+          sendIdAnnouncement.append('id_announcement', conv)
+          axios({
+              method: 'post',
+              url: 'api/themeAuxiliarySearch',
+              data: sendIdAnnouncement,
+              headers: { 'Content-Type': 'multipart/form-data' }
+          }).then(response => {
+              this.setState({ tableTheme: response.data });
+              console.log(this.state.tableTheme);
+              this.state.tableTheme.sort(function (a, b) {
+                  if (a.name > b.name) {
+                      return 1;
+                  }
+                  if (a.name < b.name) {
+                      return -1;
+                  }
+                  return 0;
+              });
+  
+              console.log(this.state.tableTheme);
+              this.setState({ tableThemeOrder: this.state.tableTheme });
+  
+  
+          })
+              .catch(error => {
+                  console.log(error)
+  
+              })
     }
-    // handlePercentageAnnouncement(e){
-    //     e.preventDefault()
-    //     this.setState({
-    //         showAuxiliary:false ,
-    //          showRequirement:false,
-    //          showMerit:false,
-    //          showTheme:false,
-    //         showPercentage: true
- 
-    //       } )
-    // }
+  
     handlePercentageAnnouncement(e) { 
         e.preventDefault()
             this.setState({
@@ -218,7 +476,10 @@ export class AnnouncementSetup extends Component {
              showRequirement:false,
              showMerit:false,
              showTheme:false,
-            showPercentage: true
+            showPercentage: true,
+            percentageKnowledgeDoc_error:'',
+            modifyWarning: '' ,
+            deleteWarning:'' ,
  
           } )
         let idconvocato = this.state.selectedOptionConv.value
@@ -365,6 +626,206 @@ export class AnnouncementSetup extends Component {
 
 
     }
+    handleRemoveRequirement(e){
+        let idRequirement = e.id
+        let send = new FormData()
+        send.append('id_requirement', idRequirement)
+        axios({
+            method: 'post',
+            url: 'api/requirementDelete',
+            data: send,
+            headers: { 'Content-Type': 'multipart/form-data' }
+        }).then(res => {
+            console.log(res);
+ this.setState({ deleteWarning: 'se elimino el elemento con exito' })
+        })
+            .catch(error => {
+                console.log(error)
+
+            })
+        let conv = this.state.found[0].name
+        let sendIdAnnouncement = new FormData()
+        sendIdAnnouncement.append('conv', conv)
+        axios({
+            method: 'post',
+            url: 'api/requirementList',
+            data: sendIdAnnouncement,
+            headers: { 'Content-Type': 'multipart/form-data' }
+        }).then(response => {
+            this.setState({ tableRequirement: response.data });
+            console.log(this.state.tableRequirement);
+            this.state.tableRequirement.sort(function (a, b) {
+                if (a.requirement > b.requirement) {
+                    return 1;
+                }
+                if (a.requirement < b.requirement) {
+                    return -1;
+                }
+                return 0;
+            });
+
+            console.log(this.state.tableRequirement);
+            this.setState({ tableRequirementOrder: this.state.tableRequirement });
+
+
+        })
+            .catch(error => {
+                console.log(error)
+
+            })
+    }
+    handleRemoveAuxiliary(e){
+        let idAuxiliary = e.id
+        let send = new FormData()
+        send.append('id_auxiliary', idAuxiliary)
+        axios({
+            method: 'post',
+            url: 'api/auxiliaryDelete',
+            data: send,
+            headers: { 'Content-Type': 'multipart/form-data' }
+        }).then(res => {
+            console.log(res);
+ this.setState({ deleteWarning: 'se elimino el elemento con exito' })
+        })
+            .catch(error => {
+                console.log(error)
+
+            })
+        let conv = this.state.found[0].id
+        let sendIdAnnouncement = new FormData()
+        sendIdAnnouncement.append('id_announcement', conv)
+        axios({
+            method: 'post',
+            url: 'api/auxiliarySearch',
+            data: sendIdAnnouncement,
+            headers: { 'Content-Type': 'multipart/form-data' }
+        }).then(response => {
+            this.setState({ tableAuxiliary: response.data });
+            console.log(this.state.tableAuxiliary);
+            this.state.tableAuxiliary.sort(function (a, b) {
+                if (a.item > b.item) {
+                    return 1;
+                }
+                if (a.item < b.item) {
+                    return -1;
+                }
+                return 0;
+            });
+
+            console.log(this.state.tableAuxiliary);
+            this.setState({ tableAuxiliaryOrder: this.state.tableAuxiliary });
+
+
+        })
+            .catch(error => {
+                console.log(error)
+
+            })
+        
+    }
+    handleRemoveMerit(e){
+        
+        let idMerit = e.id
+        let send = new FormData()
+        send.append('id_merit', idMerit)
+        axios({
+            method: 'post',
+            url: 'api/deleteMeritConfig',
+            data: send,
+            headers: { 'Content-Type': 'multipart/form-data' }
+        }).then(res => {
+            console.log(res);
+ this.setState({ deleteWarning: 'se elimino el elemento con exito' })
+        })
+            .catch(error => {
+                console.log(error)
+
+            })
+        let conv = this.state.found[0].id
+        console.log(conv);
+        
+        let sendIdAnnouncement = new FormData()
+        sendIdAnnouncement.append('id_announcement', conv)
+        axios({
+            method: 'post',
+            url: 'api/meritByAnnouncementConfig',
+            data: sendIdAnnouncement,
+            headers: { 'Content-Type': 'multipart/form-data' }
+        }).then(response => {
+            this.setState({ tableMerit: response.data });
+            console.log(this.state.tableMerit);
+            this.state.tableMerit.sort(function (a, b) {
+                if (a.name > b.name) {
+                    return 1;
+                }
+                if (a.name < b.name) {
+                    return -1;
+                }
+                return 0;
+            });
+
+            console.log(this.state.tableMerit);
+            this.setState({ tableMeritOrder: this.state.tableMerit });
+
+
+        })
+            .catch(error => {
+                console.log(error)
+
+            })
+
+    }
+    handleRemoveTheme(e){
+         
+        let idTheme = e.id
+        let send = new FormData()
+        send.append('id_theme', idTheme)
+        axios({
+            method: 'post',
+            url: 'api/deleteTheme',
+            data: send,
+            headers: { 'Content-Type': 'multipart/form-data' }
+        }).then(res => {
+            console.log(res);
+ this.setState({ deleteWarning: 'se elimino el elemento con exito' })
+        })
+            .catch(error => {
+                console.log(error)
+
+            })
+ let conv = this.state.found[0].id
+          console.log(conv);
+          
+          let sendIdAnnouncement = new FormData()
+          sendIdAnnouncement.append('id_announcement', conv)
+          axios({
+              method: 'post',
+              url: 'api/themeAuxiliarySearch',
+              data: sendIdAnnouncement,
+              headers: { 'Content-Type': 'multipart/form-data' }
+          }).then(response => {
+              this.setState({ tableTheme: response.data });
+              console.log(this.state.tableTheme);
+              this.state.tableTheme.sort(function (a, b) {
+                  if (a.name > b.name) {
+                      return 1;
+                  }
+                  if (a.name < b.name) {
+                      return -1;
+                  }
+                  return 0;
+              });
+  
+              console.log(this.state.tableTheme);
+              this.setState({ tableThemeOrder: this.state.tableTheme });
+  
+  
+          })
+              .catch(error => {
+                  console.log(error)
+  
+              })
+    }
     render() {
         const { selectedOptionConv,requirement,item,auxiliary,tematica , nameMerit , descriptionMerit ,typeAnnouncement ,porcentageAnnouncement} = this.state
         return (
@@ -449,6 +910,37 @@ export class AnnouncementSetup extends Component {
                          <button className="btn btn-outline-info" variant="warning" onClick ={(reqevent) => this.handleReq(reqevent)} >Agregar</button>
                          </div>
                          </div>
+                         <div className="col-md-12">
+                                 <br></br>
+                            
+
+                                 <label className="col-md-4 text-info font-weight-bold text-center" htmlFor="Nombre">REQUISITOS</label>
+
+                                 <div className="my-1" style={{ border: "0.5px solid silver", width: "100%" }}></div>
+                             </div>
+                         <div>
+                         {this.state.tableRequirementOrder.map(data =>
+                                 <div key={data.id}>
+                                     <div className="container">
+                                         <div className="row row-cols-4">
+                                             <div className="col-md-10">
+                                                 {data.requirement}
+                                             </div>
+                                             <br></br>
+  
+                                             <div className="col-md-2 text-center">
+                                                 <button className="btn btn-outline-info" variant="warning" onClick={(e) => this.handleRemoveRequirement(data)
+                                                 } >Eliminar</button>
+
+
+                                             </div>
+                                             <br></br>
+                                         </div>
+                                         <div className="my-1" style={{ border: "0.3px solid silver", width: "100%" }}></div>
+                                     </div>
+                                 </div>
+                             )}
+                         </div>
                          </div>
                          :null}
                            {this.state.showAuxiliary?
@@ -488,6 +980,39 @@ export class AnnouncementSetup extends Component {
                       {/* <button   className="btn btn-outline-info mx-3" variant="warning"onClick ={(AuxEvent) => this.handleRemove(AuxEvent)} >Remover Ultimo Ingresado</button> */}
                      <p style={{color:"red"}}>{this.state.array_error}</p>
                     </div>
+                    <div className="col-md-12">
+                                 <br></br>
+                            
+
+                                 <label className="col-md-2 text-info font-weight-bold text-center" htmlFor="Nombre">ITEM</label>
+                                 <label className="col-md-8 text-info font-weight-bold text-center" htmlFor="Nombre">NOMBRE</label>
+                                 <div className="my-1" style={{ border: "0.5px solid silver", width: "100%" }}></div>
+                                 {this.state.tableAuxiliaryOrder.map(data =>
+                                 <div key={data.id}>
+                                     <div className="container">
+                                         <div className="row row-cols-4">
+                                             <div className="col-md-4">
+                                                 {data.item}
+                                             </div>
+                                             <div className="col-md-5">
+                                                 {data.name}
+                                             </div>
+                                             <br></br>
+  
+                                             <div className="col-md-2 text-center">
+                                                 <button className="btn btn-outline-info" variant="warning" onClick={(e) => this.handleRemoveAuxiliary(data)
+                                                 } >Eliminar</button>
+
+
+                                             </div>
+                                             <br></br>
+                                         </div>
+                                         <div className="my-1" style={{ border: "0.3px solid silver", width: "100%" }}></div>
+                                     </div>
+                                 </div>
+                             )}
+                             </div>
+                  
                     </div>
                     
                     :null}
@@ -513,6 +1038,37 @@ export class AnnouncementSetup extends Component {
                       <button className="btn btn-outline-info" variant="warning" onClick ={(e) => this.handleTheme(e)} >Agregar</button>
                  
                     </div>
+                    <div className="col-md-12">
+                                 <br></br>
+                            
+
+                                
+                                 <label className="col-md-8 text-info font-weight-bold text-center" htmlFor="Nombre">NOMBRE</label>
+                                 <div className="my-1" style={{ border: "0.5px solid silver", width: "100%" }}></div>
+                                 {this.state.tableThemeOrder.map(data =>
+                                 <div key={data.id}>
+                                     <div className="container">
+                                         <div className="row row-cols-4">
+                                            
+                                             <div className="col-md-8">
+                                                 {data.name}
+                                             </div>
+                                             <br></br>
+  
+                                             <div className="col-md-2 text-center">
+                                                 <button className="btn btn-outline-info" variant="warning" onClick={(e) => this.handleRemoveTheme(data)
+                                                 } >Eliminar</button>
+
+
+                                             </div>
+                                             <br></br>
+                                         </div>
+                                         <div className="my-1" style={{ border: "0.3px solid silver", width: "100%" }}></div>
+                                     </div>
+                                 </div>
+                             )}
+                             </div>
+                  
                     </div>
                      
                     :null}
@@ -553,6 +1109,38 @@ export class AnnouncementSetup extends Component {
                       {/* <button   className="btn btn-outline-info mx-3" variant="warning"onClick ={(AuxEvent) => this.handleRemove(AuxEvent)} >Remover Ultimo Ingresado</button> */}
                      <p style={{color:"red"}}>{this.state.array_error}</p>
                     </div>
+                    <div className="col-md-12">
+                                 <br></br>
+                            
+
+                                 <label className="col-md-4 text-info font-weight-bold text-center" htmlFor="Nombre">NOMBRE</label>
+                                 <label className="col-md-5 text-info font-weight-bold text-center" htmlFor="Nombre">DESCRIPCION</label>
+                                 <div className="my-1" style={{ border: "0.5px solid silver", width: "100%" }}></div>
+                                 {this.state.tableMeritOrder.map(data =>
+                                 <div key={data.id}>
+                                     <div className="container">
+                                         <div className="row row-cols-4">
+                                             <div className="col-md-4">
+                                                 {data.name}
+                                             </div>
+                                             <div className="col-md-5">
+                                                 {data.description}
+                                             </div>
+                                             <br></br>
+  
+                                             <div className="col-md-2 text-center">
+                                                 <button className="btn btn-outline-info" variant="warning" onClick={(e) => this.handleRemoveMerit(data)
+                                                 } >Eliminar</button>
+
+
+                                             </div>
+                                             <br></br>
+                                         </div>
+                                         <div className="my-1" style={{ border: "0.3px solid silver", width: "100%" }}></div>
+                                     </div>
+                                 </div>
+                             )}
+                             </div>
                     </div>
                         :null}    
                         {this.state.showPercentage?
@@ -570,8 +1158,8 @@ export class AnnouncementSetup extends Component {
                                      // placeholder=""
                                      value={typeAnnouncement}
                                      onChange={this.onChange}>
-                                     <option>merit</option>
-                                     <option>knowledge</option>
+                                     <option>merito </option>
+                                     <option>conocimiento</option>
 
 
 
