@@ -1,7 +1,7 @@
 /* eslint-disable eqeqeq */
 import React, { Component } from 'react'
 import Select from 'react-select'
-import {getUserAnnouncements, getTheoryScore} from './UserFunctions'
+import {getUserAnnouncementsDoc, getTheoryScore} from './UserFunctions'
 import {getProfile} from './UserFunctions'
 import {getStudents} from './UserFunctions' 
 import {getUserAuxiliary} from './UserFunctions' 
@@ -29,7 +29,7 @@ componentDidMount() {
         this.setState({
             idUser: res.user.id        
         }) 
-        getUserAnnouncements(res.user.id).then(res => {
+        getUserAnnouncementsDoc(res.user.id).then(res => {
             for (var i=0; i < res.length; i++) {
                 var object = {}
                 object.id = res[i].id

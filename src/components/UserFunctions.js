@@ -340,7 +340,7 @@ export const  percentageData = (data) =>{
 }
 
 
-export const getUserAnnouncements = (id) => {
+export const getUserAnnouncementsDoc = (id) => {
     //console.log(id);
     return axios
         .get('api/userAnnouncement/'+id, {
@@ -353,19 +353,19 @@ export const getUserAnnouncements = (id) => {
             console.log(err)
         })
 }
-// export const getUserAnnouncements = (id) => {
-//     //console.log(id);
-//     return axios
-//         .get('api/userAnnouncementUser/'+id, {
-//             headers: { 'Content-Type': 'application/json' }
-//         })
-//         .then(response => {
-//             return response.data
-//         })
-//         .catch(err => {
-//             console.log(err)
-//         })
-// }
+ export const getUserAnnouncements = (id) => {
+     console.log(id);
+     return axios
+         .get('api/userAnnouncementUser/'+id, {
+             headers: { 'Content-Type': 'application/json' }
+         })
+         .then(response => {
+             return response.data
+         })
+         .catch(err => {
+             console.log(err)
+         })
+ }
 
 export const getQualifiedPostulants = () => {
     return axios
