@@ -6,7 +6,8 @@ var ArrayAuxi = []
  class Post extends Component {
      constructor() {
          super()
-     
+         this.inputRef = React.createRef()
+
          this.state = { 
             file: null,
             file_error: '',
@@ -25,9 +26,8 @@ var ArrayAuxi = []
             auxiliary_error:'',
             requirement:'',
             tematica:'' ,
-            post_announcement_acomplish:''
-
-
+            post_announcement_acomplish:'' , 
+           
          }
      }
 
@@ -141,18 +141,27 @@ var ArrayAuxi = []
          })
     }
  
-    handleFile = (event) =>{ this.setState({file: event.target.files[0]})}
+    handleFile = (event) =>{ 
+        this.setState({file: event.target.files[0]}  )
+        
+    }
       
     handleUpload(e ){
          e.preventDefault()
+        
                this.setState({
             name_error: '', 
             year_error: '',
             selectedOption_error:'',
             file_error:'',
-            array_error:''
-         
+            array_error:'' , 
+         file:'' ,
+     
+        
     })
+   console.log(this.inputRef);
+   //this.inputRef.current.value = "" 
+    
         if(this.valid()){       
          let name = this.state.name
          let year = this.state.year
@@ -165,8 +174,11 @@ var ArrayAuxi = []
              send.append('type', type)
              send.append('departament', departament)
              //send.append('auxiliary',JSON.stringify(ArrayAuxi))
-            
+             //send.append('filepdf', this.state.file, this.state.file.name)
              send.append('filepdf', this.state.file, this.state.file.name)
+             console.log(this.state.file);
+             console.log(this.state.file.name);
+             
              send.append('file' , this.state.file.name)
              axios({
                 method: 'post',
@@ -175,6 +187,7 @@ var ArrayAuxi = []
                 headers: {'Content-Type': 'multipart/form-data' }
                 }).then(response =>{
                     this.setState({ file:null})
+                    this.inputRef.current.value = "" 
                  this.setState({post_announcement_acomplish:'Convocatoria Publicada con Exito'})
                  this.setState({name:''})
                  this.setState({year:''})
@@ -409,6 +422,7 @@ var ArrayAuxi = []
                             type = "file" 
                             name = "file" 
                             accept = "application/pdf"
+                            ref = {this.inputRef}
                         />
                         
                         <p style={{color:"red"}}>{this.state.file_error}</p>
