@@ -5,17 +5,24 @@ class Profile extends Component {
     constructor() {
         super()
         this.state = {
-            name: '',
-            email: ''
+            fullname: '',
+            user: '',
+            idRol: null,
+            idAnnouncement: null
         }
     }
 
     componentDidMount() {
         getProfile().then(res => {
+            console.log(res);
+            
             this.setState({
-                name: res.user.name,
-                email: res.user.email
+                fullname: res.user.fullname,
+                user: res.user.user,
+                idRol: res.user.idRol,
+                idAnnouncement: res.user.idAnnouncement
             })
+            console.log(res)
         })
     }
 
@@ -29,12 +36,20 @@ class Profile extends Component {
                     <table className="table col-md-4 mx-auto">
                         <tbody>
                             <tr>
-                                <td>Name</td>
-                                <td>{this.state.name}</td>
+                                <td>Nombres</td>
+                                <td>{this.state.fullname}</td>
                             </tr>
                             <tr>
-                                <td>Email</td>
-                                <td>{this.state.email}</td>
+                                <td>Usuario</td>
+                                <td>{this.state.user}</td>
+                            </tr>
+                            <tr>
+                                <td>id rol</td>
+                                <td>{this.state.idRol}</td>
+                            </tr>
+                            <tr>
+                                <td>id convocatoria</td>
+                                <td>{this.state.idAnnouncement}</td>
                             </tr>
                         </tbody>
                     </table>
