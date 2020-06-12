@@ -1,104 +1,208 @@
 import React, { Component } from 'react'
 import Select from 'react-select'
 import {getAnnouncement} from './UserFunctions'
-import {getAverage} from './UserFunctions'
+import {getAux} from './UserFunctions'
+import {getAuxThemes} from './UserFunctions'
+import {getPostEnableAux} from './UserFunctions'
+import {getLabScores} from './UserFunctions'
+import {getStudents} from './UserFunctions'
+
 //
- var conv = []
 class final_notes extends Component {
     constructor() {
         super()
+        this.scores =[];
         this.student = [];
-        this.conv = null;
         this.state = {
             selectConv:null,
             selectConvError:"",
             showList:false,
             selectedAux:null,
             aux:[],
-            students:(<div></div>),
+            conv:[],
+            list:(<div></div>),
+            notasLab:(<div></div>),
+
         }
 
     }
 
     //fill announcement
     componentDidMount() {
-        this.conv = []
+        let conv = []
         getAnnouncement().then(res => {
+            for (var i=0; i < res.length; i++) {
+                var object = {}
+                object.id = res[i].id
+                object.label = res[i].name
+                object.type = res[i].type
+                conv[i] = object
+            }
+            this.setState({conv:conv})  
+        })
+    }
+
+
+    fillAuxi(){
+        let aux = []
+        getAux(this.state.selectedConv.id).then(res =>{
             console.log(res)
             for (var i=0; i < res.length; i++) {
                 var object = {}
                 object.id = res[i].id
                 object.label = res[i].name
-                conv[i] = object
-              }
-              console.log(this.conv)
-        })
+                aux[i] = object
+            }
+            this.setState({auxiliaturas:aux})
+        }
+        )
     }
 
+    async renderTableData(){
+        let list =  (<div></div>)
+        if(this.state.selectedConv.type === 'Docencia') list = await this.docencia()
+        else list = await this.laboratorio()
+        this.setState({list:list})
+    }
 
-    setup(e){
-        this.student = []
-        console.log(e.id)
-        getAverage(e.id).then(res =>{
-          let a = res
-          console.log(a)
-          for(let i=0; i<a.length;i++){
-            let object ={}
-            object.auxiliary = a[i].auxiliary
-            object.name = a[i].name
-            object.nota_final = a[i].nota_final
-            this.student[i] = object
-        }
-          console.log(this.student) 
-        }).catch(err => {
-          console.log(err)
-      })
-      }
-
-      scores(){
-        this.setState({students:this.student.map(student =>(
-            <div key={student.id} className="row">
-                <div className="col">{student.name}</div>
-                <div className="col">{student.auxiliary}</div>
-                <div className="col">{student.nota_final}</div>
+    async docencia(){
+        let postulant = []
+        postulant = await this.Students()
+        console.log(postulant)
+        return (
+            <div>
+                <div className="row">
+                        <div class="col text-info font-weight-bold">nombre</div>
+                        <div class="col text-info font-weight-bold">nota</div>
+                        <div class="col text-info font-weight-bold">nota Oral</div>
+                </div>
+                <div className="my-1" style={{border:"0.5px solid silver", width: "100%"}}></div>
+                {postulant.map(post=>(
+                    <div className="row">
+                        <div className="col">{post.name}</div>
+                        <div className="col">{post.score}</div>
+                        <div className="col">{post.score_oral}</div>
+                    </div>
+                ))}
             </div>
-        ))})
-      }
+            )
+    }
 
+    async Students(){
+        let postulants = []
+        await getStudents().then(postulant => {
+            for(let i=0; i<postulant.length;i++){
+                if(postulant[i].auxiliary === this.state.selectedAux.label && postulant[i].announcement === this.state.selectedConv.label){
+                    let pos ={}
+                    pos.name = postulant[i].name
+                    pos.score = postulant[i].score
+                    pos.score_oral = postulant[i].score_oral
+                    postulants.push(pos)
+                }
+            }
+        })
+        console.log(postulants)
+        return postulants 
+    }
+
+    async laboratorio(){
+        const id = this.state.selectedAux.id
+        let title = [];
+        let postulant = [];
+        let score = [];
+        score = await getLabScores(id)
+        console.log(score)
+        postulant = await getPostEnableAux(id)
+        title = await getAuxThemes(id)
+        return (
+            <div>
+                <div className="row">
+                <div class="col text-info font-weight-bold">postulante</div>
+                    {title.map(item => (<div class="col text-info font-weight-bold">{item.theme}</div>))}
+                </div>
+                <div>
+                    {postulant.map(post => (
+                        <div className="row">
+                            <div className="col">{post.name}</div>
+                            {this.llenarNotasLab(post.id,score)}
+                        </div>
+                    ))}
+                </div>
+                <div className="my-1" style={{border:"0.5px solid silver", width: "100%"}}></div>
+
+            </div>
+            )
+        
+        
+    }
+
+    llenarNotasLab(id,scores){
+        let html = (<div></div>)
+        let StudentScores = [];
+        let j = 0;
+        for(let i=0; i<scores.length; i++){
+            if(scores[i].idPostulant === id){
+                StudentScores[j] = scores[i].score
+                j++
+            }
+        }
+        console.log(StudentScores)
+        html = (StudentScores.map(score =>(
+            <div className="col">{score}</div>
+        )))
+        return html
+
+    }
 
     render() {
-        return(<div>
-            <h3>calificacion de conocimientos final</h3>
-            <div className="row">
-                <div className="form-group col-8 my-4">
-                    <label htmlFor="Nombre">Selecciona una convocatoria</label>
-                    <Select
-                      name="conv"
-                      options={conv}
-                      onChange={(e) => this.setup(e)}
-                      placeholder=""
-                      className="basic-select"
-                      classNamePrefix="select"
-                    />
-                    <p style={{color:"red"}}>{this.state.selectConvError}</p>
-                    
-                </div>
-                <div className="form-group col-3 mt-5">
-                    <button type="button" class="col btn btn-info mt-2" onClick={() => this.scores()} >Generar lista</button>
-                </div>
-                <br/>
-                <br/>        
+        return(
+        <div className="justify-content-center">
+        <h1 className="h3 font-weight-normal text-center mt-3 p-3 bg-info text-white rounded">
+            Lista de notas de conocimiento
+        </h1>
+        <div className="row">
+            <div className="form-group col-8 my-4">
+                <label htmlFor="Nombre">Selecciona una convocatoria</label>
+                <Select
+                  name="conv"
+                  options={this.state.conv}
+                  onChange={(e) => this.setState({selectedConv:e})}
+                  placeholder=""
+                  className="basic-select"
+                  classNamePrefix="select"
+                />
+                <p style={{color:"red"}}>{this.state.selectConvError}</p>
+                
             </div>
-            <div className="row">
-                <div className="col text-info font-weight-bold">nombre</div>
-                <div className="col text-info font-weight-bold">auxiliatura</div>
-                <div className="col text-info font-weight-bold">nota promedio</div>
+
+            <div className="form-group col-3 mt-5">
+                <button type="button" className="col btn btn-info mt-2" onClick={() => this.fillAuxi()} >seleccionar convocatoria</button>
             </div>
-            <div className="my-1" style={{border:"0.5px solid silver", width: "100%"}}></div>
-            <div>
-                {this.state.students}
-            </div>  
-        </div>)
+
+            <div className="form-group col-8 my-4">
+                <label htmlFor="Nombre">Selecciona una auxiliatura</label>
+                <Select
+                  name="conv"
+                  options={this.state.auxiliaturas}
+                  onChange={(e) => this.setState({selectedAux:e})}
+                  placeholder=""
+                  className="basic-select"
+                  classNamePrefix="select"
+                />
+                <p style={{color:"red"}}>{this.state.selectAuxError}</p>
+            </div>
+
+            <div className="form-group col-3 mt-5">
+                <button type="button" class="col btn btn-info mt-2" onClick={() => this.renderTableData()} >Generar lista</button>
+            </div>            
+        </div>
+        <div >
+        </div>     
+        <br/>
+        <br/>  
+        {this.state.list}
+    </div> 
+        )
     }
 }
 
