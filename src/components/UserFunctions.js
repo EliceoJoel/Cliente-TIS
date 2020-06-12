@@ -343,7 +343,7 @@ export const  percentageData = (data) =>{
 export const getUserAnnouncementsDoc = (id) => {
     //console.log(id);
     return axios
-        .get('api/userAnnouncementUser/'+id, {
+        .get('api/userAnnouncement/'+id, {
             headers: { 'Content-Type': 'application/json' }
         })
         .then(response => {
