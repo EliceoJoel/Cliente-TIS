@@ -421,7 +421,7 @@ export class PostulantEnable extends Component {
                         
                         <div className="col-md-12">
                         <br></br>
-                            <label className="col-md-8 text-info font-weight-bold" htmlFor="Nombre">REQUISITOS</label>
+                            <label className="col-md-8 text-info font-weight-bold" htmlFor="Nombre">DOCUMENTOS</label>
                             <label className="col-md-2 text-info font-weight-bold text-center" htmlFor="Nombre">CUMPLE</label>
                           
                               <div className="my-1" style={{border:"0.5px solid silver", width: "100%"}}></div>     
