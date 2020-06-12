@@ -10,15 +10,15 @@ import {saveAnnouncement} from './UserFunctions'
 import axios from 'axios'
 
 
-let users =[]
-let rol =[]
-let conv =[]
+
 
 class configure_user extends Component{
   
   constructor(props) {
       super(props);
-
+      this.users =[]
+      this.rol =[]
+      this.conv =[]
       this.aux = []
       this.theme = []
       this.items=[]
@@ -41,7 +41,7 @@ class configure_user extends Component{
           let user = {};
           user.id = res[i].id
           user.label = res[i].fullname
-          users[i]= user
+          this.users[i]= user
         }
       })
 
@@ -50,7 +50,7 @@ class configure_user extends Component{
             var object = {}
             object.id = roles[i].id
             object.label = roles[i].rol
-            rol[i] = object
+            this.rol[i] = object
         }
       })
 
@@ -63,7 +63,7 @@ class configure_user extends Component{
             object.idConv = res[i].id
             object.idAux = -1
             object.idTheme = -1
-            conv[i] = object
+            this.conv[i] = object
         }
       })
     }
@@ -79,7 +79,7 @@ class configure_user extends Component{
                 <label htmlFor="Nombre">Selecciona un usuario</label>
                 <Select
                 name="user"
-                options={users}
+                options={this.users}
                 onChange={(e) => this.setState({user:e})}
                 placeholder=""
                 className="basic-select"
@@ -90,7 +90,7 @@ class configure_user extends Component{
                 <label htmlFor="Nombre">Selecciona un rol</label>
                 <Select
                 name="rol"
-                options={rol}
+                options={this.rol}
                 onChange={(e) => this.change(e)}
                 placeholder=""
                 className="basic-select"
@@ -160,7 +160,7 @@ class configure_user extends Component{
           <label htmlFor="Nombre">Selecciona una convocatoria</label>
           <Select
                 name="conv"
-                options={conv}
+                options={this.conv}
                 onChange={(e) => this.fillAux(e)}
                 placeholder=""
                 className="basic-select"
@@ -178,7 +178,7 @@ class configure_user extends Component{
             <label htmlFor="Nombre">Selecciona una convocatoria</label>
             <Select
                   name="conv"
-                  options={conv}
+                  options={this.conv}
                   onChange={(e) => this.fillAux(e)}
                   placeholder=""
                   className="basic-select"

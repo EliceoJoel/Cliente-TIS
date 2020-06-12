@@ -463,7 +463,7 @@ export const getAux = id => {
             headers: { 'Content-Type': 'application/json' }
         })
         .then(response => {
-            return response
+            return response.data
         })
         .catch(err => {
             console.log(err)
@@ -623,3 +623,46 @@ export const getAnn  = () => {
             console.log(e);
         })
 }
+
+export const getAuxThemes  = (id) => {
+    //console.log(id);
+    return axios
+        .get('/api/getAuxTheme/' + id, {
+        headers: { 'Content-Type': 'application/json'}
+        })
+        .then(response => {
+            return response.data
+        })
+        .catch(e => {
+            console.log(e);
+        })
+}
+
+export const getPostEnableAux  = (id) => {
+    //console.log(id);
+    return axios
+        .get('/api/AuxPostEn/' + id, {
+        headers: { 'Content-Type': 'application/json'}
+        })
+        .then(response => {
+            return response.data
+        })
+        .catch(e => {
+            console.log(e);
+        })
+}
+
+export const getLabScores  = (id) => {
+    //console.log(id);
+    return axios
+        .get('/api/GetLabScore/' + id, {
+        headers: { 'Content-Type': 'application/json'}
+        })
+        .then(response => {
+            return response.data
+        })
+        .catch(e => {
+            console.log(e);
+        })
+}
+

@@ -12,11 +12,12 @@ import {finalTheoryScore} from './UserFunctions'
 import axios from 'axios'
 
 
-var conv = []
+
 class Laboratory_scores extends Component{
 
     constructor() {
         super()
+        this.conv = []
         this.notas = []
         this.state = {
             selectedConv:null,
@@ -41,7 +42,7 @@ class Laboratory_scores extends Component{
                     var object = {}
                     object.id = res[i].id
                     object.label = res[i].name
-                    conv[i] = object
+                    this.conv[i] = object
                 }
             })
         })
@@ -120,6 +121,7 @@ class Laboratory_scores extends Component{
     }
 
     changeScore(e,col,fila){
+        console.log(col,fila)
         if(this.notas[0] == null){
             this.fillMatrix()
         }
@@ -139,8 +141,7 @@ class Laboratory_scores extends Component{
                     url: 'api/labScore',
                     data: score,
                     headers: {'Content-Type': 'multipart/form-data' }
-                    }).then(response =>{
-                }) 
+                    }) 
                 .catch(error => {
                      console.log(error)
                 })
@@ -168,7 +169,7 @@ class Laboratory_scores extends Component{
                     <label htmlFor="Nombre">Selecciona una convocatoria</label>
                     <Select
                       name="conv"
-                      options={conv}
+                      options={this.conv}
                       onChange={(e) => this.setState({selectedConv:e})}
                       placeholder=""
                       className="basic-select"
@@ -232,7 +233,7 @@ class Laboratory_scores extends Component{
                 ))}
             </div>
 
-            <input type="submit" className="col btn btn-info mt-2" value="subir notas "/>
+            <button type="submit" className="col btn btn-info mt-2">subir notas</button>
             </form>  
         </div>
         )  

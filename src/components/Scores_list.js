@@ -9,10 +9,10 @@ import {updateScore} from './UserFunctions'
 import {finalTheoryScore} from './UserFunctions'
 
 //import {getAnnouncementIDGenerateRotulate} from './UserFunctions'
-var conv = []
 class Scores_list extends Component{
   constructor() {
     super()
+    this.conv = []
     this.state = {
         selectedConv:null,
         selectedAux:null,
@@ -34,7 +34,7 @@ componentDidMount() {
                 var object = {}
                 object.id = res[i].id
                 object.label = res[i].name
-                conv[i] = object
+                this.conv[i] = object
             }
         })
     })
@@ -123,7 +123,7 @@ render() {
                     <label htmlFor="Nombre">Selecciona una convocatoria</label>
                     <Select
                       name="conv"
-                      options={conv}
+                      options={this.conv}
                       onChange={(e) => this.setState({selectedConv:e})}
                       placeholder=""
                       className="basic-select"
@@ -194,7 +194,7 @@ renderTableData() {
                         min="0"
                         max="100"
                         className="col"  
-                        placeholder= "ingrese notas de conocimineto"
+                        placeholder= "examen escrito"
                         onChange = {this.onChange}                     
                     />
 
@@ -205,7 +205,7 @@ renderTableData() {
                         min="0"
                         max="100"
                         className="col"  
-                        placeholder= "ingrese notas de examen oral"
+                        placeholder= "examen oral"
                         onChange = {this.onChangeOral}                     
                     />
                     <div class="col">{this.state.warningMesage}</div>
