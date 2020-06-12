@@ -3,7 +3,6 @@ import Select from 'react-select'
 import {getProfile , getUserAnnouncements} from './UserFunctions'
 import {getAllNotes} from './UserFunctions'
 
-//var conv = []
 var notas = []
 
 class Note_final_list extends Component {
@@ -35,7 +34,7 @@ class Note_final_list extends Component {
               } this.setState({conv: announcementArray})
           })
       })
-  }
+    }
 
 
     selectConvChange = selectConv =>{
