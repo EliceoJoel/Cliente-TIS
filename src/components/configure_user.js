@@ -11,14 +11,13 @@ import axios from 'axios'
 
 
 
-
+let conv =[]
 class configure_user extends Component{
   
   constructor(props) {
       super(props);
       this.users =[]
       this.rol =[]
-      this.conv =[]
       this.aux = []
       this.theme = []
       this.items=[]
@@ -31,6 +30,7 @@ class configure_user extends Component{
         convsList:(<div></div>),
         auxList:(<div></div>),
         themeList:(<div></div>),
+        message:"",
       };
 
       this.fillAux = this.fillAux.bind(this);
@@ -63,7 +63,7 @@ class configure_user extends Component{
             object.idConv = res[i].id
             object.idAux = -1
             object.idTheme = -1
-            this.conv[i] = object
+            conv[i] = object
         }
       })
     }
@@ -113,10 +113,11 @@ class configure_user extends Component{
     }
     fillAux(e){
       let announcement = e;
+      console.log(announcement)
       this.aux =[]
       this.setState({temp_conv : announcement})
       getAux(announcement.id).then(res =>{
-        let a = res.data
+        let a = res
         console.log(a)
         for(let i=0; i<a.length;i++){
           let object ={}
@@ -160,7 +161,7 @@ class configure_user extends Component{
           <label htmlFor="Nombre">Selecciona una convocatoria</label>
           <Select
                 name="conv"
-                options={this.conv}
+                options={conv}
                 onChange={(e) => this.fillAux(e)}
                 placeholder=""
                 className="basic-select"
@@ -178,7 +179,7 @@ class configure_user extends Component{
             <label htmlFor="Nombre">Selecciona una convocatoria</label>
             <Select
                   name="conv"
-                  options={this.conv}
+                  options={conv}
                   onChange={(e) => this.fillAux(e)}
                   placeholder=""
                   className="basic-select"
@@ -188,7 +189,9 @@ class configure_user extends Component{
             <div> {this.state.itemsList} </div>
             <br/>
             <button  type="button" className="btn btn-info mt-2" onClick ={() => this.addAnnouncement()}> agregar convocatoria </button>
-            <br/>
+            <div style={{color:'green'}} className="mt-4">
+              <p>{this.state.message}</p>
+            </div>
             <button  type="button" className="btn btn-info mt-2" onClick ={() => this.save()}> guardar </button>
           </div>
           )
@@ -208,31 +211,28 @@ class configure_user extends Component{
     }
 
     addAuxiliary(){
-      this.items[this.items.length] = this.state.temp_aux
-      this.items = this.items.filter(function(item, index, array) {
-        return array.indexOf(item) === index;
-      })
-      console.log(this.items)
-      console.log(this.state.temp_aux)
+      this.items = this.check(this.state.temp_aux, this.items)
       this.setState({itemsList:this.items.map(aux =>(
         <h6 className="mb-3 font-weight-normal text-center">{aux.label}</h6>
       ))})
     }
 
     addTheme(){
-      this.items[this.items.length] = this.state.temp_theme
-      this.items = this.items.filter(function(item, index, array) {
-      return array.indexOf(item) === index;
-      })
-      console.log(this.items)
+      this.items = this.check(this.state.temp_theme, this.items)
       this.setState({itemsList:this.items.map(theme =>(
         <h6 className="mb-3 font-weight-normal text-center">{theme.label}</h6>
       ))})
     }
 
+    check(a, list){
+      for (let i=0; i<list.length;i++){
+        if(list[i].id ===  a.id) {return list}
+      }
+      list[list.length] = a
+      return list
+    }
+
     save(){
-      console.log(this.items)
-      console.log(this.state.user.id)
       for(let i = 0; i<this.items.length;i++){
         let data = {
           "idAnnouncement": this.items[i].idConv,
@@ -243,13 +243,13 @@ class configure_user extends Component{
           console.log(data)
         saveAnnouncement(data)
       }
-
       console.log(this.state.user.id, this.state.rol.id)
       axios.get('api/updateRol/'+this.state.user.id+'/'+this.state.rol.id ,{
         headers: { 'Content-Type': 'application/json' }
       }).catch(err => {
           console.log(err)
       })
+      this.setState({message:'se guardaron los datos'})
     }
 
     generar(){
@@ -280,8 +280,9 @@ class configure_user extends Component{
           <div> {this.state.itemsList} </div>
           <br/>
           <button  type="button" className="btn btn-info mt-2" onClick ={() => this.addTheme()}> agregar </button>
-          <br/>
-          <br/>
+          <div style={{color:'green'}} className="mt-4">
+            <p>{this.state.message}</p>
+          </div>
           <button  type="button" className="btn btn-info mt-2" onClick ={() => this.save()}> guardar </button>
         </div>
       )
@@ -301,8 +302,9 @@ class configure_user extends Component{
           <div> {this.state.itemsList} </div>
           <br/>
           <button  type="button" className="btn btn-info mt-2" onClick ={() => this.addAuxiliary()}> agregar </button>
-          <br/>
-          <br/>
+          <div style={{color:'green'}} className="mt-4">
+            <p>{this.state.message}</p>
+          </div>
           <button  type="button" className="btn btn-info mt-2" onClick ={() => this.save()}> guardar </button>
         </div>
       )
