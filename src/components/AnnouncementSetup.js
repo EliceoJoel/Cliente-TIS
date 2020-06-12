@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import Select from 'react-select'
-import { getAnnouncement } from './UserFunctions'
+//import { getAnnouncement } from './UserFunctions'
 import axios from 'axios'
+import {getProfile , getUserAnnouncements} from './UserFunctions'
 //import {getAnnouncementIDGenerateRotulate} from './UserFunctions'
-var conv = []
+//var conv = []
 
 export class AnnouncementSetup extends Component {
 
@@ -11,6 +12,7 @@ export class AnnouncementSetup extends Component {
         super(props)
 
         this.state = {
+            conv: '' ,
             found: [],
             requirement: '',
             item: '',
@@ -54,13 +56,35 @@ export class AnnouncementSetup extends Component {
 
     }
     componentDidMount() {
-        getAnnouncement().then(res => {
-            for (var i = 0; i < res.length; i++) {
-                var object = {}
-                object.value = res[i].id
-                object.label = res[i].name
-                conv[i] = object
-            }
+        // getAnnouncement().then(res => {
+        //     for (var i = 0; i < res.length; i++) {
+        //         var object = {}
+        //         object.value = res[i].id
+        //         object.label = res[i].name
+        //         conv[i] = object
+        //     }
+        // })
+        getProfile().then(res => {
+            console.log(res);
+            
+            this.setState({
+                idUser: res.user.id
+               
+                
+            }) 
+            console.log(this.state.idUser);
+            getUserAnnouncements(this.state.idUser).then(res=>{
+
+                let announcementArray = []
+                console.log(res);
+                for (var i = 0; i < res.length; i++) {
+                    var object = {}
+                    object.value = res[i].id
+                    object.label = res[i].name
+                    announcementArray[i] = object
+                } this.setState({conv: announcementArray})
+            })
+
         })
     }
 
@@ -107,7 +131,7 @@ export class AnnouncementSetup extends Component {
             requirement_error: '',
             add_requirement_warning: '',
             remove_requirement_warning: '',
-
+ 
         })
         console.log(this.state.requirement);
 
@@ -125,7 +149,8 @@ export class AnnouncementSetup extends Component {
             }).then(response => {
                 console.log(response)
             }).then(response => {
-                this.setState({ add_requirement_warning: "Documento agregado con exito" })
+                this.setState({ add_requirement_warning: "Documento agregado con exito"  , requirement:''})
+                
             })
                 .catch(error => {
                     console.log(error)
@@ -649,7 +674,7 @@ export class AnnouncementSetup extends Component {
         this.handleTableTheme()
     }
     render() {
-        const { selectedOptionConv, requirement, item, auxiliary, tematica, nameMerit, descriptionMerit, typeAnnouncement, porcentageAnnouncement } = this.state
+        const { selectedOptionConv, requirement, item, auxiliary, tematica, nameMerit, descriptionMerit, typeAnnouncement, porcentageAnnouncement , conv} = this.state
         return (
 
             <div className="justify-content-center">
