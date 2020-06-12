@@ -30,6 +30,7 @@ class configure_user extends Component{
         convsList:(<div></div>),
         auxList:(<div></div>),
         themeList:(<div></div>),
+        message:"",
       };
 
       this.fillAux = this.fillAux.bind(this);
@@ -188,7 +189,9 @@ class configure_user extends Component{
             <div> {this.state.itemsList} </div>
             <br/>
             <button  type="button" className="btn btn-info mt-2" onClick ={() => this.addAnnouncement()}> agregar convocatoria </button>
-            <br/>
+            <div style={{color:'green'}} className="mt-4">
+              <p>{this.state.message}</p>
+            </div>
             <button  type="button" className="btn btn-info mt-2" onClick ={() => this.save()}> guardar </button>
           </div>
           )
@@ -208,31 +211,25 @@ class configure_user extends Component{
     }
 
     addAuxiliary(){
-      this.items[this.items.length] = this.state.temp_aux
-      this.items = this.items.filter(function(item, index, array) {
-        return array.indexOf(item) === index;
-      })
-      console.log(this.items)
-      console.log(this.state.temp_aux)
+      this.items = this.check(this.state.temp_aux, this.items)
       this.setState({itemsList:this.items.map(aux =>(
         <h6 className="mb-3 font-weight-normal text-center">{aux.label}</h6>
       ))})
     }
 
     addTheme(){
-      this.items = this.check(this.state.temp_theme)
-      console.log(this.items)
+      this.items = this.check(this.state.temp_theme, this.items)
       this.setState({itemsList:this.items.map(theme =>(
         <h6 className="mb-3 font-weight-normal text-center">{theme.label}</h6>
       ))})
     }
 
-    check(a){
-      for (let i=0; i<this.items.length;i++){
-        if(this.items[i].id === a.id) {return this.items}
+    check(a, list){
+      for (let i=0; i<list.length;i++){
+        if(list[i].id ===  a.id) {return list}
       }
-      this.items[this.items.length] = a
-      return this.items
+      list[list.length] = a
+      return list
     }
 
     save(){
@@ -246,13 +243,13 @@ class configure_user extends Component{
           console.log(data)
         saveAnnouncement(data)
       }
-
       console.log(this.state.user.id, this.state.rol.id)
       axios.get('api/updateRol/'+this.state.user.id+'/'+this.state.rol.id ,{
         headers: { 'Content-Type': 'application/json' }
       }).catch(err => {
           console.log(err)
       })
+      this.setState({message:'se guardaron los datos'})
     }
 
     generar(){
@@ -283,8 +280,9 @@ class configure_user extends Component{
           <div> {this.state.itemsList} </div>
           <br/>
           <button  type="button" className="btn btn-info mt-2" onClick ={() => this.addTheme()}> agregar </button>
-          <br/>
-          <br/>
+          <div style={{color:'green'}} className="mt-4">
+            <p>{this.state.message}</p>
+          </div>
           <button  type="button" className="btn btn-info mt-2" onClick ={() => this.save()}> guardar </button>
         </div>
       )
@@ -304,8 +302,9 @@ class configure_user extends Component{
           <div> {this.state.itemsList} </div>
           <br/>
           <button  type="button" className="btn btn-info mt-2" onClick ={() => this.addAuxiliary()}> agregar </button>
-          <br/>
-          <br/>
+          <div style={{color:'green'}} className="mt-4">
+            <p>{this.state.message}</p>
+          </div>
           <button  type="button" className="btn btn-info mt-2" onClick ={() => this.save()}> guardar </button>
         </div>
       )
