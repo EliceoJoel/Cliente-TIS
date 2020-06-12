@@ -3,7 +3,7 @@ import Select from 'react-select'
 import {getProfile , getUserAnnouncements} from './UserFunctions'
 import {getAllNotes} from './UserFunctions'
 
-var conv = []
+//var conv = []
 var notas = []
 
 class Note_final_list extends Component {
