@@ -5,6 +5,7 @@ import {registerPermission} from './UserFunctions'
 
 var permisions=[]
 
+
 class Roles_permission extends Component {
     constructor() {
         super()
