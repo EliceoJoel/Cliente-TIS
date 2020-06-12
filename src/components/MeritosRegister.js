@@ -3,6 +3,7 @@ import {getQualifiedPostulants} from './UserFunctions'
 import {getConfigMeritos} from './UserFunctions'
 import {registrarNotaMerito} from './UserFunctions'
 import {notaMerito} from './UserFunctions'
+import {getProfile , getUserAnnouncements} from './UserFunctions'
 
 let notasOne =[]
 let notasTwo = []
@@ -32,10 +33,35 @@ class MeritosRegister extends Component {
   }
 
   componentDidMount() {
+    getProfile().then(res => {
+        this.setState({
+            idUser: res.user.id        
+        }) 
+        getUserAnnouncements(this.state.idUser).then(res=>{
+            let posts =[]
+            console.log(res)
+            for (var i = 0; i < res.length; i++) {
+                console.log(res[i].name)
+                const dat = {name:res[i].name}
+                console.log(dat)
+                getQualifiedPostulants(dat).then(resp => { 
+                  console.log(resp)
+                  for(let i=0 ; i<resp.length ; i++){
+                    posts.push(resp[i])
+                  }
+                })
+            } 
+            console.log(posts)
+            this.setState({postulants:posts, postulantsBackup:posts})
+        })
+    })
+  }
+
+  /*componentDidMount() {
     getQualifiedPostulants().then(res => {
       this.setState({postulants:res, postulantsBackup:res})
     })
-  }
+  }*/
 
   filter(event){
     notasOne = []
@@ -47,6 +73,7 @@ class MeritosRegister extends Component {
         errorNota:'',
         success:''
     })
+    console.log(this.state.postulantsBackup)
     let text = event.target.value
     const data = this.state.postulantsBackup
     const newData = data.filter(function(item){
@@ -198,7 +225,8 @@ class MeritosRegister extends Component {
       success:"Registro de notas exitoso",
       textBuscar:"",
       aprob:0.0,
-      gral:0.0
+      gral:0.0,
+      total:0.0
     })
   }
 

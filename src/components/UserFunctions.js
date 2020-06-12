@@ -368,9 +368,9 @@ export const getUserAnnouncementsDoc = (id) => {
          })
  }
 
-export const getQualifiedPostulants = () => {
+export const getQualifiedPostulants = (data) => {
     return axios
-        .get('api/enablePostulant', {
+        .post('api/enablePostulant', data, {
             headers: { 'Content-Type': 'application/json' }
         })
         .then(response => {
