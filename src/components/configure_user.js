@@ -220,14 +220,19 @@ class configure_user extends Component{
     }
 
     addTheme(){
-      this.items[this.items.length] = this.state.temp_theme
-      this.items = this.items.filter(function(item, index, array) {
-      return array.indexOf(item) === index;
-      })
+      this.items = this.check(this.state.temp_theme)
       console.log(this.items)
       this.setState({itemsList:this.items.map(theme =>(
         <h6 className="mb-3 font-weight-normal text-center">{theme.label}</h6>
       ))})
+    }
+
+    check(a){
+      for (let i=0; i<this.items.length;i++){
+        if(this.items[i].id === a.id) {return this.items}
+      }
+      this.items[this.items.length] = a
+      return this.items
     }
 
     save(){
