@@ -35,7 +35,7 @@ export class PostulantEnable extends Component {
              codSis_error:'',
              notfound_error:'' ,
              //conv: [] , 
-             reason :''
+            //  reason :''
             
              
              
