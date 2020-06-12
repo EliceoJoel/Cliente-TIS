@@ -11,14 +11,13 @@ import axios from 'axios'
 
 
 
-
+let conv =[]
 class configure_user extends Component{
   
   constructor(props) {
       super(props);
       this.users =[]
       this.rol =[]
-      this.conv =[]
       this.aux = []
       this.theme = []
       this.items=[]
@@ -63,7 +62,7 @@ class configure_user extends Component{
             object.idConv = res[i].id
             object.idAux = -1
             object.idTheme = -1
-            this.conv[i] = object
+            conv[i] = object
         }
       })
     }
@@ -113,10 +112,11 @@ class configure_user extends Component{
     }
     fillAux(e){
       let announcement = e;
+      console.log(announcement)
       this.aux =[]
       this.setState({temp_conv : announcement})
       getAux(announcement.id).then(res =>{
-        let a = res.data
+        let a = res
         console.log(a)
         for(let i=0; i<a.length;i++){
           let object ={}
@@ -160,7 +160,7 @@ class configure_user extends Component{
           <label htmlFor="Nombre">Selecciona una convocatoria</label>
           <Select
                 name="conv"
-                options={this.conv}
+                options={conv}
                 onChange={(e) => this.fillAux(e)}
                 placeholder=""
                 className="basic-select"
@@ -178,7 +178,7 @@ class configure_user extends Component{
             <label htmlFor="Nombre">Selecciona una convocatoria</label>
             <Select
                   name="conv"
-                  options={this.conv}
+                  options={conv}
                   onChange={(e) => this.fillAux(e)}
                   placeholder=""
                   className="basic-select"
@@ -231,8 +231,6 @@ class configure_user extends Component{
     }
 
     save(){
-      console.log(this.items)
-      console.log(this.state.user.id)
       for(let i = 0; i<this.items.length;i++){
         let data = {
           "idAnnouncement": this.items[i].idConv,
