@@ -68,6 +68,12 @@ class configure_user extends Component{
       })
     }
 
+    changeUsr(e){
+      this.setState({user:e})
+      this.setState({message:'', itemsList:(<div></div>)})
+      this.items =[]
+    }
+
     render(){
       
       return(
@@ -80,7 +86,7 @@ class configure_user extends Component{
                 <Select
                 name="user"
                 options={this.users}
-                onChange={(e) => this.setState({user:e})}
+                onChange={(e) => this.changeUsr(e)}
                 placeholder=""
                 className="basic-select"
                 classNamePrefix="select"
@@ -110,6 +116,7 @@ class configure_user extends Component{
       this.theme = []
       this.aux =[]
       this.conv = []
+      this.setState({message:''})
     }
     fillAux(e){
       let announcement = e;
@@ -188,11 +195,13 @@ class configure_user extends Component{
             <br/>
             <div> {this.state.itemsList} </div>
             <br/>
-            <button  type="button" className="btn btn-info mt-2" onClick ={() => this.addAnnouncement()}> agregar convocatoria </button>
-            <div style={{color:'green'}} className="mt-4">
-              <p>{this.state.message}</p>
+            <button  type="button" className="btn btn-info md-2" onClick ={() => this.addAnnouncement()}> agregar </button>
+            <div class="h-100 row align-items-center">
+              <div style={{color:'green'}} className="mt-4">
+                <p className= "col md-2 align-middle">{this.state.message}</p>
+              </div>
             </div>
-            <button  type="button" className="btn btn-info mt-2" onClick ={() => this.save()}> guardar </button>
+            <button  type="button" className="btn btn-info md-2" onClick ={() => this.save()}> guardar </button>
           </div>
           )
       }
@@ -200,6 +209,7 @@ class configure_user extends Component{
     }
 
     addAnnouncement(){
+      this.setState({message:''})
       this.items[this.items.length] = this.state.temp_conv
       console.log(this.items)
       this.items = this.items.filter(function(item, index, array) {
@@ -211,6 +221,7 @@ class configure_user extends Component{
     }
 
     addAuxiliary(){
+      this.setState({message:''})
       this.items = this.check(this.state.temp_aux, this.items)
       this.setState({itemsList:this.items.map(aux =>(
         <h6 className="mb-3 font-weight-normal text-center">{aux.label}</h6>
@@ -218,6 +229,7 @@ class configure_user extends Component{
     }
 
     addTheme(){
+      this.setState({message:''})
       this.items = this.check(this.state.temp_theme, this.items)
       this.setState({itemsList:this.items.map(theme =>(
         <h6 className="mb-3 font-weight-normal text-center">{theme.label}</h6>
@@ -279,11 +291,11 @@ class configure_user extends Component{
           <br/>
           <div> {this.state.itemsList} </div>
           <br/>
-          <button  type="button" className="btn btn-info mt-2" onClick ={() => this.addTheme()}> agregar </button>
+          <button  type="button" className="btn btn-info md-2" onClick ={() => this.addTheme()}> agregar </button>
           <div style={{color:'green'}} className="mt-4">
-            <p>{this.state.message}</p>
+            <p className= "md-2">{this.state.message}</p>
           </div>
-          <button  type="button" className="btn btn-info mt-2" onClick ={() => this.save()}> guardar </button>
+          <button  type="button" className="btn btn-info md-2" onClick ={() => this.save()}> guardar </button>
         </div>
       )
       if(this.state.temp_conv.type == "Docencia")
@@ -301,11 +313,11 @@ class configure_user extends Component{
           <br/>
           <div> {this.state.itemsList} </div>
           <br/>
-          <button  type="button" className="btn btn-info mt-2" onClick ={() => this.addAuxiliary()}> agregar </button>
+          <button  type="button" className="btn btn-info md-2" onClick ={() => this.addAuxiliary()}> agregar </button>
           <div style={{color:'green'}} className="mt-4">
-            <p>{this.state.message}</p>
+            <p className= "md-2">{this.state.message}</p>
           </div>
-          <button  type="button" className="btn btn-info mt-2" onClick ={() => this.save()}> guardar </button>
+          <button  type="button" className="btn btn-info md-2" onClick ={() => this.save()}> guardar </button>
         </div>
       )
     }
