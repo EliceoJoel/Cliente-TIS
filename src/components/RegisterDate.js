@@ -11,7 +11,8 @@ export class RegisterDate extends Component {
              date_error:'',
              event_error:'',
              description_error:'',
-             valid_data:''
+             valid_data:'' , 
+             
         }
     }
     onChange =  (e) =>{
@@ -24,18 +25,16 @@ export class RegisterDate extends Component {
            date_error: '', 
            event_error: '',
            description_error:'',
-           date:'',
-           event:'',
-           description:'',
-           valid_data:'REGISTRO REALIZADO CON EXITO'
          
-        
+          
+           
    })
        if(this.valid()){       
         let date = this.state.date
         let event = this.state.event
         let description = this.state.description
         let send = new FormData()
+        
             
             send.append('date', date)
             send.append('event', event )
@@ -48,6 +47,12 @@ export class RegisterDate extends Component {
                headers: {'Content-Type': 'multipart/form-data' }
                }).then(response =>{
                 console.log(response)
+                this.setState({
+                    date:'',
+                    event:'',
+                    description:'',
+                    valid_data:'REGISTRO REALIZADO CON EXITO'
+                })
             }) 
             .catch(error => {
                 console.log(error)
@@ -56,17 +61,26 @@ export class RegisterDate extends Component {
 
     }
           
-    valid(){        
+    valid(){   
+        var today =new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+       var mm = String(today.getMonth() + 1).padStart(2, '0'); 
+      var yyyy = today.getFullYear();
+
+       today = yyyy + '-' + mm + '-' + dd;
+
+        console.log(today);
+        console.log(this.state.date);     
         if(this.state.date === ''){
             this.setState({date_error:'Introduce una fecha'})
         }
-        else if(this.state.date.length > 30){
-            this.setState({date_error: 'fecha incorrecta'})
+        else if(this.state.date < today){
+            this.setState({date_error: 'No puede registrar una fecha pasada'})
         }
         else if(this.state.event === ''){
             this.setState({event_error:'Introduzca un evento'})
         }
-        else if(this.state.event.length > 30){
+        else if(this.state.event.length > 80){
             this.setState({event_error:'Nombre de Evento demasiado largo'})
         }
      
@@ -76,9 +90,13 @@ export class RegisterDate extends Component {
         else if(this.state.description > 240){
             this.setState({description_error:'excedio el limite de descripcion'})
         }
+
         else{
             return true;
         }
+       
+        
+        
     }
     render() {
        
