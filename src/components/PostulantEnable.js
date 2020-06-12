@@ -37,7 +37,7 @@ export class PostulantEnable extends Component {
              //conv: [] , 
             //  reason :''
             
-             
+             showData:false
              
         }
     }
@@ -115,7 +115,8 @@ export class PostulantEnable extends Component {
         this.setState({
             selectedConvOption_error:'',
             codSis_error:'',
-            notfound_error:''
+            notfound_error:'' ,
+           
         })
         if(this.valid()){  
         let codSis = this.state.codSis
@@ -134,16 +135,17 @@ export class PostulantEnable extends Component {
                }).then(response =>{
 
                // this.found = response.data
-                this.setState({found: response.data})
+                this.setState({found: response.data ,  showData:true})
                 console.log(this.state.found)
                 this.splitArray()
                 console.log(this.state.auxst)
-              
+               
             }) 
             .catch(error => {
                 console.log(error)
                 this.setState({notfound_error:"No existe ese postulante en esa convocatoria"})
                 this.setState({showList:false})
+                this.setState({showData:false})
             })
         }
            
@@ -380,7 +382,9 @@ export class PostulantEnable extends Component {
                         <div className="form-group col-4 mt-3">
                            <button type="button" class="col btn btn-info mt-3" variant="warning" onClick={(e) => this.handleSearch(e)} >Buscar Postulante</button>
                         </div>
-                        <div  className="col-md-12">
+                        {/* {this.showData? */}
+                     
+                          <div  className="col-md-12">
                               {this.state.found.map(enable =>
                                 <div key = {enable.id}>                         
                                     <label htmlFor="nombre"><b>Nombre:</b> {enable.names} {enable.first_surname} {enable.second_surname}</label>
@@ -394,14 +398,19 @@ export class PostulantEnable extends Component {
                                     {/* <button className="btn btn-outline-info mt-4" variant="warning" onClick ={(e) => this.handleReq(e)}htmlFor="cod_sys">Auxiliatura</button> */}
                                 </div>
                                 )}
+                                  {this.state.showData?
                                   <div className="form-row col-md-12">
                                 {this.state.auxst.map(enable =>
                                   
                                         <button className="col-md-2 btn btn-outline-info mt-4 mx-3" variant="warning" value={enable.axiliatura} onClick ={(e) => this.handleReq(enable)}htmlFor="cod_sys">{enable.axiliatura}</button>
                                    
-                                 )}</div>
+                                 )}</div> :null} 
                                   <p style={{color:"green"}} className="my-4"><b>{this.state.CorrectlySendChanges}</b></p>
+                                  
                         </div>
+                      
+                       
+                      
                         
                         <br></br>
                         
