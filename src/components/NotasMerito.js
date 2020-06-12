@@ -3,7 +3,6 @@ import Select from 'react-select'
 import {getProfile , getUserAnnouncements} from './UserFunctions'
 import {getNotasMerito} from './UserFunctions'
 
-var conv = []
 var notas = []
 
 class NotasMerito extends Component {
@@ -13,6 +12,7 @@ class NotasMerito extends Component {
             selectConv:null,
             selectConvError:"",
             showList:false,
+            conv:[],
         }
 
         this.selectConvChange = this.selectConvChange.bind(this)
@@ -25,15 +25,17 @@ class NotasMerito extends Component {
                 idUser: res.user.id        
             }) 
             getUserAnnouncements(this.state.idUser).then(res=>{
+                let announcementArray = []
                 for (var i = 0; i < res.length; i++) {
                     var object = {}
                     object.value = res[i].id
                     object.label = res[i].name
-                    conv[i] = object
-                }
+                    announcementArray[i] = object
+                } 
+                this.setState({conv: announcementArray})
             })
         })
-    }
+      }
 
 
     selectConvChange = selectConv =>{
@@ -79,6 +81,7 @@ class NotasMerito extends Component {
 
     render() {
         const { selectConv } = this.state
+        const { conv } = this.state
 
         return (
             <div className="justify-content-center">

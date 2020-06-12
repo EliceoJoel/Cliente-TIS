@@ -9,8 +9,8 @@ import {getAnnouncementIDGenerateRotulate} from './UserFunctions'
 
 //format of valid email
 var validMail = /\w+@\w+\.+[a-z]/;
-var aux = []
-var conv = []
+//var aux = []
+//var conv = []
 
 class Register extends Component {
 
@@ -18,6 +18,8 @@ class Register extends Component {
     constructor() {
         super()
         this.state = {
+            aux:[],
+            conv:[],
             names: '',
             names_error: '',
             first_surname: '',
@@ -49,12 +51,14 @@ class Register extends Component {
 
     componentDidMount() {
         getAnnouncement().then(res => {
+            let convs = []
             for (var i=0; i < res.length; i++) {
                 var object = {}
                 object.value = res[i].id
                 object.label = res[i].name
-                conv[i] = object
+                convs[i] = object
               }
+              this.setState({conv:convs})
         })
     }
 
@@ -86,9 +90,8 @@ class Register extends Component {
         this.setState({showAux:true})
         this.setState({selectedOptionAux:null})
         //delete auxiliary array data
-        console.log(aux)
-        var array = []
-        aux = array
+        console.log(this.state.aux)
+        this.setState({aux:[]})
     }
     // fillAuxiliary(){
         
@@ -106,14 +109,15 @@ class Register extends Component {
         
         getAnnouncementIDGenerateRotulate(this.state.selectedConvOption.value).then(res => {
             console.log(res);
-              var auxiliary = res
-           // var auxiliary = JSON.parse(res)
+            var auxiliary = res
+            let auxs = []
             for(var i=0 ; i<auxiliary.length ; i++){
                 var object = {}
                 object.value = auxiliary[i].item
                 object.label = auxiliary[i].name
-                aux[i] = object
+                auxs[i] = object
             }
+            this.setState({aux:auxs})
         })
     }
 
@@ -272,6 +276,8 @@ class Register extends Component {
     render () {
         const { selectedOptionAux } = this.state
         const { selectedOptionConv } = this.state
+        const { conv } = this.state
+        const { aux } = this.state
         return (
                 <form noValidate onSubmit={this.onSubmit}>
                     <div className="row">

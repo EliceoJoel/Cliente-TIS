@@ -3,7 +3,6 @@ import Select from 'react-select'
 import {getProfile , getUserAnnouncements} from './UserFunctions'
 import {getAllNotes} from './UserFunctions'
 
-var conv = []
 var notas = []
 
 class Note_final_list extends Component {
@@ -35,7 +34,7 @@ class Note_final_list extends Component {
               } this.setState({conv: announcementArray})
           })
       })
-  }
+    }
 
 
     selectConvChange = selectConv =>{
@@ -88,7 +87,7 @@ class Note_final_list extends Component {
             <div className="container">
               <div className="justify-content-center">
                 <h1 className="h3 font-weight-normal text-center mt-3 p-3 bg-info text-white rounded">
-                   Lista de notas de mérito
+                   Lista de notas finales
                 </h1>
                 <div className="row">
                   <div className="form-group col-8 my-4">
