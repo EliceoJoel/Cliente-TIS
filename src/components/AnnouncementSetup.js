@@ -719,11 +719,11 @@ export class AnnouncementSetup extends Component {
                                     <h3 className="h5 col-md-12 my-4 font-weight-normal text-center">
                                         Documentos a presentar en esta convocatoria</h3>
                                     <div className="form-group col-md-12">
-                                        <label htmlFor="Nombre">Requisito</label>
+                                        <label htmlFor="Nombre">Documento</label>
 
                                         <textarea
                                             className="form-control"
-                                            placeholder="Ingrese un requisito"
+                                            placeholder="Ingrese un documento"
                                             type="text"
                                             name="requirement"
                                             value={requirement}
@@ -927,7 +927,7 @@ export class AnnouncementSetup extends Component {
                                 <label htmlFor="Nombre">Descripcion</label>
                                 <input
                                     className="form-control"
-                                    placeholder="Ingrese un nombre"
+                                    placeholder="Ingrese una descripcion"
                                     type="text"
                                     name="descriptionMerit"
                                     value={descriptionMerit}
