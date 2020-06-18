@@ -111,8 +111,8 @@ class final_notes extends Component {
         let postulant = [];
         let score = [];
         score = await getLabScores(id)
-        console.log(score)
         postulant = await getPostEnableAux(id)
+        console.log(postulant)
         title = await getAuxThemes(id)
         return (
             <div>
@@ -137,6 +137,7 @@ class final_notes extends Component {
     }
 
     llenarNotasLab(id,scores){
+        console.log(id)
         let html = (<div></div>)
         let StudentScores = [];
         let j = 0;
