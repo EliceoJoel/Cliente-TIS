@@ -571,7 +571,7 @@ export const getTheoryScore  = (id, postulant) => {
 export const getLabScore  = (id) => {
     //console.log(id);
     return axios
-        .get('api/finalScores/'+id ,{
+        .get('api/GetLabScore/'+id ,{
             headers: { 'Content-Type': 'application/json' }
         })
         .then(response => {
