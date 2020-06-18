@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Select from 'react-select'
-import {getAnnouncement} from './UserFunctions'
+import {getProfile , getUserAnnouncements} from './UserFunctions'
 import {getPostulantsEnabled} from './UserFunctions' 
 import {getAnnouncementIDGenerateRotulate} from './UserFunctions'
 
@@ -17,17 +17,22 @@ class Auxiliary_list extends Component{
     }
 }
 componentDidMount() {
-    getAnnouncement().then(res => {
-        if(res != null){
+
+    getProfile().then(res => {
+        this.setState({
+            idUser: res.user.id        
+        }) 
+        getUserAnnouncements(this.state.idUser).then(res=>{
+            console.log(res)
             for (var i=0; i < res.length; i++) {
                 var object = {}
                 object.id = res[i].id
                 object.label = res[i].name
                 conv[i] = object
             }
-        }
+        })
     })
-}
+  }
 getStudents(){
     var postulants = []
     console.log()
