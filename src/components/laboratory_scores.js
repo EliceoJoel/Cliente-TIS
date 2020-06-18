@@ -19,6 +19,7 @@ class Laboratory_scores extends Component{
         super()
         this.conv = []
         this.notas = []
+        this.notas[0] = null
         this.state = {
             selectedConv:null,
             selectedAux:null,
@@ -104,6 +105,7 @@ class Laboratory_scores extends Component{
         getUserTheme(this.state.idUser,this.state.selectedConv.id,this.state.selectedAux.id).then(course => {
             this.setState({tematics:course});
         })
+        this.notas[0] = null
         this.fillMatrix()
     }
 
