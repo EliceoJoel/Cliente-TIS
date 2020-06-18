@@ -483,9 +483,9 @@ export const getTheme = aux => {
         })
 }
 
-export const getFinalScores = (data) => {
+export const getFinalScores = (id) => {
     return axios
-        .post('api/finalScores', data, {
+        .get('api/finalScores/' + id, {
             headers: { 'Content-Type': 'application/json' }
         })
         .then(response => {

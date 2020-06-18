@@ -5,7 +5,7 @@ import {getStudentData} from './UserFunctions'
 import { getProfile } from './UserFunctions'
 import {getUserTheme} from './UserFunctions' 
 import {getUserAuxiliary} from './UserFunctions'
-import {getLabScore} from './UserFunctions'
+import {getFinalScores} from './UserFunctions'
 import {finalTheoryScore} from './UserFunctions'
 //import {getAnnouncementIDGenerateRotulate} from './UserFunctions'
 //import {getStudents} from './UserFunctions' 
@@ -121,7 +121,6 @@ class Laboratory_scores extends Component{
     }
 
     changeScore(e,col,fila){
-        console.log(col,fila)
         if(this.notas[0] == null){
             this.fillMatrix()
         }
@@ -147,12 +146,13 @@ class Laboratory_scores extends Component{
                 })
             }
             // eslint-disable-next-line no-loop-func
-            getLabScore(this.notas[i][0].id).then(data =>{
-                message.notaConocimiento = parseFloat(data[0].sum)
-                message.idPostulant = data[0].idPostulant
+            getFinalScores(this.notas[i][0].id).then(data =>{
+                console.log(data.data[0])
+                message.notaConocimiento = parseFloat(data.data[0].sum)
+                message.idPostulant = data.data[0].idPostulant
                 message.announcement = this.state.selectedConv.label
-                finalTheoryScore(message)
                 console.log(message)
+                finalTheoryScore(message)   
             })
         }
     }
@@ -233,8 +233,9 @@ class Laboratory_scores extends Component{
                 ))}
             </div>
 
-            <button type="submit" className="col btn btn-info mt-2">subir notas</button>
             </form>  
+            <button onClick={(e) => this.uploadScore(e)} className="col btn btn-info mt-2">subir notas</button>
+
         </div>
         )  
     }
