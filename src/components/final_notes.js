@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Select from 'react-select'
-import {getAnnouncement} from './UserFunctions'
+import {getProfile , getUserAnnouncements} from './UserFunctions'
 import {getAux} from './UserFunctions'
 import {getAuxThemes} from './UserFunctions'
 import {getPostEnableAux} from './UserFunctions'
@@ -30,15 +30,20 @@ class final_notes extends Component {
     //fill announcement
     componentDidMount() {
         let conv = []
-        getAnnouncement().then(res => {
-            for (var i=0; i < res.length; i++) {
-                var object = {}
-                object.id = res[i].id
-                object.label = res[i].name
-                object.type = res[i].type
-                conv[i] = object
-            }
-            this.setState({conv:conv})  
+        getProfile().then(res => {
+            this.setState({
+                idUser: res.user.id        
+            }) 
+            getUserAnnouncements(this.state.idUser).then(res=>{
+                console.log(res)
+                for (var i=0; i < res.length; i++) {
+                    var object = {}
+                    object.id = res[i].id
+                    object.label = res[i].name
+                    conv[i] = object
+                }
+                this.setState({conv:conv})  
+            })
         })
     }
 
