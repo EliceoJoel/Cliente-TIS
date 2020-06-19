@@ -483,9 +483,9 @@ export const getTheme = aux => {
         })
 }
 
-export const getFinalScores = (data) => {
+export const getFinalScores = (id) => {
     return axios
-        .post('api/finalScores', data, {
+        .get('api/finalScores/' + id, {
             headers: { 'Content-Type': 'application/json' }
         })
         .then(response => {
@@ -571,7 +571,7 @@ export const getTheoryScore  = (id, postulant) => {
 export const getLabScore  = (id) => {
     //console.log(id);
     return axios
-        .get('api/finalScores/'+id ,{
+        .get('api/GetLabScore/'+id ,{
             headers: { 'Content-Type': 'application/json' }
         })
         .then(response => {
