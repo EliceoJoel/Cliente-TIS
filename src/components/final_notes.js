@@ -40,6 +40,7 @@ class final_notes extends Component {
                     var object = {}
                     object.id = res[i].id
                     object.label = res[i].name
+                    object.type = res[i].type
                     conv[i] = object
                 }
                 this.setState({conv:conv})  
