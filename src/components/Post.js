@@ -101,7 +101,7 @@ var ArrayAuxi = []
         if(this.state.name === ''){
             this.setState({name_error:'Campo vacio'})
         }
-        else if(this.state.name.length > 50){
+        else if(this.state.name.length > 255){
             this.setState({name_error:'Dato ingresado demasiado largo'})
         }
         else if(this.state.year === ''){
