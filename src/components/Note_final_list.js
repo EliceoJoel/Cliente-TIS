@@ -19,21 +19,18 @@ class Note_final_list extends Component {
     }
 
     //fill announcement
-    componentDidMount() {
-      getProfile().then(res => {
-          this.setState({
-              idUser: res.user.id        
-          }) 
-          getUserAnnouncements(this.state.idUser).then(res=>{
-              let announcementArray = []
-              for (var i = 0; i < res.length; i++) {
-                  var object = {}
-                  object.value = res[i].id
-                  object.label = res[i].name
-                  announcementArray[i] = object
-              } this.setState({conv: announcementArray})
-          })
-      })
+    async componentDidMount() {
+      let user = await getProfile()
+      console.log(user.user.id)
+      let announcements = await getUserAnnouncements(user.user.id)
+      let announcement = []
+      for (var i = 0; i < announcements.length; i++) {
+          var object = {}
+          object.value = announcements[i].id
+          object.label = announcements[i].name
+          announcement[i] = object
+      }
+      this.setState({conv:announcement})    
     }
 
 
@@ -105,6 +102,9 @@ class Note_final_list extends Component {
                   </div>
                   <div className="form-group col-4 mt-5">
                       <button type="button" className="col btn btn-info mt-2" onClick={() => this.show()} >Generar lista</button>
+                  </div>
+                  <div className="col-md-12 mb-4 text-center">
+                    <p style={{color:"red"}}>Las notas que se muestran son de los postulantes que fueron calificados en meritos y conocimientos</p>
                   </div>
                   <div className="row col-md-12">
                     <label className="col-md-3 text-info font-weight-bold" htmlFor="Nombre">Nombre del postulante</label>

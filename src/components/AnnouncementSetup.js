@@ -12,6 +12,7 @@ export class AnnouncementSetup extends Component {
         super(props)
 
         this.state = {
+            idUser:null,
             conv: '' ,
             found: [],
             requirement: '',
@@ -68,9 +69,7 @@ export class AnnouncementSetup extends Component {
             console.log(res);
             
             this.setState({
-                idUser: res.user.id
-               
-                
+                idUser: res.user.id               
             }) 
             console.log(this.state.idUser);
             getUserAnnouncements(this.state.idUser).then(res=>{
