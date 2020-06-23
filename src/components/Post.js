@@ -6,7 +6,7 @@ var ArrayAuxi = []
  class Post extends Component {
      constructor() {
          super()
-         this.inputRef = React.createRef()
+         //this.inputRef = React.createRef()
 
          this.state = { 
             file: null,
@@ -183,8 +183,8 @@ var ArrayAuxi = []
                 data: send,
                 headers: {'Content-Type': 'multipart/form-data' }
                 }).then(response =>{
-                    this.setState({ file:null})
-                    this.inputRef.current.value = "" 
+                   // this.setState({ file:null})
+                    //this.inputRef.current.value = "" 
                  this.setState({post_announcement_acomplish:'Convocatoria Publicada con Exito'})
                  this.setState({name:''})
                  this.setState({year:''})
@@ -419,7 +419,7 @@ var ArrayAuxi = []
                             type = "file" 
                             name = "file" 
                             accept = "application/pdf"
-                            ref = {this.inputRef}
+                            // ref = {this.inputRef}
                         />
                         
                         <p style={{color:"red"}}>{this.state.file_error}</p>
