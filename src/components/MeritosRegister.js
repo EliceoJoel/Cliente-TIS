@@ -32,36 +32,23 @@ class MeritosRegister extends Component {
       this.onSubmit = this.onSubmit.bind(this)      
   }
 
-  componentDidMount() {
-    getProfile().then(res => {
-        this.setState({
-            idUser: res.user.id        
-        }) 
-        getUserAnnouncements(this.state.idUser).then(res=>{
-            let posts =[]
-            console.log(res)
-            for (var i = 0; i < res.length; i++) {
-                console.log(res[i].name)
-                const dat = {name:res[i].name}
-                console.log(dat)
-                getQualifiedPostulants(dat).then(resp => { 
-                  console.log(resp)
-                  for(let i=0 ; i<resp.length ; i++){
-                    posts.push(resp[i])
-                  }
-                })
-            } 
-            console.log(posts)
-            this.setState({postulants:posts, postulantsBackup:posts})
-        })
-    })
+  //fill announcement
+  async componentDidMount() {
+    let user = await getProfile()
+    console.log(user.user.id)
+    let announcements = await getUserAnnouncements(user.user.id)
+    let posts =[]
+    for (var i = 0; i < announcements.length; i++) {
+      const dat = {name:announcements[i].name}
+      let res = await getQualifiedPostulants(dat)
+      console.log(res)
+        for(let i=0 ; i<res.length ; i++){
+          posts.push(res[i])
+        }
+    } 
+  this.setState({postulants:posts, postulantsBackup:posts})  
   }
 
-  /*componentDidMount() {
-    getQualifiedPostulants().then(res => {
-      this.setState({postulants:res, postulantsBackup:res})
-    })
-  }*/
 
   filter(event){
     notasOne = []
@@ -278,7 +265,7 @@ class MeritosRegister extends Component {
                   <tbody>
                   {configsOne.map(con =>(
                   <tr className="d-flex" key={con.id}>
-                      <td className="col-md-10">{con.name} <b>{"  ("+con.number+" puntos max.)" }</b>
+                      <td className="col-md-10">{con.name} <b>{"  ("+con.number+" %)." }</b>
                       </td>
                       <td className="col-md-1">
                         <input
@@ -297,7 +284,7 @@ class MeritosRegister extends Component {
                   {configsTwo.map(con =>(
                     <tr className="d-flex" key={con.id}>
                       <td className="col-md-10">
-                        {con.name} <b>{"  ("+con.number+" puntos max.)" }</b><br />
+                        {con.name} <b>{"  ("+con.number+" puntos max)." }</b><br />
                         {con.description}
                       </td>
                       <td className="col-md-1"></td>

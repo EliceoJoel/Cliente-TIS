@@ -59,6 +59,7 @@ class Register extends Component {
                 convs[i] = object
               }
               this.setState({conv:convs})
+            console.log(res)
         })
     }
 
@@ -84,7 +85,7 @@ class Register extends Component {
     }
 
     selectConvChange = selectedConvOption =>{
-        this.setState({selectedConvOption_error:''})
+        this.setState({selectedConvOption_error:'', selectedAuxOption:null})
         this.setState({selectedConvOption},()=>this.fillAuxiliary())
         this.setState({selectedOptionConv:selectedConvOption})
         this.setState({showAux:true})
@@ -249,27 +250,45 @@ class Register extends Component {
     
     //method for generate pdf
     generatePDF(){
-        var doc = new jsPDF('p', 'mm', 'letter')
-        doc.setFontSize(25)
+        let auxiliaturas = this.auxis()
+        var doc = new jsPDF('p', 'mm', 'letter'),
+            size = 20,
+            verticalOffset = 20,
+            loremipsum = 'Nombre(s) = ' + this.state.names + "\n"+
+                         'Apellido paterno = ' + this.state.first_surname + "\n"+
+                         'Apellido materno = ' + this.state.second_surname + "\n"+
+                         'Dirección = ' + this.state.direction + "\n"+
+                         'Email = ' + this.state.email + "\n"+
+                         'Celular = ' + this.state.phone + "\n"+
+                         'Ci = ' + this.state.ci + "\n"+
+                         'Codigo sis = ' + this.state.sis_code + "\n"+
+                         'Convocatoria = ' + this.state.selectedConvOption.label + "\n"+
+                         'Auxiliaturas = \n'  + auxiliaturas
+      
+            let lines = doc.setFont('Times', 'Roman')
+        				.setFontSize(size)
+        				.splitTextToSize(loremipsum, 178)
+            doc.text(20, verticalOffset + size / 72, lines)
+            verticalOffset += (lines.length + 0.5) * size / 72;
         doc.line(15, 10, 200, 10) //horizontal top line
-        doc.line(200, 10, 200, 115+(10*this.state.selectedAuxOption.length)) //vertical left line
-        doc.line(15, 10, 15, 115+(10*this.state.selectedAuxOption.length)) //vertical rigth line
-        doc.line(15, 115+(10*this.state.selectedAuxOption.length), 200, 115+(10*this.state.selectedAuxOption.length)) //horizontal button line
-        doc.text('Nombre(s) = ' + this.state.names,20,20)
-        doc.text('Apellido paterno = ' + this.state.first_surname,20,30)
-        doc.text('Apellido Materno = ' + this.state.second_surname,20,40)
-        doc.text('Dirección = ' + this.state.direction,20,50)
-        doc.text('Email = ' + this.state.email,20,60)
-        doc.text('Celular = ' + this.state.phone,20,70)
-        doc.text('Ci = ' + this.state.ci,20,80)
-        doc.text('Codigo sis = ' + this.state.sis_code,20,90)
-        doc.text('Convocatoria = ' + this.state.selectedConvOption.label,20,100)
-        doc.text('Auxiliatura(s) = ',20,110)
-        doc.setFontSize(15)
-        for(var i=0; i<this.state.selectedAuxOption.length; i++){
-        doc.text(this.state.selectedAuxOption[i].value + ' ' + this.state.selectedAuxOption[i].label, 20, 120+(i*10))
+        if(this.state.selectedAuxOption.length === 1){
+            doc.line(200, 10, 200, 115+(15*this.state.selectedAuxOption.length)) //vertical left line
+            doc.line(15, 10, 15, 115+(15*this.state.selectedAuxOption.length)) //vertical rigth line
+            doc.line(15, 115+(15*this.state.selectedAuxOption.length), 200, 115+(15*this.state.selectedAuxOption.length)) //horizontal button line   
+        }else{
+            doc.line(200, 10, 200, 115+(10*this.state.selectedAuxOption.length)) //vertical left line
+            doc.line(15, 10, 15, 115+(10*this.state.selectedAuxOption.length)) //vertical rigth line
+            doc.line(15, 115+(10*this.state.selectedAuxOption.length), 200, 115+(10*this.state.selectedAuxOption.length)) //horizontal button line    
         }
         doc.save('Mi_rotulado.pdf')
+    }
+
+    auxis(){
+        let res = ''
+        for(var i=0; i<this.state.selectedAuxOption.length; i++){
+            res = res + this.state.selectedAuxOption[i].value + ' ' + this.state.selectedAuxOption[i].label + '\n'
+            }
+        return res
     }
 
 
