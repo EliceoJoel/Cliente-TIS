@@ -9,7 +9,7 @@ var ArrayAuxi = []
          //this.inputRef = React.createRef()
 
          this.state = { 
-            file: null,
+           // file: null,
             file_error: '',
             name :'' ,
             name_error: '',
