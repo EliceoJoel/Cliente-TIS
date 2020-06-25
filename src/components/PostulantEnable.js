@@ -260,8 +260,8 @@ export class PostulantEnable extends Component {
                             console.log(response.data)
                             let score = new FormData()
                             score.append('id_postulant', response.data.id)
-                            score.append('score', 0)
-                            score.append('score_oral', 0)
+                            score.append('score', -1)
+                            score.append('score_oral', -1)
                             axios({
                                 method: 'post',
                                 url: 'api/add',

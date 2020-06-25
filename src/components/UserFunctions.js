@@ -666,3 +666,17 @@ export const getLabScores  = (id) => {
         })
 }
 
+export const getScoreCount  = (id) => {
+    //console.log(id);
+    return axios
+        .get('/api/sumTheme/' + id, {
+        headers: { 'Content-Type': 'application/json'}
+        })
+        .then(response => {
+            return response.data
+        })
+        .catch(e => {
+            console.log(e);
+        })
+}
+
