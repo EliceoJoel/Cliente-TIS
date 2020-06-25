@@ -93,20 +93,6 @@ fillAuxi(){
         console.log(aux)
         this.setState({auxiliaturas:aux})
     })
-    // var aux =[]
-    // getAnnouncementIDGenerateRotulate(this.state.selectedConv.id).then(res => {
-    //     console.log(res);
-    //       var auxiliary = res
-      
-    //             for(var j=0;j<auxiliary.length;j++){
-    //                 var object = {}
-    //                 object.label = auxiliary[j].name
-    //                 aux[j]=object
-    //             }
-    // })
-            
-        
-    
     this.setState({auxiliaturas:aux})
 }
 
@@ -164,12 +150,15 @@ render() {
                     <div class="col text-info font-weight-bold">nota</div>
                     <div class="col text-info font-weight-bold">nota Oral</div>
                     <div class="col"></div>
+                    <div class="col text-info font-weight-bold">examen escrito</div>
                     <div class="col"></div>
+                    <div class="col text-info font-weight-bold">examen oral</div>
                     <div class="col"></div>
             </div>
             <div className="my-1" style={{border:"0.5px solid silver", width: "100%"}}></div>
             <form>
                 {this.renderTableData()}
+                <div >{this.state.warningMesage}</div>
                 <button type="button" class="col btn btn-info " onClick={() =>this.update()} >subir notas</button>
             </form>
         </div>        
@@ -187,6 +176,7 @@ renderTableData() {
                     <div class="col">{postulant.auxiliary}</div>
                     <div class="col">{this.fillScore(postulant.score)}</div>
                     <div class="col">{this.fillScore(postulant.score_oral)}</div>
+                    <div class="col"></div>
                     <input 
                         type = "number"
                         id = {postulant.id} 
@@ -197,18 +187,9 @@ renderTableData() {
                         placeholder= "examen escrito"
                         onChange = {this.onChange}                     
                     />
-
-                    <input 
-                        type = "number"
-                        id = {postulant.id} 
-                        name = "score"
-                        min="0"
-                        max="100"
-                        className="col"  
-                        placeholder= "examen oral"
-                        onChange = {this.onChangeOral}                     
-                    />
-                    <div class="col">{this.state.warningMesage}</div>
+                    <div class="col"></div>
+                    {this.checkOral(postulant.score, postulant.id)}
+                    <div class="col"></div>
             </div>
             <div className="my-1" style={{border:"0.5px solid silver", width: "100%"}}></div>
         </div>
@@ -221,7 +202,7 @@ update(){
         let finalScore = 0
         console.log(this.state.score[i])
         updateScore(this.state.score[i])
-        var id = this.state.score[i].id
+        //var id = this.state.score[i].id
         // eslint-disable-next-line no-loop-func
         getTheoryScore(this.state.selectedConv.id, this.state.score[i].id).then(data=>{
             let message = {}
@@ -232,8 +213,10 @@ update(){
                 finalScore = (data[0].percentage * data[0].score_oral + data[1].percentage * data[1].score)/100
             }
             message.notaConocimiento = finalScore
-            message.idPostulant = id
+            console.log(data[0].id_postulant)
+            message.idPostulant = data[0].id_postulant
             message.announcement = this.state.selectedConv.label
+            console.log(message)
             finalTheoryScore(message)
         })
     }
@@ -241,8 +224,23 @@ update(){
 
 }
 
+checkOral(score, id){
+    if(score>50)return (
+        <input 
+        type = "number"
+        id = {id} 
+        name = "score"
+        min="0"
+        max="100"
+        className="col"  
+        placeholder= "examen oral"
+        onChange = {this.onChangeOral}                     
+    />)
+    else return 'no valido para oral'
+}
+
  onChangeOral = (event) => {
-     if(event.target.value >100){ 
+     if(event.target.value >100 ||event.target.value < 0){ 
         this.setState({warningMesage:"numero no valido"})
         return
      }
@@ -259,8 +257,8 @@ update(){
 }
 
 onChange = (event) => {
-    if(event.target.value >100){ 
-       this.setState({warningMesage:"numero no valido"})
+    if(event.target.value >100 ||event.target.value < 0){ 
+        this.setState({warningMesage:"numero no valido"})
        return
     }
     var scores = this.state.score
@@ -276,8 +274,8 @@ onChange = (event) => {
 
 fillScore(score){
     // eslint-disable-next-line eqeqeq
-    if(score == 0){
-        return "abandono"
+    if(score < 0){
+        return "-"
     } else return score
 }
 }
