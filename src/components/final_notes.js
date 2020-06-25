@@ -49,13 +49,8 @@ class final_notes extends Component {
     }
 
 
-<<<<<<< HEAD
-    async fillAuxi(){
-        //let auxiliarys = await getAux(this.state.selectedConv.value)
-=======
     fillAuxi(){
         //aa
->>>>>>> 0dfed636bd883def7765485a4f9b60f65284b14e
         let aux = []
         console.log(this.state.idUser,this.state.selectedConv.id)
         getUserAuxiliary(this.state.idUser,this.state.selectedConv.id).then(res =>{
