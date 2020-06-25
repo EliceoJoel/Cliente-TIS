@@ -67,26 +67,19 @@ export class ScoreSetup extends Component {
     selectThemeSelectChange = selectedThemeOption => {
         this.setState({ selectedOptionTheme: selectedThemeOption })
     }
-    componentDidMount() {
 
-        getProfile().then(res => {
-            console.log(res);
-            this.setState({
-                idUser: res.user.id
-            })
-            console.log(this.state.idUser);
-            getUserAnnouncements(this.state.idUser).then(res => {
-                console.log(res);
-                let announcement = []
-                for (var i = 0; i < res.length; i++) {
-                    var object = {}
-                    object.value = res[i].id
-                    object.label = res[i].name
-                    announcement[i] = object
-                }
-                this.setState({ conv: announcement })
-            })
-        })
+    async componentDidMount() {
+        let user = await getProfile()
+        console.log(user.user.id)
+        let announcements = await getUserAnnouncements(user.user.id)
+        let announcement = []
+        for (var i = 0; i < announcements.length; i++) {
+            var object = {}
+            object.value = announcements[i].id
+            object.label = announcements[i].name
+            announcement[i] = object
+        }
+        this.setState({conv:announcement})    
     }
 
     handleSearchAnnouncement() {

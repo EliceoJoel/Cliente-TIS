@@ -28,28 +28,23 @@ class final_notes extends Component {
     }
 
     //fill announcement
-    componentDidMount() {
-        let conv = []
-        getProfile().then(res => {
-            this.setState({
-                idUser: res.user.id        
-            }) 
-            getUserAnnouncements(this.state.idUser).then(res=>{
-                console.log(res)
-                for (var i=0; i < res.length; i++) {
-                    var object = {}
-                    object.id = res[i].id
-                    object.label = res[i].name
-                    object.type = res[i].type
-                    conv[i] = object
-                }
-                this.setState({conv:conv})  
-            })
-        })
+    async componentDidMount() {
+        let user = await getProfile()
+        console.log(user.user.id)
+        let announcements = await getUserAnnouncements(user.user.id)
+        let announcement = []
+        for (var i = 0; i < announcements.length; i++) {
+            var object = {}
+            object.value = announcements[i].id
+            object.label = announcements[i].name
+            announcement[i] = object
+        }
+        this.setState({conv:announcement})    
     }
 
 
-    fillAuxi(){
+    async fillAuxi(){
+        let auxiliarys = await getAux(this.state.selectedConv.value)
         let aux = []
         console.log(this.state.idUser,this.state.selectedConv.id)
         getUserAuxiliary(this.state.idUser,this.state.selectedConv.id).then(res =>{
@@ -62,6 +57,7 @@ class final_notes extends Component {
             this.setState({auxiliaturas:aux})
         })
 }
+
 
     async renderTableData(){
         let list =  (<div></div>)
