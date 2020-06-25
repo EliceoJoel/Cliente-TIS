@@ -271,16 +271,16 @@ class Register extends Component {
         				.splitTextToSize(loremipsum, 178)
             doc.text(20, verticalOffset + size / 72, lines)
             verticalOffset += (lines.length + 0.5) * size / 72;
-        doc.line(15, 10, 200, 10) //horizontal top line
-        if(this.state.selectedAuxOption.length === 1){
-            doc.line(200, 10, 200, 115+(15*this.state.selectedAuxOption.length)) //vertical left line
+        //doc.line(15, 10, 200, 10) //horizontal top line
+       /* if(this.state.selectedAuxOption.length === 1){
+            doc.line(200, 10, 200, 115+(25*this.state.selectedAuxOption.length)) //vertical left line
             doc.line(15, 10, 15, 115+(15*this.state.selectedAuxOption.length)) //vertical rigth line
             doc.line(15, 115+(15*this.state.selectedAuxOption.length), 200, 115+(15*this.state.selectedAuxOption.length)) //horizontal button line   
         }else{
             doc.line(200, 10, 200, 115+(10*this.state.selectedAuxOption.length)) //vertical left line
             doc.line(15, 10, 15, 115+(10*this.state.selectedAuxOption.length)) //vertical rigth line
             doc.line(15, 115+(10*this.state.selectedAuxOption.length), 200, 115+(10*this.state.selectedAuxOption.length)) //horizontal button line    
-        }
+        }*/
         doc.save('Mi_rotulado.pdf')
     }
 

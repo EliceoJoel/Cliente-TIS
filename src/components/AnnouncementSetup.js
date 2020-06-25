@@ -456,7 +456,7 @@ export class AnnouncementSetup extends Component {
 
             this.setState({ requirement_error: 'Campo Vacio' })
         }
-        else if (this.state.requirement.length > 250) {
+        else if (this.state.requirement.length > 255) {
             this.setState({ requirement_error: 'Requisito Demasiado Largo' })
         }
         else {

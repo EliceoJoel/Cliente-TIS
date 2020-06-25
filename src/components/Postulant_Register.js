@@ -82,7 +82,7 @@ class PostulantRegister extends Component {
         if(this.state.documents === ''){
             this.setState({documents_error:'Campo vacio'})
         }
-        else if(this.state.documents.length > 2 || this.state.documents < 0 || isNaN(this.state.documents)){
+        else if(this.state.documents < 0 || isNaN(this.state.documents)){
             this.setState({documents_error:'Numero de documentos incorrecto o demasiado grande'})
         }
         else if(this.state.date === ''){
