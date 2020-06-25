@@ -21,22 +21,20 @@ class Enabled_list extends Component {
     }
 
     //fill announcement
-    componentDidMount() {
-        getProfile().then(res => {
-            this.setState({
-                idUser: res.user.id        
-            }) 
-            getUserAnnouncements(this.state.idUser).then(res=>{
-                let announcementArray = []
-                for (var i = 0; i < res.length; i++) {
-                    var object = {}
-                    object.value = res[i].id
-                    object.label = res[i].name
-                    announcementArray[i] = object
-                } this.setState({conv: announcementArray})
-            })
-        })
-    }
+    async componentDidMount() {
+        let user = await getProfile()
+        console.log(user.user.id)
+        let announcements = await getUserAnnouncements(user.user.id)
+        let announcement = []
+        for (var i = 0; i < announcements.length; i++) {
+            var object = {}
+            object.value = announcements[i].id
+            object.label = announcements[i].name
+            announcement[i] = object
+        }
+        this.setState({conv:announcement})    
+      }
+
 
 
     selectConvChange = selectConv =>{

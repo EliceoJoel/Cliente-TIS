@@ -49,18 +49,19 @@ class Register extends Component {
         this.onSubmit = this.onSubmit.bind(this)
     }
 
-    componentDidMount() {
-        getAnnouncement().then(res => {
-            let convs = []
-            for (var i=0; i < res.length; i++) {
-                var object = {}
-                object.value = res[i].id
-                object.label = res[i].name
-                convs[i] = object
-              }
-              this.setState({conv:convs})
-            console.log(res)
-        })
+   //fill announcement
+    async componentDidMount() {
+      let announcements = await getAnnouncement()
+      let announcement = []
+      if(announcements !== undefined){
+        for (var i = 0; i < announcements.length; i++) {
+            var object = {}
+            object.value = announcements[i].id
+            object.label = announcements[i].name
+            announcement[i] = object
+        }
+        this.setState({conv:announcement})   
+      } 
     }
 
     onChange (e) {
