@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Select from 'react-select'
 import {getProfile , getUserAnnouncements} from './UserFunctions'
-import {getAux} from './UserFunctions'
+import {getUserAuxiliary} from './UserFunctions'
 import {getAuxThemes} from './UserFunctions'
 import {getPostEnableAux} from './UserFunctions'
 import {getLabScores} from './UserFunctions'
@@ -28,38 +28,52 @@ class final_notes extends Component {
     }
 
     //fill announcement
-    async componentDidMount() {
-        let user = await getProfile()
-        console.log(user.user.id)
-        let announcements = await getUserAnnouncements(user.user.id)
-        let announcement = []
-        for (var i = 0; i < announcements.length; i++) {
-            var object = {}
-            object.value = announcements[i].id
-            object.label = announcements[i].name
-            announcement[i] = object
-        }
-        this.setState({conv:announcement})    
+    componentDidMount() {
+        let conv = []
+        getProfile().then(res => {
+            this.setState({
+                idUser: res.user.id        
+            }) 
+            getUserAnnouncements(this.state.idUser).then(res=>{
+                console.log(res)
+                for (var i=0; i < res.length; i++) {
+                    var object = {}
+                    object.id = res[i].id
+                    object.label = res[i].name
+                    object.type = res[i].type
+                    conv[i] = object
+                }
+                this.setState({conv:conv})  
+            })
+        })
     }
 
 
-    async fillAuxi(){
-        let auxiliarys = await getAux(this.state.selectedConv.value)
+    fillAuxi(){
+        //aa
         let aux = []
-        for (var i=0; i < auxiliarys.length; i++) {
-            var object = {}
-            object.id = auxiliarys[i].id
-            object.label = auxiliarys[i].name
-            aux[i] = object
-        }
-        this.setState({auxiliaturas:aux})
-    }
+        console.log(this.state.idUser,this.state.selectedConv.id)
+        getUserAuxiliary(this.state.idUser,this.state.selectedConv.id).then(res =>{
+            for (var i=0; i < res.length; i++){
+                var object = {}
+                object.id = res[i].id
+                object.label = res[i].name
+                aux[i] = object
+            }
+            this.setState({auxiliaturas:aux})
+        })
+}
 
     async renderTableData(){
         let list =  (<div></div>)
         if(this.state.selectedConv.type === 'Docencia') list = await this.docencia()
         else list = await this.laboratorio()
         this.setState({list:list})
+    }
+
+    showScore(score){
+        if(score<0) return '-'
+        else return score
     }
 
     async docencia(){
@@ -77,8 +91,8 @@ class final_notes extends Component {
                 {postulant.map(post=>(
                     <div className="row">
                         <div className="col">{post.name}</div>
-                        <div className="col">{post.score}</div>
-                        <div className="col">{post.score_oral}</div>
+                        <div className="col">{this.showScore(post.score)}</div>
+                        <div className="col">{this.showScore(post.score_oral)}</div>
                     </div>
                 ))}
             </div>
