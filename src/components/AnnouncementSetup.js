@@ -12,6 +12,7 @@ export class AnnouncementSetup extends Component {
         super(props)
 
         this.state = {
+            idUser:null,
             conv: '' ,
             found: [],
             requirement: '',
@@ -68,9 +69,7 @@ export class AnnouncementSetup extends Component {
             console.log(res);
             
             this.setState({
-                idUser: res.user.id
-               
-                
+                idUser: res.user.id               
             }) 
             console.log(this.state.idUser);
             getUserAnnouncements(this.state.idUser).then(res=>{
@@ -146,10 +145,16 @@ export class AnnouncementSetup extends Component {
                 url: 'api/requirement',
                 data: send,
                 headers: { 'Content-Type': 'multipart/form-data' }
+          
             }).then(response => {
-                console.log(response)
-            }).then(response => {
-                this.setState({ add_requirement_warning: "Documento agregado con exito"  , requirement:''})
+                if (response.data === false){
+                    console.log(response);
+                    
+                    this.setState({ requirement_error: "No puede ingresar el mismo documento" })
+                }else{
+                     this.setState({ add_requirement_warning: "Documento agregado con exito"  , requirement:''})
+                }
+               
                 
             })
                 .catch(error => {
@@ -175,9 +180,16 @@ export class AnnouncementSetup extends Component {
                 data: send,
                 headers: { 'Content-Type': 'multipart/form-data' }
             }).then(response => {
+                if(response.data === 'item'){
+                    this.setState({item_error: 'El item ya fue registrado' })
+                }if (response.data === 'nombre'){
+                    this.setState({auxiliary_error: 'La auxiliatura ya fue registrada' })
+                }else {
+                    
+                this.setState({ item: '', auxiliary: '', add_auxiliary: 'Se agrego la auxiliatura con exito' })
+                }
                 console.log(response);
 
-                this.setState({ item: '', auxiliary: '', add_auxiliary: 'Se agrego la auxiliatura con exito' })
 
             })
                 .catch(error => {
@@ -201,8 +213,12 @@ export class AnnouncementSetup extends Component {
                 data: send,
                 headers: { 'Content-Type': 'multipart/form-data' }
             }).then(response => {
-                console.log(response)
-                this.setState({ add_tematica: 'Se agrego la tematica con exito', tematica: '' })
+                if(response.data === false){
+                    this.setState({tematica_error:'Ya se registro la tematica' })
+                }else{
+                     this.setState({ add_tematica: 'Se agrego la tematica con exito', tematica: '' })
+                }
+               
             })
                 .catch(error => {
                     console.log(error)
@@ -263,9 +279,17 @@ export class AnnouncementSetup extends Component {
                 data: send,
                 headers: { 'Content-Type': 'multipart/form-data' }
             }).then(response => {
-                console.log(response)
+                if(response.data === false){
+                    
+                    this.setState({ merit_error: 'merito ya registrado' })
+                  
+                    
+                }else{
+                   
                 this.setState({ add_merit: 'Merito agregado con exito', nameMerit: '', descriptionMerit: '' })
 
+                } 
+               
             })
                 .catch(error => {
                     console.log(error)
