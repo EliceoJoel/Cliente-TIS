@@ -5,8 +5,6 @@ import {getStudentData} from './UserFunctions'
 import { getProfile } from './UserFunctions'
 import {getUserTheme} from './UserFunctions' 
 import {getUserAuxiliary} from './UserFunctions'
-import {getScoreCount} from './UserFunctions'
-import {getAuxThemes} from './UserFunctions'
 import {getFinalScores} from './UserFunctions'
 import {finalTheoryScore} from './UserFunctions'
 //import {getAnnouncementIDGenerateRotulate} from './UserFunctions'
@@ -34,8 +32,8 @@ class Laboratory_scores extends Component{
             idUser:-1,
         }
     }
-    async componentDidMount() {
-        this.notas[0] = null
+    componentDidMount() {
+        this.notas[0] = null 
         getProfile().then(res => {
             this.setState({
                 idUser: res.user.id        
@@ -51,6 +49,22 @@ class Laboratory_scores extends Component{
         })
     }
 
+    // fillAuxi(){
+    //     var aux =[]
+    //     getAnnouncement().then(conv =>{
+    //         for(var i=0;i<conv.length;i++){
+    //             if(conv[i].id === this.state.selectedConv.id){
+    //                 var auxi = JSON.parse(conv[i].auxiliary)
+    //                 for(var j=0;j<auxi.length;j++){
+    //                     var object = {}
+    //                     object.label = auxi[j].name
+    //                     aux[j]=object
+    //                 }
+    //             }
+    //         }
+    //     })
+    //     this.setState({auxiliaturas:aux})
+    // }
     fillAuxi(){
         let aux = []
         getUserAuxiliary(this.state.idUser,this.state.selectedConv.id).then(auxi =>{
@@ -63,9 +77,23 @@ class Laboratory_scores extends Component{
             this.setState({auxiliaturas:aux})
         })
         
+        // getAnnouncementIDGenerateRotulate(this.state.selectedConv.id).then(res => {
+        //     console.log(res);
+        //       var auxiliary = res
+          
+        //             for(var j=0;j<auxiliary.length;j++){
+        //                 var object = {}
+        //                 object.label = auxiliary[j].name
+        //                 aux[j]=object
+        //             }
+        // })
+                
+            
+        
+        // this.setState({auxiliaturas:aux})
     }
 
-    async getStudents(){
+    getStudents(){
         const data =  {
             "announcement": this.state.selectedConv.label,
             "auxiliary": this.state.selectedAux.label
@@ -88,7 +116,7 @@ class Laboratory_scores extends Component{
                 this.notas[i][j] = {
                     id:this.state.postulantes[i].id,
                     theme:this.state.tematics[j].id,
-                    score:-1
+                    score:0
                 };
             }
         }
@@ -101,9 +129,7 @@ class Laboratory_scores extends Component{
         this.notas[fila][col].score = e.target.value
     }
 
-    async uploadScore(e){
-        let themeCount = await getAuxThemes(this.state.selectedAux.id)
-        let ScoreCount = await getScoreCount(this.state.postulantes[0].id) 
+    uploadScore(e){
         for(var i=0; i<this.state.postulantes.length; i++) {
             let message = {}
             for(var j=0; j<this.state.tematics.length; j++) {
@@ -122,21 +148,14 @@ class Laboratory_scores extends Component{
                 })
             }
             // eslint-disable-next-line no-loop-func
-            let a
-            if(ScoreCount[0] === undefined) a = 0
-            else a = ScoreCount[0].count
-            console.log(a  ,  this.state.tematics.length)
-            console.log(themeCount.length)
-            if(a + this.state.tematics.length >= themeCount.length || themeCount.length === this.state.tematics.length){
-                getFinalScores(this.notas[i][0].id).then(data =>{
-                    console.log(data.data[0])
-                    message.notaConocimiento = parseFloat(data.data[0].sum)
-                    message.idPostulant = data.data[0].idPostulant
-                    message.announcement = this.state.selectedConv.label
-                    console.log(message)
-                    finalTheoryScore(message)   
-                })
-            }
+            getFinalScores(this.notas[i][0].id).then(data =>{
+                console.log(data.data[0])
+                message.notaConocimiento = parseFloat(data.data[0].sum)
+                message.idPostulant = data.data[0].idPostulant
+                message.announcement = this.state.selectedConv.label
+                console.log(message)
+                finalTheoryScore(message)   
+            })
         }
     }
 
