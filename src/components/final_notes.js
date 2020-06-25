@@ -50,6 +50,7 @@ class final_notes extends Component {
 
 
     fillAuxi(){
+        //aa
         let aux = []
         console.log(this.state.idUser,this.state.selectedConv.id)
         getUserAuxiliary(this.state.idUser,this.state.selectedConv.id).then(res =>{
