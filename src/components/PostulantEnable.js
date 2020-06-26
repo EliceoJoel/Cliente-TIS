@@ -129,7 +129,7 @@ export class PostulantEnable extends Component {
             selectedConvOption_error:'',
             codSis_error:'',
             notfound_error:'' ,
-           
+            CorrectlySendChanges:''
         })
         if(this.valid()){  
         let codSis = this.state.codSis

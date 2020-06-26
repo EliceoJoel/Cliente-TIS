@@ -463,6 +463,7 @@ export class AnnouncementSetup extends Component {
             return true;
         }
     }
+    
     validAnnouncementAuxiliary() {
         if (this.state.item === '') {
             this.setState({ item_error: 'Campo Vacio' })
@@ -973,7 +974,7 @@ export class AnnouncementSetup extends Component {
                             <h3 className="h5 col-md-12 my-4 font-weight-normal text-center">
                                 Datos de Merito</h3>
 
-                            <div className="form-group col-md-4">
+                            <div className="form-group col-md-5">
                                 <label htmlFor="Nombre">Nombre</label>
 
                                 <input
@@ -986,9 +987,9 @@ export class AnnouncementSetup extends Component {
                                 />
                                 <p style={{ color: "red" }}>{this.state.merit_error}</p>
                             </div>
-                            <div className="form-group col-md-4">
+                            <div className="form-group col-md-5">
                                 <label htmlFor="Nombre">Descripcion</label>
-                                <input
+                                <textarea
                                     className="form-control"
                                     placeholder="Ingrese una descripcion"
                                     type="text"
