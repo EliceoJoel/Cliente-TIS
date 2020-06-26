@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import {getPermissions} from './UserFunctions'
 import {registerRol} from './UserFunctions'
 import {registerPermission} from './UserFunctions'
+import {getRolName} from './UserFunctions'
 
 var permisions=[]
 
@@ -84,9 +85,22 @@ class Roles_permission extends Component {
             if(this.state.permisionsListChecked.length === 0){
                 this.setState({withoutPermission:"Rol sin permiso(s)"})
             }else{
-                this.register()
+                this.verifyexists()
             } 
         }        
+    }
+
+    async verifyexists(){
+        let roles = await getRolName()
+        let array = []
+            for (let i = 0; i < roles.length; i++) {
+                array.push(roles[i].rol)
+            }
+        if(array.indexOf(this.state.rolName) > -1){
+           this.setState({rolNameError:"El nombre de rol ya existe, introduzca otro nombre de rol por favor", showBody:false})
+        }else{
+            this.register()
+        }
     }
 
     async register(){
@@ -100,7 +114,7 @@ class Roles_permission extends Component {
             }
             await registerPermission(newPermission)
         }
-        this.setState({rolRegister:"Rol y permiso(s) registrado(s) correctamente"})
+        this.setState({rolRegister:"Rol y permiso(s) registrado(s) correctamente", showBody:false})
 
     }
 
@@ -155,6 +169,7 @@ class Roles_permission extends Component {
                                 </div>
                             :null
                             }
+                        <p style={{color:"green"}}><b>{this.state.rolRegister}</b></p>
                         </div>
                     </div>
                 </form>

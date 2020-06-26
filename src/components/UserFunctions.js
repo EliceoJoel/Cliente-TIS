@@ -680,3 +680,16 @@ export const getScoreCount  = (id) => {
         })
 }
 
+export const getRolName  = () => {
+    //console.log(id);
+    return axios
+        .get('/api/rolname', {
+        headers: { 'Content-Type': 'application/json'}
+        })
+        .then(response => {
+            return response.data
+        })
+        .catch(e => {
+            console.log(e);
+        })
+}

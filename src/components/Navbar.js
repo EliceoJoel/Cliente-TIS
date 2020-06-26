@@ -27,7 +27,6 @@ class Landing extends Component {
       this.props.history.push(`/`)
     }else{
       getPermissions(res.user.idRol).then(permissions =>{
-        console.log("emtras")
         this.setState({
           items: permissions
         })
