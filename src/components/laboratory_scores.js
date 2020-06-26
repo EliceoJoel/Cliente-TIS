@@ -32,15 +32,16 @@ class Laboratory_scores extends Component{
             warningMesage:"",
             notas:[],
             idUser:-1,
+            message:'',
         }
     }
     async componentDidMount() {
         this.notas[0] = null
-        getProfile().then(res => {
+        await getProfile().then(async res => {
             this.setState({
                 idUser: res.user.id        
             }) 
-            getUserAnnouncementsLab(res.user.id).then(res => {
+            await getUserAnnouncementsLab(res.user.id).then(res => {
                 for (var i=0; i < res.length; i++) {
                     var object = {}
                     object.id = res[i].id
@@ -51,9 +52,9 @@ class Laboratory_scores extends Component{
         })
     }
 
-    fillAuxi(){
+    async fillAuxi(){
         let aux = []
-        getUserAuxiliary(this.state.idUser,this.state.selectedConv.id).then(auxi =>{
+        await getUserAuxiliary(this.state.idUser,this.state.selectedConv.id).then(auxi =>{
             for(var i=0; i<auxi.length;i++){
                 var object = {}
                 object.id = auxi[i].id
@@ -70,11 +71,11 @@ class Laboratory_scores extends Component{
             "announcement": this.state.selectedConv.label,
             "auxiliary": this.state.selectedAux.label
         }
-        getStudentData(data).then(postulant => {
+        await getStudentData(data).then(postulant => {
             this.setState({postulantes:postulant})
         })
 
-        getUserTheme(this.state.idUser,this.state.selectedConv.id,this.state.selectedAux.id).then(course => {
+        await getUserTheme(this.state.idUser,this.state.selectedConv.id,this.state.selectedAux.id).then(course => {
             this.setState({tematics:course});
         })
         this.notas[0] = null
@@ -98,45 +99,52 @@ class Laboratory_scores extends Component{
         if(this.notas[0] == null){
             this.fillMatrix()
         }
-        this.notas[fila][col].score = e.target.value
+        console.log(e.target.value)
+        if(e.target.value < 0 || e.target.value > 100){
+            this.setState({message:'numero no valido, se guardaran solo los dos primeros digitos'})
+        }
+        else{
+            this.notas[fila][col].score = e.target.value
+            this.setState({message:''})
+        }
     }
 
     async uploadScore(e){
         let themeCount = await getAuxThemes(this.state.selectedAux.id)
-        let ScoreCount = await getScoreCount(this.state.postulantes[0].id) 
         for(var i=0; i<this.state.postulantes.length; i++) {
             let message = {}
             for(var j=0; j<this.state.tematics.length; j++) {
-                let score = new FormData()
-                score.append('idPostulant', this.notas[i][j].id)
-                score.append('idtTheme', this.notas[i][j].theme)
-                score.append('score', this.notas[i][j].score)
-                axios({
-                    method: 'post',
-                    url: 'api/labScore',
-                    data: score,
-                    headers: {'Content-Type': 'multipart/form-data' }
-                    }) 
-                .catch(error => {
-                     console.log(error)
-                })
+                if(this.notas[i][j].score >0){
+                    let score = new FormData()
+                    score.append('idPostulant', this.notas[i][j].id)
+                    score.append('idtTheme', this.notas[i][j].theme)
+                    score.append('score', this.notas[i][j].score)
+                    axios({
+                        method: 'post',
+                        url: 'api/labScore',
+                        data: score,
+                        headers: {'Content-Type': 'multipart/form-data' }
+                        }) 
+                    .catch(error => {
+                        console.log(error)
+                    })
+                }
             }
             // eslint-disable-next-line no-loop-func
+            let ScoreCount = await getScoreCount(this.state.postulantes[i].id) 
             let a
             if(ScoreCount[0] === undefined) a = 0
             else a = ScoreCount[0].count
-            console.log(a  ,  this.state.tematics.length)
-            console.log(themeCount.length)
-            if(a + this.state.tematics.length >= themeCount.length || themeCount.length === this.state.tematics.length){
+            console.log(a, themeCount)
+            if(a === themeCount.length){
                 getFinalScores(this.notas[i][0].id).then(data =>{
-                    console.log(data.data[0])
                     message.notaConocimiento = parseFloat(data.data[0].sum)
                     message.idPostulant = data.data[0].idPostulant
                     message.announcement = this.state.selectedConv.label
-                    console.log(message)
                     finalTheoryScore(message)   
                 })
             }
+            else this.setState({message:'datos guardados'})
         }
     }
 
@@ -216,7 +224,10 @@ class Laboratory_scores extends Component{
                 ))}
             </div>
 
-            </form>  
+            </form> 
+            <br/>
+            <p>{this.state.message}</p>
+            <br/>
             <button onClick={(e) => this.uploadScore(e)} className="col btn btn-info mt-2">subir notas</button>
 
         </div>

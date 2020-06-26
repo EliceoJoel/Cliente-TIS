@@ -24,12 +24,12 @@ class Scores_list extends Component{
         idUser:"",
     }
 }
-componentDidMount() {
-    getProfile().then(res => {
+async componentDidMount() {
+    await getProfile().then(async res => {
         this.setState({
             idUser: res.user.id        
         }) 
-        getUserAnnouncementsDoc(res.user.id).then(res => {
+        await getUserAnnouncementsDoc(res.user.id).then(res => {
             for (var i=0; i < res.length; i++) {
                 var object = {}
                 object.id = res[i].id
@@ -39,10 +39,10 @@ componentDidMount() {
         })
     })
 }
-getStudents(){
+async getStudents(){
     var postulants = []
     var scores =[]
-    getStudents().then(postulant => {
+    await getStudents().then(postulant => {
         for(var i=0; i<postulant.length;i++){
             if(postulant[i].auxiliary === this.state.selectedAux && postulant[i].announcement === this.state.selectedConv.label){
                 var object = {}
@@ -64,26 +64,11 @@ getStudents(){
     })
 }
 
-// fillAuxi(){
-//     var aux =[]
-//     getAnnouncement().then(conv =>{
-//         for(var i=0;i<conv.length;i++){
-//             if(conv[i].id === this.state.selectedConv.id){
-//                 var auxi = JSON.parse(conv[i].auxiliary)
-//                 for(var j=0;j<auxi.length;j++){
-//                     var object = {}
-//                     object.label = auxi[j].name
-//                     aux[j]=object
-//                 }
-//             }
-//         }
-//     })
-//     this.setState({auxiliaturas:aux})
-// }
-fillAuxi(){
+
+async fillAuxi(){
     let aux = []
     console.log(this.state.idUser,this.state.selectedConv.id)
-    getUserAuxiliary(this.state.idUser,this.state.selectedConv.id).then(auxi =>{
+    await getUserAuxiliary(this.state.idUser,this.state.selectedConv.id).then(auxi =>{
         for(var i=0; i<auxi.length;i++){
             var object = {}
             object.id = auxi[i].id
@@ -206,18 +191,23 @@ update(){
         // eslint-disable-next-line no-loop-func
         getTheoryScore(this.state.selectedConv.id, this.state.score[i].id).then(data=>{
             let message = {}
+            let aproved = false
             if(data[0].type == "Examen Escrito"){
                 finalScore =  (data[0].percentage * data[0].score + data[1].percentage * data[1].score_oral)/100
+                aproved = data[1].score_oral >= 0
             }
             else{
                 finalScore = (data[0].percentage * data[0].score_oral + data[1].percentage * data[1].score)/100
+                aproved = data[0].score_oral >= 0
             }
-            message.notaConocimiento = finalScore
-            console.log(data[0].id_postulant)
-            message.idPostulant = data[0].id_postulant
-            message.announcement = this.state.selectedConv.label
-            console.log(message)
-            finalTheoryScore(message)
+            if(aproved){
+                message.notaConocimiento = finalScore
+                console.log(data[0].id_postulant)
+                message.idPostulant = data[0].id_postulant
+                message.announcement = this.state.selectedConv.label
+                console.log(message)
+                finalTheoryScore(message)
+            }
         })
     }
     this.getStudents()
