@@ -35,8 +35,8 @@ class configure_user extends Component{
 
       this.fillAux = this.fillAux.bind(this);
     }
-    componentDidMount() {
-      getAllUsers().then(res => {
+    async componentDidMount() {
+      await getAllUsers().then(res => {
         for(let i=0; i<res.length; i++){
           let user = {};
           user.id = res[i].id
@@ -45,7 +45,7 @@ class configure_user extends Component{
         }
       })
 
-      getRol().then(roles => {
+      await getRol().then(roles => {
         for (var i=0; i < roles.length; i++) {
             var object = {}
             object.id = roles[i].id
@@ -54,7 +54,7 @@ class configure_user extends Component{
         }
       })
 
-      getAnnouncement().then(res => {
+      await getAnnouncement().then(res => {
         for (var i=0; i < res.length; i++) {
             var object = {}
             object.id = res[i].id
@@ -118,12 +118,13 @@ class configure_user extends Component{
       this.conv = []
       this.setState({message:''})
     }
-    fillAux(e){
+
+    async fillAux(e){
       let announcement = e;
       console.log(announcement)
       this.aux =[]
       this.setState({temp_conv : announcement})
-      getAux(announcement.id).then(res =>{
+      await getAux(announcement.id).then(res =>{
         let a = res
         console.log(a)
         for(let i=0; i<a.length;i++){
@@ -140,11 +141,11 @@ class configure_user extends Component{
     })
     }
 
-    fillTheme(e){
+    async fillTheme(e){
       this.theme = [] 
       this.setState({temp_aux : e})
       let data = {auxiliary:e.label}
-      getTheme(data).then(res =>{
+      await getTheme(data).then(res =>{
         let a = res.data
         for(let i=0; i<a.length;i++){
           let object ={}
