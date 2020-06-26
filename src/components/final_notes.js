@@ -29,9 +29,28 @@ class final_notes extends Component {
     }
 
     //fill announcement
-    componentDidMount() {
+    async componentDidMount() {
+        let user = await getProfile()
+        this.setState({
+            idUser: user.user.id        
+        }) 
+        console.log(user.user.id)
+        let res = await getUserAnnouncements(user.user.id)
+        let announcement = []
+        for (var i=0; i < res.length; i++) {
+            var object = {}
+            object.id = res[i].id
+            object.label = res[i].name
+            object.type = res[i].type
+            announcement[i] = object
+        }
+        this.setState({conv:announcement})    
+      }
+/*
+    //fill announcement
+    async componentDidMount() {
         let conv = []
-        getProfile().then(res => {
+        await getProfile().then(res => {
             this.setState({
                 idUser: res.user.id        
             }) 
@@ -47,14 +66,14 @@ class final_notes extends Component {
                 this.setState({conv:conv})  
             })
         })
-    }
+    }*/
 
 
-    fillAuxi(){
+    async fillAuxi(){
         //aa
         let aux = []
         console.log(this.state.idUser,this.state.selectedConv.id)
-        getUserAuxiliary(this.state.idUser,this.state.selectedConv.id).then(res =>{
+        await getUserAuxiliary(this.state.idUser,this.state.selectedConv.id).then(res =>{
             for (var i=0; i < res.length; i++){
                 var object = {}
                 object.id = res[i].id

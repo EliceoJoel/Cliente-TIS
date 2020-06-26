@@ -44,6 +44,7 @@ class NotasMerito extends Component {
         var array = []
         notas = array
         getNotasMerito().then(res => {
+            console.log(res)
             for (var i=0; i < res.length; i++) {
                 if(res[i].announcement === this.state.selectConv.label){
                     var object = {}

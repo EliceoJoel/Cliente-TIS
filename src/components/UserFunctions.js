@@ -31,7 +31,7 @@ export const register = newUser => {
             return response.data
         })
         .catch(err => {
-            console.log(err)
+            //console.log(err)
         })
 }
 

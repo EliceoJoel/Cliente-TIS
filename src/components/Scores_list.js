@@ -24,6 +24,8 @@ class Scores_list extends Component{
         idUser:"",
     }
 }
+
+
 async componentDidMount() {
     await getProfile().then(async res => {
         this.setState({
@@ -186,7 +188,7 @@ update(){
     for(var i=0;i<this.state.postulantes.length;i++){
         let finalScore = 0
         console.log(this.state.score[i])
-        updateScore(this.state.score[i])
+        updateScore(this.state.score[i])//
         //var id = this.state.score[i].id
         // eslint-disable-next-line no-loop-func
         getTheoryScore(this.state.selectedConv.id, this.state.score[i].id).then(data=>{

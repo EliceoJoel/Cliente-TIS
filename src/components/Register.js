@@ -28,12 +28,14 @@ class Register extends Component {
         this.setState({ [e.target.name]: e.target.value })
     }
     async ChangeName (e) {
+        this.setState({message:""})
         await this.setState({ [e.target.name]: e.target.value })
         let a = this.state.first_name + this.state.last_name
         a = a.replace(/\s/g, '') ;
         this.setState({user:a})
     }
     register(e) {
+        this.setState({first_name:"", last_name:"", user:"", password:"", message:""})
         console.log(this.state.first_name + ' ' + this.state.last_name)
         console.log(this.state.user)
         console.log(this.state.password)
@@ -44,7 +46,8 @@ class Register extends Component {
             password: this.state.password,
             idRol:-1,
         }
-        register(newUser).then(this.setState({message:'datos guardado'}))
+        register(newUser)
+        .then(this.setState({message:'datos guardado'}))
     }
 
     render () {
@@ -103,7 +106,7 @@ class Register extends Component {
                             />
                         </div>
                     </div>
-                    <p>{this.state.message}</p>
+                    <p style={{color:"green"}} className="mt-2"><b>{this.state.message}</b></p>
                     <button className="btn btn-info mt-2 mb-5" onClick={(e) => this.register(e)}>
                         guardar datos
                     </button>

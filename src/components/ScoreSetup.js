@@ -388,8 +388,9 @@ export class ScoreSetup extends Component {
             data: send,
             headers: { 'Content-Type': 'multipart/form-data' }
         }).then(response => {
+            console.log(response.data)
             if (response.data === false) {
-                // this.setState({ percentageKnowledgeDoc_error: 'el digito excede el porcentaje' })
+                 this.setState({ percentageMerit_error: 'El digito excede el porcentaje' })
                 console.log('excede el 100');
                 
             } else {

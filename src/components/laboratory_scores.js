@@ -35,6 +35,8 @@ class Laboratory_scores extends Component{
             message:'',
         }
     }
+
+    
     async componentDidMount() {
         this.notas[0] = null
         await getProfile().then(async res => {
@@ -144,7 +146,7 @@ class Laboratory_scores extends Component{
                     finalTheoryScore(message)   
                 })
             }
-            else this.setState({message:'datos guardados'})
+            this.setState({message:'Datos guardados'})
         }
     }
 
@@ -161,7 +163,7 @@ class Laboratory_scores extends Component{
                     <Select
                       name="conv"
                       options={this.conv}
-                      onChange={(e) => this.setState({selectedConv:e})}
+                      onChange={(e) => this.setState({selectedConv:e, message:""})}
                       placeholder=""
                       className="basic-select"
                       classNamePrefix="select"
@@ -179,7 +181,7 @@ class Laboratory_scores extends Component{
                     <Select
                       name="conv"
                       options={this.state.auxiliaturas}
-                      onChange={(e) => this.setState({selectedAux:e})}
+                      onChange={(e) => this.setState({selectedAux:e, message:""})}
                       placeholder=""
                       className="basic-select"
                       classNamePrefix="select"
@@ -226,7 +228,7 @@ class Laboratory_scores extends Component{
 
             </form> 
             <br/>
-            <p>{this.state.message}</p>
+            <p style={{color:"green"}} className="mt-2"><b>{this.state.message}</b></p>
             <br/>
             <button onClick={(e) => this.uploadScore(e)} className="col btn btn-info mt-2">subir notas</button>
 
