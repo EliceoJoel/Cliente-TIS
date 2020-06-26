@@ -236,7 +236,6 @@ export const updateScore = (score) =>{
             }
         )
         .then(response => {
-            localStorage.setItem('usertoken', response.data.token)
             return response.data.token
         })
         .catch(err => {

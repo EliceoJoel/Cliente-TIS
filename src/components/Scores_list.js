@@ -182,13 +182,14 @@ renderTableData() {
         </div>
     ))
  }
-update(){
+async update(){
     var post = this.state.score
     console.log(post)
+    console.log(this.state.postulantes.length)
     for(var i=0;i<this.state.postulantes.length;i++){
         let finalScore = 0
         console.log(this.state.score[i])
-        updateScore(this.state.score[i])//
+        await updateScore(this.state.score[i])//
         //var id = this.state.score[i].id
         // eslint-disable-next-line no-loop-func
         getTheoryScore(this.state.selectedConv.id, this.state.score[i].id).then(data=>{
