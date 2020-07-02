@@ -38,7 +38,6 @@ export class ScoreSetup extends Component {
             number: '',
             selectedOptionMerit: null,
             announcementFound: false,
-
             announcementdoc: false,
             typeDoc: 'Examen Oral',
             porcentageDoc: '',
@@ -88,15 +87,9 @@ export class ScoreSetup extends Component {
             deleteWarning: ''
         })
         if (this.validAnnouncement()) {
-            this.setState({ auxiliarylist: false })
-            this.setState({ addpercentagelab: false })
-            this.setState({ addpercentagedoc: false })
-            this.setState({ announcementlab: false })
-            this.setState({ announcementdoc: false })
-            this.setState({ addMeritPercentage: false })
-            this.setState({ MeritConfigDone: false })
-            this.setState({ knowledgeDocConfigDone: false })
-            this.setState({ knowledgeLabConfigDone: false })
+            this.setState({ auxiliarylist: false ,addpercentagelab: false,  addpercentagedoc: false ,announcementlab: false ,
+                 announcementdoc: false, addMeritPercentage: false, MeritConfigDone: false ,knowledgeDocConfigDone: false,knowledgeLabConfigDone: false })
+        
             let conv = this.state.selectedOptionConv.label
             console.log(conv);
             let send = new FormData()
@@ -173,10 +166,8 @@ export class ScoreSetup extends Component {
 
             })
           
-        this.setState({ MeritConfigDone: false })
-        this.setState({ knowledgeLabConfigDone: false })
-        this.setState({ addpercentagelab: true })
-        this.setState({ addMeritPercentage: false })
+        this.setState({ MeritConfigDone: false,  knowledgeLabConfigDone: false ,  addpercentagelab: true, addMeritPercentage: false})
+     
         e.preventDefault()
         let send = new FormData()
         let send2 = new FormData()
@@ -304,19 +295,11 @@ export class ScoreSetup extends Component {
                 console.log(error)
 
             })
-            this.setState({ deleteWarning: '' }) 
-            this.setState({ percentageMerit_error: '' })   
-            this.setState({ selectedMeritOption_error: '' })  
-            this.setState({ selectedOptionMerit: null })  
-            this.setState({ modifyWarning: '' })       
-        this.setState({ MeritWarningFinish: '' })   
-        this.setState({ acomplishConfig: false })   
-        this.setState({ addpercentagelab: false })
-        this.setState({ addpercentagedoc: false })
-        this.setState({ addMeritPercentage: true })
-        this.setState({ MeritConfigDone: false })
-        this.setState({ knowledgeDocConfigDone: false })
-        this.setState({ knowledgeLabConfigDone: false })
+            this.setState({ deleteWarning: '',  percentageMerit_error: '' ,selectedMeritOption_error: '', selectedOptionMerit: null,
+         modifyWarning: '', MeritWarningFinish: '',acomplishConfig: false,addpercentagelab: false ,addpercentagedoc: false,addMeritPercentage: true,
+         MeritConfigDone: false,knowledgeDocConfigDone: false,knowledgeLabConfigDone: false
+        }) 
+            
         e.preventDefault()
         let send = new FormData()
         send.append('id_announcement', this.state.found[0].id)
@@ -394,8 +377,7 @@ export class ScoreSetup extends Component {
                 console.log('excede el 100');
                 
             } else {
-                // this.setState({ modifyWarning: 'Elemento Modificado con exito' })
-                // this.setState({ porcentage: '' })
+               
                 console.log('funciono se hizo la insercion');               
             }
         })
@@ -588,12 +570,10 @@ export class ScoreSetup extends Component {
 
             })
             
-            this.setState({ acomplishConfig: false })    
-        this.setState({ knowledgeDocConfigDone: false })
-        this.setState({ MeritConfigDone: false })
-        this.setState({ addpercentagelab: false })
-        this.setState({ addpercentagedoc: true })
-        this.setState({ addMeritPercentage: false })
+            this.setState({ acomplishConfig: false , knowledgeDocConfigDone: false , MeritConfigDone: false,
+             addpercentagelab: false ,  addpercentagedoc: true ,addMeritPercentage: false
+            })    
+        
         let idconvocato = this.state.selectedOptionConv.value
         let sendIdAnnouncement = new FormData()
         sendIdAnnouncement.append('id_announcement', idconvocato)
@@ -867,12 +847,9 @@ export class ScoreSetup extends Component {
             })
     }
     handleMeritConfiguration(e){
-        this.setState({ acomplishConfig: false })   
-        this.setState({ addpercentagelab: false })
-        this.setState({ addpercentagedoc: false })
-        this.setState({ addMeritPercentage: false })
-        this.setState({ knowledgeDocConfigDone: false })
-        this.setState({ knowledgeLabConfigDone: false })
+        this.setState({ acomplishConfig: false , addpercentagelab: false  ,  addpercentagedoc: false , addMeritPercentage: false,
+            knowledgeDocConfigDone: false , knowledgeLabConfigDone: false })   
+      
         e.preventDefault()
         let idconv = this.state.selectedOptionConv.value
         let send = new FormData()
@@ -901,12 +878,8 @@ export class ScoreSetup extends Component {
        
     }
     handleKnowledgeDocConfiguration(e){
-        this.setState({ acomplishConfig: false })   
-        this.setState({ addpercentagelab: false })
-        this.setState({ addpercentagedoc: false })
-        this.setState({ addMeritPercentage: false })
+        this.setState({ acomplishConfig: false , addpercentagelab: false, addpercentagedoc: false ,addMeritPercentage: false,MeritConfigDone: false})   
       
-        this.setState({ MeritConfigDone: false })
         e.preventDefault()
         let idconv = this.state.selectedOptionConv.value
         let send = new FormData()
@@ -935,12 +908,8 @@ export class ScoreSetup extends Component {
        
     }
     handleKnowledgeLabConfiguration(e){
-        this.setState({ acomplishConfig: false })   
-        this.setState({ addpercentagelab: false })
-        this.setState({ addpercentagedoc: false })
-        this.setState({ addMeritPercentage: false })
-        
-        this.setState({ MeritConfigDone: false })
+        this.setState({ acomplishConfig: false, addpercentagelab: false ,  addpercentagedoc: false, addMeritPercentage: false,MeritConfigDone: false})   
+     
         e.preventDefault()
         let idconv = this.state.selectedOptionConv.value
         let send = new FormData()
