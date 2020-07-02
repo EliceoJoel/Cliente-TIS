@@ -31,7 +31,7 @@ export const register = newUser => {
             return response.data
         })
         .catch(err => {
-            console.log(err)
+            //console.log(err)
         })
 }
 
@@ -236,7 +236,6 @@ export const updateScore = (score) =>{
             }
         )
         .then(response => {
-            localStorage.setItem('usertoken', response.data.token)
             return response.data.token
         })
         .catch(err => {
@@ -666,3 +665,30 @@ export const getLabScores  = (id) => {
         })
 }
 
+export const getScoreCount  = (id) => {
+    //console.log(id);
+    return axios
+        .get('/api/sumTheme/' + id, {
+        headers: { 'Content-Type': 'application/json'}
+        })
+        .then(response => {
+            return response.data
+        })
+        .catch(e => {
+            console.log(e);
+        })
+}
+
+export const getRolName  = () => {
+    //console.log(id);
+    return axios
+        .get('/api/rolname', {
+        headers: { 'Content-Type': 'application/json'}
+        })
+        .then(response => {
+            return response.data
+        })
+        .catch(e => {
+            console.log(e);
+        })
+}

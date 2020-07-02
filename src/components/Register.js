@@ -15,18 +15,27 @@ class Register extends Component {
             convocatoria:[],
             convocatoria_temp: '',
             rol_temp: '',
-            userID:{}
+            userID:{},
+            message:'',
         }
 
         this.onChange = this.onChange.bind(this)
+        this.ChangeName = this.ChangeName.bind(this)
         this.register = this.register.bind(this)
     }
-
 
     onChange (e) {
         this.setState({ [e.target.name]: e.target.value })
     }
+    async ChangeName (e) {
+        this.setState({message:""})
+        await this.setState({ [e.target.name]: e.target.value })
+        let a = this.state.first_name + this.state.last_name
+        a = a.replace(/\s/g, '') ;
+        this.setState({user:a})
+    }
     register(e) {
+        this.setState({first_name:"", last_name:"", user:"", password:"", message:""})
         console.log(this.state.first_name + ' ' + this.state.last_name)
         console.log(this.state.user)
         console.log(this.state.password)
@@ -38,6 +47,7 @@ class Register extends Component {
             idRol:-1,
         }
         register(newUser)
+        .then(this.setState({message:'datos guardado'}))
     }
 
     render () {
@@ -46,7 +56,7 @@ class Register extends Component {
             <h1 className="h3 font-weight-normal text-center mt-3 p-3 bg-info text-white rounded">
                         Registro de usuarios
             </h1>
-                <form onSubmit={(e) => this.register(e)}>
+                <formdata>
                     <div className="row mt-5">
                         <div className="form-group col-md-6">
                             <label htmlFor="name">Nombres</label>
@@ -56,7 +66,7 @@ class Register extends Component {
                                 name="first_name"
                                 placeholder="Ingrese su nombre o nombres"
                                 value={this.state.first_name}
-                                onChange={this.onChange}
+                                onChange={this.ChangeName}
                             />
                         </div>
                         <div className="form-group col-md-6">
@@ -67,7 +77,7 @@ class Register extends Component {
                                 name="last_name"
                                 placeholder="Ingrese su apellido o apellidos"
                                 value={this.state.last_name}
-                                onChange={this.onChange}
+                                onChange={this.ChangeName}
                             />
                         </div>
                     </div>
@@ -96,8 +106,11 @@ class Register extends Component {
                             />
                         </div>
                     </div>
-                    <input type="submit" className="btn btn-info mt-2 mb-5" value="Registrar"/>
-                </form>
+                    <p style={{color:"green"}} className="mt-2"><b>{this.state.message}</b></p>
+                    <button className="btn btn-info mt-2 mb-5" onClick={(e) => this.register(e)}>
+                        guardar datos
+                    </button>
+                </formdata>
             </div>
         )
     }

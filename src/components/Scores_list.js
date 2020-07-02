@@ -24,12 +24,14 @@ class Scores_list extends Component{
         idUser:"",
     }
 }
-componentDidMount() {
-    getProfile().then(res => {
+
+
+async componentDidMount() {
+    await getProfile().then(async res => {
         this.setState({
             idUser: res.user.id        
         }) 
-        getUserAnnouncementsDoc(res.user.id).then(res => {
+        await getUserAnnouncementsDoc(res.user.id).then(res => {
             for (var i=0; i < res.length; i++) {
                 var object = {}
                 object.id = res[i].id
@@ -39,10 +41,10 @@ componentDidMount() {
         })
     })
 }
-getStudents(){
+async getStudents(){
     var postulants = []
     var scores =[]
-    getStudents().then(postulant => {
+    await getStudents().then(postulant => {
         for(var i=0; i<postulant.length;i++){
             if(postulant[i].auxiliary === this.state.selectedAux && postulant[i].announcement === this.state.selectedConv.label){
                 var object = {}
@@ -64,26 +66,11 @@ getStudents(){
     })
 }
 
-// fillAuxi(){
-//     var aux =[]
-//     getAnnouncement().then(conv =>{
-//         for(var i=0;i<conv.length;i++){
-//             if(conv[i].id === this.state.selectedConv.id){
-//                 var auxi = JSON.parse(conv[i].auxiliary)
-//                 for(var j=0;j<auxi.length;j++){
-//                     var object = {}
-//                     object.label = auxi[j].name
-//                     aux[j]=object
-//                 }
-//             }
-//         }
-//     })
-//     this.setState({auxiliaturas:aux})
-// }
-fillAuxi(){
+
+async fillAuxi(){
     let aux = []
     console.log(this.state.idUser,this.state.selectedConv.id)
-    getUserAuxiliary(this.state.idUser,this.state.selectedConv.id).then(auxi =>{
+    await getUserAuxiliary(this.state.idUser,this.state.selectedConv.id).then(auxi =>{
         for(var i=0; i<auxi.length;i++){
             var object = {}
             object.id = auxi[i].id
@@ -93,20 +80,6 @@ fillAuxi(){
         console.log(aux)
         this.setState({auxiliaturas:aux})
     })
-    // var aux =[]
-    // getAnnouncementIDGenerateRotulate(this.state.selectedConv.id).then(res => {
-    //     console.log(res);
-    //       var auxiliary = res
-      
-    //             for(var j=0;j<auxiliary.length;j++){
-    //                 var object = {}
-    //                 object.label = auxiliary[j].name
-    //                 aux[j]=object
-    //             }
-    // })
-            
-        
-    
     this.setState({auxiliaturas:aux})
 }
 
@@ -164,12 +137,15 @@ render() {
                     <div class="col text-info font-weight-bold">nota</div>
                     <div class="col text-info font-weight-bold">nota Oral</div>
                     <div class="col"></div>
+                    <div class="col text-info font-weight-bold">examen escrito</div>
                     <div class="col"></div>
+                    <div class="col text-info font-weight-bold">examen oral</div>
                     <div class="col"></div>
             </div>
             <div className="my-1" style={{border:"0.5px solid silver", width: "100%"}}></div>
             <form>
                 {this.renderTableData()}
+                <div >{this.state.warningMesage}</div>
                 <button type="button" class="col btn btn-info " onClick={() =>this.update()} >subir notas</button>
             </form>
         </div>        
@@ -187,6 +163,7 @@ renderTableData() {
                     <div class="col">{postulant.auxiliary}</div>
                     <div class="col">{this.fillScore(postulant.score)}</div>
                     <div class="col">{this.fillScore(postulant.score_oral)}</div>
+                    <div class="col"></div>
                     <input 
                         type = "number"
                         id = {postulant.id} 
@@ -197,52 +174,66 @@ renderTableData() {
                         placeholder= "examen escrito"
                         onChange = {this.onChange}                     
                     />
-
-                    <input 
-                        type = "number"
-                        id = {postulant.id} 
-                        name = "score"
-                        min="0"
-                        max="100"
-                        className="col"  
-                        placeholder= "examen oral"
-                        onChange = {this.onChangeOral}                     
-                    />
-                    <div class="col">{this.state.warningMesage}</div>
+                    <div class="col"></div>
+                    {this.checkOral(postulant.score, postulant.id)}
+                    <div class="col"></div>
             </div>
             <div className="my-1" style={{border:"0.5px solid silver", width: "100%"}}></div>
         </div>
     ))
  }
-update(){
+async update(){
     var post = this.state.score
     console.log(post)
+    console.log(this.state.postulantes.length)
     for(var i=0;i<this.state.postulantes.length;i++){
         let finalScore = 0
         console.log(this.state.score[i])
-        updateScore(this.state.score[i])
-        var id = this.state.score[i].id
+        await updateScore(this.state.score[i])//
+        //var id = this.state.score[i].id
         // eslint-disable-next-line no-loop-func
         getTheoryScore(this.state.selectedConv.id, this.state.score[i].id).then(data=>{
             let message = {}
+            let aproved = false
             if(data[0].type == "Examen Escrito"){
                 finalScore =  (data[0].percentage * data[0].score + data[1].percentage * data[1].score_oral)/100
+                aproved = data[1].score_oral >= 0
             }
             else{
                 finalScore = (data[0].percentage * data[0].score_oral + data[1].percentage * data[1].score)/100
+                aproved = data[0].score_oral >= 0
             }
-            message.notaConocimiento = finalScore
-            message.idPostulant = id
-            message.announcement = this.state.selectedConv.label
-            finalTheoryScore(message)
+            if(aproved){
+                message.notaConocimiento = finalScore
+                console.log(data[0].id_postulant)
+                message.idPostulant = data[0].id_postulant
+                message.announcement = this.state.selectedConv.label
+                console.log(message)
+                finalTheoryScore(message)
+            }
         })
     }
     this.getStudents()
 
 }
 
+checkOral(score, id){
+    if(score>50)return (
+        <input 
+        type = "number"
+        id = {id} 
+        name = "score"
+        min="0"
+        max="100"
+        className="col"  
+        placeholder= "examen oral"
+        onChange = {this.onChangeOral}                     
+    />)
+    else return 'no valido para oral'
+}
+
  onChangeOral = (event) => {
-     if(event.target.value >100){ 
+     if(event.target.value >100 ||event.target.value < 0){ 
         this.setState({warningMesage:"numero no valido"})
         return
      }
@@ -259,8 +250,8 @@ update(){
 }
 
 onChange = (event) => {
-    if(event.target.value >100){ 
-       this.setState({warningMesage:"numero no valido"})
+    if(event.target.value >100 ||event.target.value < 0){ 
+        this.setState({warningMesage:"numero no valido"})
        return
     }
     var scores = this.state.score
@@ -276,8 +267,8 @@ onChange = (event) => {
 
 fillScore(score){
     // eslint-disable-next-line eqeqeq
-    if(score == 0){
-        return "abandono"
+    if(score < 0){
+        return "-"
     } else return score
 }
 }

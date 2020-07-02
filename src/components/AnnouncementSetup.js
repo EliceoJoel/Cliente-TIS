@@ -12,6 +12,7 @@ export class AnnouncementSetup extends Component {
         super(props)
 
         this.state = {
+            idUser:null,
             conv: '' ,
             found: [],
             requirement: '',
@@ -55,38 +56,50 @@ export class AnnouncementSetup extends Component {
         this.setState({ selectedOptionConv: selectedConvOption })
 
     }
-    componentDidMount() {
-        // getAnnouncement().then(res => {
-        //     for (var i = 0; i < res.length; i++) {
-        //         var object = {}
-        //         object.value = res[i].id
-        //         object.label = res[i].name
-        //         conv[i] = object
-        //     }
-        // })
-        getProfile().then(res => {
-            console.log(res);
+    // componentDidMount() {
+    //     // getAnnouncement().then(res => {
+    //     //     for (var i = 0; i < res.length; i++) {
+    //     //         var object = {}
+    //     //         object.value = res[i].id
+    //     //         object.label = res[i].name
+    //     //         conv[i] = object
+    //     //     }
+    //     // })
+    //     getProfile().then(res => {
+    //         console.log(res);
             
-            this.setState({
-                idUser: res.user.id
-               
-                
-            }) 
-            console.log(this.state.idUser);
-            getUserAnnouncements(this.state.idUser).then(res=>{
+    //         this.setState({
+    //             idUser: res.user.id               
+    //         }) 
+    //         console.log(this.state.idUser);
+    //         getUserAnnouncements(this.state.idUser).then(res=>{
 
-                let announcementArray = []
-                console.log(res);
-                for (var i = 0; i < res.length; i++) {
-                    var object = {}
-                    object.value = res[i].id
-                    object.label = res[i].name
-                    announcementArray[i] = object
-                } this.setState({conv: announcementArray})
-            })
+    //             let announcementArray = []
+    //             console.log(res);
+    //             for (var i = 0; i < res.length; i++) {
+    //                 var object = {}
+    //                 object.value = res[i].id
+    //                 object.label = res[i].name
+    //                 announcementArray[i] = object
+    //             } this.setState({conv: announcementArray})
+    //         })
 
-        })
+    //     })
+    // }
+    async componentDidMount() {
+        let user = await getProfile()
+        console.log(user.user.id)
+        let announcements = await getUserAnnouncements(user.user.id)
+        let announcementArray = []
+        for (var i = 0; i < announcements.length; i++) {
+            var object = {}
+            object.value = announcements[i].id
+            object.label = announcements[i].name
+            announcementArray[i] = object
+        }
+        this.setState({conv:announcementArray})    
     }
+
 
     handleSearchAnnouncement() {
         this.setState({
@@ -146,10 +159,16 @@ export class AnnouncementSetup extends Component {
                 url: 'api/requirement',
                 data: send,
                 headers: { 'Content-Type': 'multipart/form-data' }
+          
             }).then(response => {
-                console.log(response)
-            }).then(response => {
-                this.setState({ add_requirement_warning: "Documento agregado con exito"  , requirement:''})
+                if (response.data === false){
+                    console.log(response);
+                    
+                    this.setState({ requirement_error: "No puede ingresar el mismo documento" })
+                }else{
+                     this.setState({ add_requirement_warning: "Documento agregado con exito"  , requirement:''})
+                }
+               
                 
             })
                 .catch(error => {
@@ -175,9 +194,16 @@ export class AnnouncementSetup extends Component {
                 data: send,
                 headers: { 'Content-Type': 'multipart/form-data' }
             }).then(response => {
+                if(response.data === 'item'){
+                    this.setState({item_error: 'El item ya fue registrado' })
+                }if (response.data === 'nombre'){
+                    this.setState({auxiliary_error: 'La auxiliatura ya fue registrada' })
+                }else {
+                    
+                this.setState({ item: '', auxiliary: '', add_auxiliary: 'Se agrego la auxiliatura con exito' })
+                }
                 console.log(response);
 
-                this.setState({ item: '', auxiliary: '', add_auxiliary: 'Se agrego la auxiliatura con exito' })
 
             })
                 .catch(error => {
@@ -201,8 +227,12 @@ export class AnnouncementSetup extends Component {
                 data: send,
                 headers: { 'Content-Type': 'multipart/form-data' }
             }).then(response => {
-                console.log(response)
-                this.setState({ add_tematica: 'Se agrego la tematica con exito', tematica: '' })
+                if(response.data === false){
+                    this.setState({tematica_error:'Ya se registro la tematica' })
+                }else{
+                     this.setState({ add_tematica: 'Se agrego la tematica con exito', tematica: '' })
+                }
+               
             })
                 .catch(error => {
                     console.log(error)
@@ -263,9 +293,17 @@ export class AnnouncementSetup extends Component {
                 data: send,
                 headers: { 'Content-Type': 'multipart/form-data' }
             }).then(response => {
-                console.log(response)
+                if(response.data === false){
+                    
+                    this.setState({ merit_error: 'merito ya registrado' })
+                  
+                    
+                }else{
+                   
                 this.setState({ add_merit: 'Merito agregado con exito', nameMerit: '', descriptionMerit: '' })
 
+                } 
+               
             })
                 .catch(error => {
                     console.log(error)
@@ -418,13 +456,14 @@ export class AnnouncementSetup extends Component {
 
             this.setState({ requirement_error: 'Campo Vacio' })
         }
-        else if (this.state.requirement.length > 250) {
+        else if (this.state.requirement.length > 255) {
             this.setState({ requirement_error: 'Requisito Demasiado Largo' })
         }
         else {
             return true;
         }
     }
+    
     validAnnouncementAuxiliary() {
         if (this.state.item === '') {
             this.setState({ item_error: 'Campo Vacio' })
@@ -935,7 +974,7 @@ export class AnnouncementSetup extends Component {
                             <h3 className="h5 col-md-12 my-4 font-weight-normal text-center">
                                 Datos de Merito</h3>
 
-                            <div className="form-group col-md-4">
+                            <div className="form-group col-md-5">
                                 <label htmlFor="Nombre">Nombre</label>
 
                                 <input
@@ -948,9 +987,9 @@ export class AnnouncementSetup extends Component {
                                 />
                                 <p style={{ color: "red" }}>{this.state.merit_error}</p>
                             </div>
-                            <div className="form-group col-md-4">
+                            <div className="form-group col-md-5">
                                 <label htmlFor="Nombre">Descripcion</label>
-                                <input
+                                <textarea
                                     className="form-control"
                                     placeholder="Ingrese una descripcion"
                                     type="text"

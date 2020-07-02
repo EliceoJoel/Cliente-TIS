@@ -48,39 +48,52 @@ export class PostulantEnable extends Component {
     onChangeReason =  (e) =>{
         this.setState({[e.target.name]: e.target.value })
     }
-    componentDidMount() {
-        // getAnnouncement().then(res => {
-        //     for (var i=0; i < res.length; i++) {
-        //         var object = {}
-        //         object.value = res[i].id
-        //         object.label = res[i].name
-        //         conv[i] = object
-        //       }
-        // })
-        getProfile().then(res => {
-            console.log(res);
+    // componentDidMount() {
+    //     // getAnnouncement().then(res => {
+    //     //     for (var i=0; i < res.length; i++) {
+    //     //         var object = {}
+    //     //         object.value = res[i].id
+    //     //         object.label = res[i].name
+    //     //         conv[i] = object
+    //     //       }
+    //     // })
+    //     getProfile().then(res => {
+    //         console.log(res);
             
-            this.setState({
-                idUser: res.user.id
+    //         this.setState({
+    //             idUser: res.user.id
                
                 
-            }) 
-            console.log(this.state.idUser);
-            getUserAnnouncements(this.state.idUser).then(res=>{
+    //         }) 
+    //         console.log(this.state.idUser);
+    //         getUserAnnouncements(this.state.idUser).then(res=>{
 
-                let announcementArray = []
-                console.log(res);
-                for (var i = 0; i < res.length; i++) {
-                    var object = {}
-                    object.value = res[i].id
-                    object.label = res[i].name
-                    announcementArray[i] = object
-                } this.setState({conv: announcementArray})
-            })
+    //             let announcementArray = []
+    //             console.log(res);
+    //             for (var i = 0; i < res.length; i++) {
+    //                 var object = {}
+    //                 object.value = res[i].id
+    //                 object.label = res[i].name
+    //                 announcementArray[i] = object
+    //             } this.setState({conv: announcementArray})
+    //         })
 
-        })
+    //     })
         
         
+    // }
+    async componentDidMount() {
+        let user = await getProfile()
+        console.log(user.user.id)
+        let announcements = await getUserAnnouncements(user.user.id)
+        let announcementArray = []
+        for (var i = 0; i < announcements.length; i++) {
+            var object = {}
+            object.value = announcements[i].id
+            object.label = announcements[i].name
+            announcementArray[i] = object
+        }
+        this.setState({conv:announcementArray})    
     }
     splitArray(){
         let a = this.state.found[0]
@@ -116,7 +129,7 @@ export class PostulantEnable extends Component {
             selectedConvOption_error:'',
             codSis_error:'',
             notfound_error:'' ,
-           
+            CorrectlySendChanges:''
         })
         if(this.valid()){  
         let codSis = this.state.codSis
@@ -260,8 +273,8 @@ export class PostulantEnable extends Component {
                             console.log(response.data)
                             let score = new FormData()
                             score.append('id_postulant', response.data.id)
-                            score.append('score', 0)
-                            score.append('score_oral', 0)
+                            score.append('score', -1)
+                            score.append('score_oral', -1)
                             axios({
                                 method: 'post',
                                 url: 'api/add',

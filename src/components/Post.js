@@ -9,7 +9,7 @@ var ArrayAuxi = []
          this.inputRef = React.createRef()
 
          this.state = { 
-            file: null,
+           file: null,
             file_error: '',
             name :'' ,
             name_error: '',
@@ -101,9 +101,6 @@ var ArrayAuxi = []
         if(this.state.name === ''){
             this.setState({name_error:'Campo vacio'})
         }
-        else if(this.state.name.length > 50){
-            this.setState({name_error:'Dato ingresado demasiado largo'})
-        }
         else if(this.state.year === ''){
             this.setState({year_error:'Campo vacio'})
         }
@@ -186,7 +183,7 @@ var ArrayAuxi = []
                 data: send,
                 headers: {'Content-Type': 'multipart/form-data' }
                 }).then(response =>{
-                    this.setState({ file:null})
+                   this.setState({ file:null})
                     this.inputRef.current.value = "" 
                  this.setState({post_announcement_acomplish:'Convocatoria Publicada con Exito'})
                  this.setState({name:''})
